@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
+  <title>Timestamp Studio — Editor foto</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg class="icon-defs" aria-hidden="true"><defs>
+ <symbol id="i-camera" viewBox="0 0 24 24"><path d="M8 5l1.5-2h5L16 5h4a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2z"/><circle cx="12" cy="12" r="4"/></symbol>
+ <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5l5-5 5 5M4 16v4a1 1 0 001 1h14a1 1 0 001-1v-4"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5l5 5 5-5M4 17v4h16v-4"/></symbol>
+ <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="M3 17l5-5 4 4 3-3 6 6"/></symbol>
+ <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1116 0z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></symbol>
+ <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 10a9 9 0 119 11M3 4v6h6"/></symbol>
+ <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 3v7m0 4v7M12 3v12m0 4v2M20 3v2m0 4v12M1 10h6m2 9h6m2-14h6"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 018 0v4m-4 4v3"/></symbol>
+ <symbol id="i-save" viewBox="0 0 24 24"><path d="M4 3h13l4 4v14H3V3zM7 3v6h10V3M7 21v-8h10v8"/></symbol>
+</defs></svg>
+<header class="topbar">
+ <a href="./" class="brand"><span class="brand-icon"><svg><use href="#i-camera"/></svg></span><span>timestamp<span class="brand-light"> studio</span><small>PHOTO EDITOR</small></span></a>
+ <div class="header-right"><span class="privacy"><svg><use href="#i-lock"/></svg> Foto tetap di perangkat Anda</span><button class="button primary top-download" data-download disabled><svg><use href="#i-download"/></svg> Unduh foto</button></div>
+</header>
+<main>
+ <div class="page-intro"><div><div class="eyebrow"><span></span> SETIAP FOTO, LENGKAP DENGAN CERITANYA</div><h1>Foto Anda. Waktu & tempatnya.</h1><p>Tambahkan timestamp yang rapi, sesuaikan detailnya, lalu simpan.</p></div><span class="local-badge"><span></span> Diproses di browser</span></div>
+ <div class="studio">
+ <aside class="editor" aria-label="Pengaturan foto dan timestamp">
+  <section class="panel upload-panel"><div class="section-heading"><span class="step">01</span><h2>Foto Anda</h2><span class="mini-label">MULAI DI SINI</span></div>
+   <label class="dropzone" id="photo-drop" for="photo-input"><span class="upload-icon"><svg><use href="#i-upload"/></svg></span><strong id="photo-label">Klik atau letakkan foto di sini</strong><span>JPG atau PNG · resolusi asli dipertahankan</span><input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
+   <div id="photo-info" class="file-info" hidden></div>
+  </section>
+  <section class="panel timestamp-panel"><div class="section-heading"><span class="step">02</span><h2>Isi timestamp</h2><span class="mini-label">7 BARIS</span></div>
+   <div class="preset-box"><span class="preset-star">✦</span><div><label for="preset">Preset tampilan</label><select id="preset"><option value="camera">Timestamp Camera</option><option value="pixellab">Template PixelLab</option></select></div><span class="preset-tag" id="preset-tag">UTAMA</span></div>
+   <div id="timestamp-fields"></div>
+   <div class="quick-actions"><button id="time-now" class="text-button">Gunakan waktu sekarang</button><span>WITA</span></div>
+   <details class="advanced" id="appearance"><summary><svg><use href="#i-sliders"/></svg> Penyesuaian tampilan <span>⌄</span></summary><div class="details-body">
+    <label class="control-label" for="font-family">Jenis huruf</label><select id="font-family"><option value="camera">Android / sans-serif</option><option value="arial">Arial</option><option value="custom" disabled>Font unggahan</option></select>
+    <label class="font-upload text-button" for="font-input">+ Unggah font sendiri (.ttf / .otf / .woff)</label><input type="file" id="font-input" accept=".ttf,.otf,.woff,.woff2" class="file-input"><span class="hint" id="font-note">Font perangkat dapat sedikit berbeda. Unggah font untuk kecocokan lebih dekat.</span>
+    <label class="control-label" for="font-size">Ukuran teks <output id="font-size-value">40 · Medium</output></label><input id="font-size" type="range" min="16" max="100" step="1" value="40">
+    <label class="control-label" for="line-gap">Jarak antarbaris <output id="line-gap-value">10.25</output></label><input id="line-gap" type="range" min="0" max="24" step="0.25" value="10.25">
+    <div class="two-col"><div><label class="control-label" for="text-color">Warna teks</label><input type="color" id="text-color" value="#ffffff"></div><div><label class="control-label" for="text-position">Posisi teks</label><select id="text-position"><option value="br">Kanan bawah</option><option value="bl">Kiri bawah</option><option value="tr">Kanan atas</option><option value="tl">Kiri atas</option></select></div></div>
+    <div class="two-col"><div><label class="control-label" for="margin-x">Margin samping (%)</label><input id="margin-x" type="number" min="0" max="40" step="0.1" value="0"></div><div><label class="control-label" for="margin-y">Margin vertikal (%)</label><input id="margin-y" type="number" min="0" max="40" step="0.1" value="0"></div></div>
+    <label class="control-label" for="text-opacity">Opasitas teks <output id="text-opacity-value">100%</output></label><input id="text-opacity" type="range" min="0" max="100" value="100">
+    <label class="switch-row"><span>Bayangan teks</span><input id="text-shadow" type="checkbox" class="switch" checked></label>
+    <label class="control-label" for="shadow-opacity">Kekuatan bayangan <output id="shadow-opacity-value">50%</output></label><input id="shadow-opacity" type="range" min="0" max="100" value="50">
+    <label class="control-label" for="shadow-blur">Kelembutan bayangan <output id="shadow-blur-value">2</output></label><input id="shadow-blur" type="range" min="0" max="6" step="0.25" value="2">
+    <label class="control-label" for="shadow-offset">Pergeseran bayangan <output id="shadow-offset-value">1</output></label><input id="shadow-offset" type="range" min="0" max="5" step="0.25" value="1">
+    <label class="control-label" for="background-opacity">Latar belakang teks <output id="background-opacity-value">0%</output></label><input id="background-opacity" type="range" min="0" max="100" value="0">
+    <label class="control-label" for="time-separator">Pemisah jam saat mengisi waktu otomatis</label><select id="time-separator"><option value=".">Titik — 12.37</option><option value=":">Titik dua — 12:37</option></select>
+    <p class="hint">Teks panjang diperkecil bersama agar semua baris tetap utuh. Anda juga dapat menggeser blok teks pada pratinjau.</p>
+   </div></details>
+  </section>
+  <section class="panel"><div class="section-heading"><span class="step">03</span><h2>Peta lokasi</h2><input id="map-enabled" aria-label="Tampilkan peta" type="checkbox" class="switch" checked></div>
+   <p class="section-description">Tambahkan tangkapan layar peta pilihan Anda.</p>
+   <label class="map-upload" for="map-input"><svg><use href="#i-pin"/></svg><span id="map-label">Unggah gambar peta</span><span>+</span><input id="map-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
+   <div id="map-empty-note" class="hint">Peta muncul setelah gambar diunggah.</div>
+   <details class="advanced"><summary>Ukuran & posisi peta <span>⌄</span></summary><div class="details-body">
+    <label class="control-label" for="map-size">Lebar peta <output id="map-size-value">30%</output></label><input id="map-size" type="range" min="10" max="60" value="30">
+    <label class="control-label" for="map-shape">Bentuk peta</label><select id="map-shape"><option value="square">Persegi · potong tengah</option><option value="original">Rasio gambar asli</option></select>
+    <label class="control-label" for="map-position">Posisi peta</label><select id="map-position"><option value="bl">Kiri bawah</option><option value="br">Kanan bawah</option><option value="tl">Kiri atas</option><option value="tr">Kanan atas</option></select>
+    <label class="control-label" for="map-opacity">Opasitas peta <output id="map-opacity-value">85%</output></label><input id="map-opacity" type="range" min="0" max="100" value="85">
+    <label class="switch-row"><span>Garis tepi putih</span><input id="map-border" type="checkbox" class="switch"></label>
+    <button id="remove-map" class="text-button danger" disabled>Hapus gambar peta</button>
+   </div></details>
+  </section>
+  <div class="preset-actions"><button id="save-preset" class="button secondary"><svg><use href="#i-save"/></svg> Simpan preset</button><button id="load-preset" class="button secondary">Muat preset</button><button id="reset" class="icon-button" aria-label="Reset pengaturan" title="Reset pengaturan"><svg><use href="#i-reset"/></svg></button></div>
+ </aside>
+ <section class="preview-column" aria-label="Pratinjau dan unduhan">
+  <div class="preview-panel"><div class="preview-toolbar"><div><span class="live-dot"></span><h2>Pratinjau langsung</h2></div><span id="resolution">Belum ada foto</span></div>
+   <div id="preview-stage" class="preview-stage"><div class="canvas-wrap" id="canvas-wrap"><canvas id="preview" aria-label="Pratinjau foto dan timestamp"></canvas><div class="empty-state" id="empty-state"><div class="empty-icon"><svg><use href="#i-image"/></svg></div><h3>Mulai dengan sebuah foto</h3><p>Detail waktu dan tempat akan tampil di sini.</p><label for="photo-input" class="button primary"><svg><use href="#i-upload"/></svg> Pilih foto</label><button id="demo" class="demo-button">atau coba kanvas contoh →</button></div><span class="demo-label" id="demo-label" hidden>KANVAS CONTOH</span></div></div>
+   <div class="preview-bottom"><span><svg><use href="#i-check"/></svg> <span id="preview-status">Perubahan terlihat secara langsung</span></span><button id="compare" class="text-button" disabled aria-pressed="false">Lihat foto asli</button></div>
+  </div>
+  <section class="export-panel"><div class="export-heading"><div class="export-icon"><svg><use href="#i-download"/></svg></div><div><h2>Siap untuk disimpan</h2><p>Timestamp dan peta menyatu dengan foto Anda.</p></div></div>
+   <div class="export-options"><div><label for="export-format">Format</label><select id="export-format"><option value="jpeg">JPG · ukuran lebih ringan</option><option value="png">PNG · tanpa kompresi lossy</option></select></div><div><label for="export-size">Resolusi</label><select id="export-size"><option value="original">Resolusi asli</option><option value="pixellab">2448 × 3264 · 3:4</option></select></div></div>
+   <div id="fit-options" hidden><label class="control-label" for="export-fit">Penyesuaian rasio foto</label><select id="export-fit"><option value="contain">Utuh · tambah bidang hitam</option><option value="cover">Penuhi bidang · potong tengah</option></select></div>
+   <label class="control-label quality-label" for="export-quality">Kualitas JPG <output id="export-quality-value">95%</output></label><input id="export-quality" type="range" min="60" max="100" value="95">
+   <button class="button primary download-main" data-download disabled><svg><use href="#i-download"/></svg><span>Unduh foto</span><small id="download-size">Pilih foto terlebih dahulu</small></button>
+   <p class="export-note">Tanpa watermark tambahan. Foto asli tetap tersimpan di perangkat.</p>
+  </section>
+  <div class="workflow-note"><span>01 <b>Unggah</b></span><i>—</i><span>02 <b>Sesuaikan</b></span><i>—</i><span>03 <b>Simpan</b></span></div>
+ </section>
+ </div>
+</main>
+<footer><span>timestamp studio <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Privat di perangkat. Mudah di setiap layar.</span></footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="app.js"></script>
+</body></html>
