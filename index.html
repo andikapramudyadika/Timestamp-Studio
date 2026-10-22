@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
   <title>Timestamp Studio — Editor foto</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.2"><link rel="stylesheet" href="mobile.css?v=1.2">
 </head>
 <body>
 <svg class="icon-defs" aria-hidden="true"><defs>
@@ -25,6 +25,7 @@
 </header>
 <main>
  <div class="page-intro"><div><div class="eyebrow"><span></span> SETIAP FOTO, LENGKAP DENGAN CERITANYA</div><h1>Foto Anda. Waktu & tempatnya.</h1><p>Tambahkan timestamp yang rapi, sesuaikan detailnya, lalu simpan.</p></div><span class="local-badge"><span></span> Diproses di browser</span></div>
+ <nav class="mobile-tabs" aria-label="Bagian editor"><button data-tab="photo" class="active" aria-pressed="true"><svg><use href="#i-image"/></svg>Foto</button><button data-tab="text" aria-pressed="false"><svg><use href="#i-sliders"/></svg>Teks</button><button data-tab="map" aria-pressed="false"><svg><use href="#i-pin"/></svg>Peta</button><button data-tab="export" aria-pressed="false"><svg><use href="#i-download"/></svg>Unduh</button></nav>
  <div class="studio">
  <aside class="editor" aria-label="Pengaturan foto dan timestamp">
   <section class="panel upload-panel"><div class="section-heading"><span class="step">01</span><h2>Foto Anda</h2><span class="mini-label">MULAI DI SINI</span></div>
@@ -39,28 +40,39 @@
     <label class="control-label" for="font-family">Jenis huruf</label><select id="font-family"><option value="camera">Android / sans-serif</option><option value="arial">Arial</option><option value="custom" disabled>Font unggahan</option></select>
     <label class="font-upload text-button" for="font-input">+ Unggah font sendiri (.ttf / .otf / .woff)</label><input type="file" id="font-input" accept=".ttf,.otf,.woff,.woff2" class="file-input"><span class="hint" id="font-note">Font perangkat dapat sedikit berbeda. Unggah font untuk kecocokan lebih dekat.</span>
     <label class="control-label" for="font-size">Ukuran teks <output id="font-size-value">40 · Medium</output></label><input id="font-size" type="range" min="16" max="100" step="1" value="40">
+    <label class="control-label" for="font-weight">Ketebalan huruf <output id="font-weight-value">380</output></label><input id="font-weight" type="range" min="250" max="500" step="10" value="380"><p class="hint">300 tipis · 400 regular. Gunakan 360–390 bila hasil terlihat terlalu tebal.</p>
     <label class="control-label" for="line-gap">Jarak antarbaris <output id="line-gap-value">10.25</output></label><input id="line-gap" type="range" min="0" max="24" step="0.25" value="10.25">
     <div class="two-col"><div><label class="control-label" for="text-color">Warna teks</label><input type="color" id="text-color" value="#ffffff"></div><div><label class="control-label" for="text-position">Posisi teks</label><select id="text-position"><option value="br">Kanan bawah</option><option value="bl">Kiri bawah</option><option value="tr">Kanan atas</option><option value="tl">Kiri atas</option></select></div></div>
     <div class="two-col"><div><label class="control-label" for="margin-x">Margin samping (%)</label><input id="margin-x" type="number" min="0" max="40" step="0.1" value="0"></div><div><label class="control-label" for="margin-y">Margin vertikal (%)</label><input id="margin-y" type="number" min="0" max="40" step="0.1" value="0"></div></div>
     <label class="control-label" for="text-opacity">Opasitas teks <output id="text-opacity-value">100%</output></label><input id="text-opacity" type="range" min="0" max="100" value="100">
     <label class="switch-row"><span>Bayangan teks</span><input id="text-shadow" type="checkbox" class="switch" checked></label>
-    <label class="control-label" for="shadow-opacity">Kekuatan bayangan <output id="shadow-opacity-value">50%</output></label><input id="shadow-opacity" type="range" min="0" max="100" value="50">
+    <label class="control-label" for="shadow-preset">Acuan bayangan</label><select id="shadow-preset"><option value="pixellab">PixelLab Anda · 34%, offset 2/2</option><option value="apk">Kode APK · 50%, offset 1/1</option><option value="custom" disabled>Disesuaikan manual</option></select>
+    <label class="control-label" for="shadow-opacity">Kekuatan bayangan <output id="shadow-opacity-value">34%</output></label><input id="shadow-opacity" type="range" min="0" max="100" value="34">
     <label class="control-label" for="shadow-blur">Kelembutan bayangan <output id="shadow-blur-value">2</output></label><input id="shadow-blur" type="range" min="0" max="6" step="0.25" value="2">
-    <label class="control-label" for="shadow-offset">Pergeseran bayangan <output id="shadow-offset-value">1</output></label><input id="shadow-offset" type="range" min="0" max="5" step="0.25" value="1">
+    <div class="two-col"><div><label class="control-label" for="shadow-offset-x">Offset X <output id="shadow-offset-x-value">2</output></label><input id="shadow-offset-x" type="range" min="0" max="5" step="0.25" value="2"></div><div><label class="control-label" for="shadow-offset-y">Offset Y <output id="shadow-offset-y-value">2</output></label><input id="shadow-offset-y" type="range" min="0" max="5" step="0.25" value="2"></div></div>
+    <p class="hint">Acuan PixelLab: offset mengikuti kanvas 2448 × 3264. Kelembutan dapat disesuaikan terpisah.</p>
     <label class="control-label" for="background-opacity">Latar belakang teks <output id="background-opacity-value">0%</output></label><input id="background-opacity" type="range" min="0" max="100" value="0">
     <label class="control-label" for="time-separator">Pemisah jam saat mengisi waktu otomatis</label><select id="time-separator"><option value=".">Titik — 12.37</option><option value=":">Titik dua — 12:37</option></select>
     <p class="hint">Teks panjang diperkecil bersama agar semua baris tetap utuh. Anda juga dapat menggeser blok teks pada pratinjau.</p>
    </div></details>
   </section>
-  <section class="panel"><div class="section-heading"><span class="step">03</span><h2>Peta lokasi</h2><input id="map-enabled" aria-label="Tampilkan peta" type="checkbox" class="switch" checked></div>
-   <p class="section-description">Tambahkan tangkapan layar peta pilihan Anda.</p>
+  <section class="panel map-panel"><div class="section-heading"><span class="step">03</span><h2>Peta lokasi</h2><input id="map-enabled" aria-label="Tampilkan peta" type="checkbox" class="switch" checked></div>
+   <p class="section-description">Tempel koordinat dari Google Maps. Pin merah muncul pada titik tersebut.</p>
+   <label class="control-label" for="map-coordinates">Koordinat lokasi</label><input id="map-coordinates" type="text" placeholder="Lintang, bujur" autocomplete="off" spellcheck="false" maxlength="200">
+   <label class="switch-row"><span>Buat otomatis setelah ditempel</span><input id="auto-map" type="checkbox" class="switch" checked></label>
+   <label class="control-label" for="map-zoom">Detail peta <output id="map-zoom-value">17</output></label><input id="map-zoom" type="range" min="13" max="19" step="1" value="17">
+   <button id="generate-map" class="button secondary map-generate"><svg><use href="#i-pin"/></svg><span>Buat peta</span></button>
+   <p id="map-status" class="map-status" role="status" aria-live="polite">OpenStreetMap gratis · tanpa API key</p>
+   <div id="map-thumbnail-wrap" class="map-thumbnail-wrap" hidden><img id="map-thumbnail" alt="Pratinjau peta lokasi dengan pin merah"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a></div>
+   <p class="hint">Koordinat digunakan untuk meminta peta ke OpenStreetMap. Foto tetap di perangkat Anda.</p>
+   <div class="map-divider">atau gunakan gambar sendiri</div>
    <label class="map-upload" for="map-input"><svg><use href="#i-pin"/></svg><span id="map-label">Unggah gambar peta</span><span>+</span><input id="map-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
-   <div id="map-empty-note" class="hint">Peta muncul setelah gambar diunggah.</div>
+   <div id="map-empty-note" class="hint">Peta otomatis menyertakan pin dan atribusi dalam hasil unduhan.</div>
    <details class="advanced"><summary>Ukuran & posisi peta <span>⌄</span></summary><div class="details-body">
     <label class="control-label" for="map-size">Lebar peta <output id="map-size-value">30%</output></label><input id="map-size" type="range" min="10" max="60" value="30">
     <label class="control-label" for="map-shape">Bentuk peta</label><select id="map-shape"><option value="square">Persegi · potong tengah</option><option value="original">Rasio gambar asli</option></select>
     <label class="control-label" for="map-position">Posisi peta</label><select id="map-position"><option value="bl">Kiri bawah</option><option value="br">Kanan bawah</option><option value="tl">Kiri atas</option><option value="tr">Kanan atas</option></select>
-    <label class="control-label" for="map-opacity">Opasitas peta <output id="map-opacity-value">85%</output></label><input id="map-opacity" type="range" min="0" max="100" value="85">
+    <label class="control-label" for="map-opacity">Opasitas peta <output id="map-opacity-value">65%</output></label><input id="map-opacity" type="range" min="0" max="100" value="65">
     <label class="switch-row"><span>Garis tepi putih</span><input id="map-border" type="checkbox" class="switch"></label>
     <button id="remove-map" class="text-button danger" disabled>Hapus gambar peta</button>
    </div></details>
@@ -70,7 +82,7 @@
  <section class="preview-column" aria-label="Pratinjau dan unduhan">
   <div class="preview-panel"><div class="preview-toolbar"><div><span class="live-dot"></span><h2>Pratinjau langsung</h2></div><span id="resolution">Belum ada foto</span></div>
    <div id="preview-stage" class="preview-stage"><div class="canvas-wrap" id="canvas-wrap"><canvas id="preview" aria-label="Pratinjau foto dan timestamp"></canvas><div class="empty-state" id="empty-state"><div class="empty-icon"><svg><use href="#i-image"/></svg></div><h3>Mulai dengan sebuah foto</h3><p>Detail waktu dan tempat akan tampil di sini.</p><label for="photo-input" class="button primary"><svg><use href="#i-upload"/></svg> Pilih foto</label><button id="demo" class="demo-button">atau coba kanvas contoh →</button></div><span class="demo-label" id="demo-label" hidden>KANVAS CONTOH</span></div></div>
-   <div class="preview-bottom"><span><svg><use href="#i-check"/></svg> <span id="preview-status">Perubahan terlihat secara langsung</span></span><button id="compare" class="text-button" disabled aria-pressed="false">Lihat foto asli</button></div>
+   <div class="preview-bottom"><button id="drag-mode" class="text-button" aria-pressed="false">Geser objek</button><span><svg><use href="#i-check"/></svg> <span id="preview-status">Perubahan terlihat secara langsung</span></span><button id="compare" class="text-button" disabled aria-pressed="false">Lihat foto asli</button></div>
   </div>
   <section class="export-panel"><div class="export-heading"><div class="export-icon"><svg><use href="#i-download"/></svg></div><div><h2>Siap untuk disimpan</h2><p>Timestamp dan peta menyatu dengan foto Anda.</p></div></div>
    <div class="export-options"><div><label for="export-format">Format</label><select id="export-format"><option value="jpeg">JPG · ukuran lebih ringan</option><option value="png">PNG · tanpa kompresi lossy</option></select></div><div><label for="export-size">Resolusi</label><select id="export-size"><option value="original">Resolusi asli</option><option value="pixellab">2448 × 3264 · 3:4</option></select></div></div>
@@ -83,7 +95,7 @@
  </section>
  </div>
 </main>
-<footer><span>timestamp studio <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Privat di perangkat. Mudah di setiap layar.</span></footer>
+<footer><span>timestamp studio v1.2 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Peta oleh OpenStreetMap.</span></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="app.js"></script>
+<script type="module" src="app.js?v=1.2"></script>
 </body></html>

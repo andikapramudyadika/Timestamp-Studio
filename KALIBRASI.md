@@ -1,5 +1,17 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.2: ponsel, ketebalan, dan bayangan
+
+Versi terbaru memakai Roboto variabel dengan weight 380, bukan Regular 400 yang tetap. Pengukuran tinta putih menunjukkan varian Light 300 terlalu tipis pada referensi, sehingga dipilih penyesuaian yang lebih halus. Pengguna tetap dapat memilih weight 250–500. Pratinjau kini dirender hingga sisi panjang 2000 piksel untuk mengurangi kehilangan detail huruf pada layar rapat piksel.
+
+Bayangan bawaan mengikuti angka PixelLab yang diberikan pengguna: opasitas 34%, offset X=2 dan Y=2 pada kanvas referensi 2448 × 3264. Offset diskalakan relatif terhadap sisi panjang 3264; pada ekspor 2448 × 3264 hasilnya tepat 2 piksel per sumbu. Blur tetap dapat diatur karena angka radius PixelLab belum diketahui. Acuan APK (50%, offset 1/1 pada skala 1280) disediakan sebagai pilihan terpisah, bukan diklaim sama dengan acuan PixelLab.
+
+Peta otomatis memakai OpenStreetMap sesuai pilihan pengguna, dengan pin merah dan opasitas 65%. Atribusi digambar terpisah agar tetap terbaca. Tidak menambahkan logo Google pada data OpenStreetMap.
+
+Angka selisih 0,75 piksel di bawah adalah hasil historis **versi 1.1 dengan Roboto Regular 400**, bukan klaim untuk versi 1.2 yang menggunakan font dan ketebalan baru. Pada pembanding yang sama, batas teks versi 1.2 masih dekat (rata-rata sekitar 2 piksel), dengan bentuk yang sedikit lebih ringan. Tidak ada klaim identik per piksel atau pengujian langsung pada perangkat fisik Pixel/Poco.
+
+## Catatan pengukuran versi 1.1
+
 Kalibrasi dilakukan terhadap foto referensi pengguna dengan orientasi tampilan 3072 × 4096 piksel, setelah rotasi EXIF dinormalisasi. Foto dan teks lokasi referensi tidak disertakan dalam repository ini.
 
 ## Perubahan
