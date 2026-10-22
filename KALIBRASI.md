@@ -1,5 +1,13 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.3: bayangan foto referensi dan Google Maps
+
+Bawaan baru memakai bayangan hitam 55%, blur 1,25 dan offset X/Y 1,25 pada acuan sisi panjang 1280. Pada ekspor 2448 × 3264 panjang tersebut menjadi sekitar 3,19 piksel. Efek diarahkan ke kanan bawah, lebih tegas daripada acuan PixelLab lama. Nilai ini merupakan penyesuaian visual terhadap foto pengguna terbaru, bukan hasil ekstraksi angka dari aplikasi asli. Ukuran, posisi, dan ketebalan huruf tidak berubah.
+
+Canvas tidak menskalakan shadowBlur/shadowOffset mengikuti transform teks. Renderer kini mengalikan panjang bayangan dengan skala pratinjau secara eksplisit agar pratinjau dan ekspor sebanding. Preset PixelLab dan APK tetap tersedia.
+
+Google Maps ditambahkan melalui Map Tiles API resmi, dengan API key pengguna, roadmap bahasa Indonesia, dan atribusi data dari viewport. OpenStreetMap tetap menjadi pilihan terpisah. Pengujian alur Google menggunakan respons simulasi; akses peta Google sebenarnya memerlukan API key dan billing aktif. Catatan versi 1.2 dan 1.1 berikut dipertahankan sebagai riwayat.
+
 ## Versi 1.2: ponsel, ketebalan, dan bayangan
 
 Versi terbaru memakai Roboto variabel dengan weight 380, bukan Regular 400 yang tetap. Pengukuran tinta putih menunjukkan varian Light 300 terlalu tipis pada referensi, sehingga dipilih penyesuaian yang lebih halus. Pengguna tetap dapat memilih weight 250–500. Pratinjau kini dirender hingga sisi panjang 2000 piksel untuk mengurangi kehilangan detail huruf pada layar rapat piksel.

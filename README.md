@@ -1,72 +1,58 @@
-# Timestamp Studio
+# Timestamp Studio v1.3
 
-Web app pribadi untuk menambahkan tujuh baris timestamp dan gambar peta ke foto. Versi ini sudah dikalibrasi terhadap foto referensi Timestamp Camera dan siap diunggah melalui situs GitHub.
+Editor foto berbahasa Indonesia untuk tujuh baris timestamp dan peta. Foto diproses di browser, dengan unduhan JPG/PNG pada resolusi asli atau 2448 × 3264. Aplikasi statis ini dapat dijalankan di GitHub Pages tanpa build, npm install, atau backend.
 
-**Tidak perlu build, npm install, API key, backend, atau akun ChatGPT untuk menjalankan versi ini.** Semua berkas yang diperlukan sudah berada di folder ini. Font Roboto variabel disertakan secara lokal. Versi 1.2 menambahkan peta otomatis OpenStreetMap, navigasi ponsel, pengaturan ketebalan huruf, dan acuan bayangan PixelLab.
+Versi 1.3 menambahkan Google Maps melalui API resmi dan memperjelas bayangan tipis tulisan berdasarkan foto referensi. Font, ukuran, susunan teks, dan posisi peta versi 1.2 dipertahankan.
 
-## Membuatnya online lewat GitHub web
+## Menjalankan di GitHub Pages
 
-1. Masuk ke GitHub, lalu buat repository baru, misalnya `timestamp-studio`.
-2. Untuk memakai GitHub Pages pada paket GitHub Free, pilih repository **Public**. Aplikasi web yang diterbitkan juga dapat diakses orang lain; versi ini tidak memiliki sistem login.
-3. Pada repository, pilih **Add file → Upload files**.
-4. Buka folder `timestamp-studio-github` di komputer. Unggah **isinya**, termasuk folder `fonts` dan berkas `.nojekyll`. Jangan mengunggah ZIP sebagai satu berkas dan jangan menaruh seluruh aplikasi di dalam satu subfolder tambahan.
-5. Pilih **Commit changes**. Pastikan `index.html`, `app.js`, `renderer.js`, `maps.js`, `style.css`, `mobile.css`, dan folder `fonts` terlihat langsung pada halaman utama repository.
-6. Buka **Settings → Pages**.
-7. Pada **Build and deployment**, pilih **Source: Deploy from a branch**.
-8. Pada **Branch**, pilih **main** dan **/(root)**, lalu **Save**. Jika nama branch Anda berbeda, pilih branch tempat berkas tadi diunggah.
-9. Tunggu proses penerbitan selesai. Buka alamat yang diberikan GitHub, biasanya `https://USERNAME.github.io/timestamp-studio/`.
+1. Buat repository GitHub. Untuk GitHub Free, gunakan repository Public agar dapat memakai Pages.
+2. Ekstrak ZIP, lalu unggah **isi folder** `timestamp-studio-github` ke halaman utama repository melalui **Add file → Upload files**. Jangan unggah ZIP sebagai satu berkas.
+3. Pastikan `index.html`, `app.js`, `renderer.js`, `maps.js`, `style.css`, `mobile.css`, `icon.svg`, `.nojekyll`, dan folder `fonts/` berada langsung di root repository.
+4. Buka **Settings → Pages → Deploy from a branch → main → /(root) → Save**. Gunakan nama branch Anda jika berbeda.
+5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.3**.
 
-Saat memperbarui aplikasi, unggah ulang berkas yang berubah ke lokasi yang sama. GitHub Pages akan menerbitkan perubahan tersebut. Bila tampilan lama masih muncul, muat ulang halaman tanpa cache.
+Untuk memperbarui aplikasi lama, lihat [PEMBARUAN.md](PEMBARUAN.md). Semua aset memakai jalur relatif sehingga mendukung alamat Pages dengan subfolder repository.
+
+## Bayangan tulisan
+
+Bawaan **Foto asli · bayangan tipis** memakai hitam 55%, blur 1,25, offset X/Y 1,25 pada acuan sisi panjang 1280. Pada foto 2448 × 3264, blur dan offset menjadi sekitar 3,19 piksel. Bayangan mengikuti ukuran foto dan diperkecil secara eksplisit pada pratinjau agar sebanding dengan unduhan.
+
+Buka **Penyesuaian tampilan → Acuan bayangan** untuk memilih preset baru, PixelLab lama (34%), atau Kode APK (50%). Kekuatan, kelembutan, offset, dan sakelar bayangan tetap dapat diubah. Preset tersimpan lama mempertahankan pengaturan Anda; pilih **Foto asli · bayangan tipis** untuk menerapkan bayangan baru tanpa mengubah isian teks. **Reset pengaturan** mengembalikan seluruh tampilan bawaan.
+
+## Google Maps
+
+Google Maps menjadi pilihan sumber peta utama. Peta dimuat langsung melalui **Map Tiles API resmi**, menggunakan roadmap, bahasa Indonesia, label beresolusi tinggi, dan pin merah dengan ujung pada koordinat. Ini bukan peta OpenStreetMap yang diganti warnanya. Gaya/label Google dapat berubah dan tidak dijamin identik dengan versi Google Maps pada foto lama.
+
+1. Di Google Cloud, buat/pilih project, aktifkan billing, lalu aktifkan **Map Tiles API**.
+2. Buat API key. Batasi key ke **Map Tiles API** dan alamat situs Anda melalui **Websites / HTTP referrers**, misalnya `https://USERNAME.github.io/*`. Untuk pengujian lokal, tambahkan `http://127.0.0.1:8013/*` bila diperlukan. Atur kuota penggunaan di Google Cloud.
+3. Buka bagian **Peta**, pilih **Google Maps**, lalu masukkan key pada kolom aplikasi. Tidak perlu mengirim key lewat chat atau menulisnya di repository.
+4. Tempel koordinat `lintang, bujur`, lalu tekan **Buat peta**, atau biarkan pilihan otomatis aktif. Pengambilan peta memakai kuota dan dapat menimbulkan biaya sesuai akun Google Cloud Anda.
+5. Tunggu **Peta Google Maps siap**, lalu unduh foto. Nama Google Maps dan atribusi data yang diberikan Google ikut digambar pada hasil dengan opasitas penuh.
+
+Key hanya digunakan selama halaman terbuka, dikirim ke Google untuk autentikasi, dan tidak dimasukkan dalam localStorage/preset. Key aplikasi browser terlihat pada permintaan jaringan; pembatasan domain dan API perlu dikonfigurasi di Google Cloud. Token sesi hanya disimpan di memori. Aplikasi tidak membuat cache tile Google sendiri; cache HTTP mengikuti respons Google.
+
+Tanpa API key, **unggah gambar Google Maps Anda** melalui **Unggah gambar peta**; sertakan logo/atribusi dalam gambar. Anda juga dapat memilih **OpenStreetMap · gratis, tanpa API key**. Aplikasi tidak berpindah ke OpenStreetMap secara diam-diam bila Google gagal. Pesan kesalahan menjelaskan bila key, billing, izin domain, atau kuota perlu diperiksa.
 
 Panduan resmi:
-- https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site
-- https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
 
-## Berkas utama
+- [Map Tiles API: API key](https://developers.google.com/maps/documentation/tile/get-api-key)
+- [Roadmap tiles](https://developers.google.com/maps/documentation/tile/roadmap)
+- [Penggunaan dan billing](https://developers.google.com/maps/documentation/tile/usage-and-billing)
+- [Atribusi Google Maps](https://developers.google.com/maps/documentation/tile/policies)
 
-| Berkas | Fungsi |
-| --- | --- |
-| `index.html` | Formulir, pratinjau, pengaturan, dan tombol unduh |
-| `style.css` | Tampilan desktop dan ponsel |
-| `mobile.css` | Navigasi Foto/Teks/Peta/Unduh serta kontrol sentuh ponsel |
-| `app.js` | Unggah, isian, simpan preset, interaksi, serta ekspor |
-| `renderer.js` | Perhitungan ukuran, susunan, margin, dan bayangan timestamp |
-| `maps.js` | Baca koordinat, proyeksi peta, pin, dan pemuatan tile OpenStreetMap |
-| `fonts/Roboto-Variable.ttf` | Font timestamp bawaan dengan ketebalan halus |
-| `fonts/OFL.txt` | Lisensi Roboto variabel |
-| `fonts/Roboto-Regular.ttf`, `fonts/LICENSE.txt` | Font dan lisensi versi sebelumnya, boleh dipertahankan |
-| `.nojekyll` | Menyajikan berkas statis langsung di GitHub Pages |
-| `KALIBRASI.md` | Hasil pengukuran dan penjelasan preset |
-| `tests/renderer.test.mjs` | Pemeriksaan fungsi waktu, gambar, teks, dan bayangan |
+## Pemakaian dan privasi
 
-Semua jalur aset relatif sehingga aplikasi juga berjalan pada alamat project Pages yang memiliki subfolder repository.
+Unggah foto JPG, PNG, atau WebP; isi waktu dan lokasi; atur peta; lalu unduh JPG/PNG. Waktu otomatis menggunakan WITA. Navigasi bawah **Foto · Teks · Peta · Unduh** tersedia di ponsel. Aktifkan **Geser objek** bila ingin memindahkan teks/peta.
 
-## Pemakaian
+Foto, font, dan gambar peta unggahan diproses di browser. Saat meminta peta otomatis, penyedia yang dipilih menerima permintaan untuk area koordinat tersebut; foto Anda tidak dikirim. OpenStreetMap memakai `tile.openstreetmap.org` dan atribusinya ikut diekspor. Peta otomatis memerlukan internet.
 
-1. Unggah foto JPG, PNG, atau WebP.
-2. Isi hari/tanggal/waktu, koordinat, jalan/lorong, kelurahan, kecamatan, kabupaten/kota, serta provinsi.
-3. Buka bagian **Peta**, lalu tempel koordinat yang disalin dari Google Maps dalam bentuk `lintang, bujur`. Peta OpenStreetMap muncul otomatis dengan ujung pin merah tepat pada koordinat tersebut. Detail peta dapat diubah. Tautan pendek Google Maps harus dibuka dahulu untuk menyalin koordinatnya. Gambar peta sendiri tetap dapat diunggah sebagai alternatif.
-4. Sesuaikan tampilan atau geser teks/peta pada pratinjau.
-5. Unduh JPG atau PNG pada resolusi asli, atau pilih 2448 × 3264 dengan opsi foto utuh atau potong tengah.
+**Simpan preset** menyimpan teks dan pengaturan tampilan pada localStorage perangkat ini. Foto, gambar peta, font unggahan, dan API key tidak disimpan. Jangan unggah foto pribadi atau API key ke repository publik. Berkas pribadi dan foto referensi tidak disertakan dalam paket aplikasi.
 
-Gunakan tombol **Reset pengaturan** untuk mengembalikan preset hasil kalibrasi. Preset lama yang pernah Anda simpan akan mempertahankan nilai pilihan Anda ketika dimuat.
+Font Roboto variabel disertakan di `fonts/` bersama lisensinya. Pengaturan ketebalan huruf menyediakan 250–500, dengan bawaan 380.
 
-Peta memakai OpenStreetMap, bukan Google Maps. Tampilan jalan/label dapat berbeda dari contoh Google. Opasitas bawaan peta 65%; atribusi OpenStreetMap tetap digambar dengan jelas pada hasil foto. Koneksi internet diperlukan untuk membuat peta. Pemuatan hanya untuk area yang diminta; tidak ada pengunduhan massal atau peta offline. Layanan tile komunitas dapat membatasi permintaan saat sibuk.
+## Pemeriksaan lokal
 
-Pada ponsel, gunakan navigasi bawah **Foto · Teks · Peta · Unduh**. Pratinjau ringkas tetap terlihat saat mengedit. Aktifkan **Geser objek** hanya ketika hendak memindahkan teks atau peta; saat nonaktif, area foto tetap dapat dipakai untuk menggulir halaman.
+Jalankan `node --test tests/*.test.mjs` untuk memeriksa koordinat, viewport, pesan kesalahan Google, waktu WITA, susunan teks, atribusi, serta skala bayangan.
 
-Ketebalan Roboto bawaan **380**, sedikit lebih tipis daripada Regular 400. Slider **Ketebalan huruf** menyediakan 250–500; cobalah 360 atau 350 bila masih terlihat tebal pada layar Anda. Acuan bayangan bawaan adalah PixelLab Anda: opasitas **34%**, offset **2/2** pada kanvas referensi 2448 × 3264. Pilihan terpisah **Kode APK** memakai 50%, offset 1/1 pada acuan 1280. Radius blur dapat disesuaikan, karena angka blur PixelLab Anda belum diberikan. Efek antialiasing/outer glow kedua mesin tidak dijamin identik.
-
-## Privasi dan penyimpanan
-
-Foto, peta, dan font unggahan dibaca dan diproses di browser. Aplikasi tidak memiliki kode untuk mengunggahnya ke server. Foto/koordinat pribadi, APK, dan gambar perbandingan referensi tidak disertakan dalam paket ini.
-
-Saat Anda meminta peta otomatis, lokasi area peta diminta dari `tile.openstreetmap.org`; penyedia tile menerima permintaan jaringan yang berkaitan dengan lokasi tersebut. Foto Anda tidak dikirim. Atribusi dan ketentuan sumber: https://www.openstreetmap.org/copyright dan https://operations.osmfoundation.org/policies/tiles/.
-
-Tombol **Simpan preset** menyimpan isi teks dan pengaturan pada browser/perangkat itu saja, melalui localStorage. Berkas foto, peta, dan font unggahan tidak ikut disimpan; unggah kembali jika halaman dibuka ulang. Hindari mengunggah berkas pribadi ke repository GitHub yang bersifat publik.
-
-## Pengembangan lokal (opsional)
-
-Untuk memeriksa dengan Node.js: `node --test tests/*.test.mjs`.
-
-Untuk pratinjau lokal, jalankan server statis dari folder ini, misalnya `python -m http.server 8000`, lalu buka `http://localhost:8000`. Membuka `index.html` dengan klik ganda dapat diblokir browser karena aplikasi memakai modul JavaScript. GitHub Pages tidak memerlukan Python atau Node.js.
+Untuk menjalankan aplikasi, sajikan folder ini dengan server statis, misalnya `python -m http.server 8000`, lalu buka `http://localhost:8000`. Jangan hanya klik ganda `index.html` karena browser dapat memblokir modul JavaScript pada URL berkas.

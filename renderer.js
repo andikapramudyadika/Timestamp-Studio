@@ -1,6 +1,11 @@
 export const LABELS = ['Hari, tanggal dan waktu','Koordinat','Nama lorong / jalan','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const DEFAULT_LINES = ['Kamis, 22 Oktober 2026 12.37','Koordinat lokasi','Nama jalan / lorong','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
-export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,shadow:true,shadowBlur:2,shadowReference:3264,shadowOffset:2,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
+export const SHADOW_PRESETS = {
+ camera:{shadow:true,shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
+ pixellab:{shadow:true,shadowBlur:2,shadowReference:3264,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34},
+ apk:{shadow:true,shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50}
+};
+export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_PRESETS.camera,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
 export function formatWita(date = new Date(), separator = '.') {
  const parts = new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Makassar',weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date);
  const get = k => parts.find(p=>p.type===k)?.value || '';
@@ -37,7 +42,14 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
   ctx.beginPath();ctx.rect(x,y,mw,mh);ctx.clip();ctx.drawImage(map.image,x+f.x,y+f.y,f.w,f.h);ctx.restore();
   if(s.mapBorder){ctx.save();ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1,unit*.7);ctx.strokeRect(x+ctx.lineWidth/2,y+ctx.lineWidth/2,mw-ctx.lineWidth,mh-ctx.lineWidth);ctx.restore();}
   bounds.map={x,y,w:mw,h:mh};
-  if(map.attribution){
+  if(map.brand){
+   // Google attribution is drawn over the map at full opacity, including exports.
+   ctx.save();const fs=Math.max(10,mw/36),padding=fs*.45,strip=fs*3.5;
+   ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(x,y+mh-strip,mw,strip);
+   ctx.fillStyle='#26372f';ctx.textAlign='left';ctx.textBaseline='middle';ctx.font=`500 ${fs*1.25}px Arial, sans-serif`;
+   ctx.fillText(map.brand,x+padding,y+mh-strip+fs,mw-padding*2);
+   ctx.font=`400 ${fs}px Arial, sans-serif`;ctx.fillText(map.attribution,x+padding,y+mh-fs*.85,mw-padding*2);ctx.restore();
+  }else if(map.attribution){
    // Attribution stays readable at full opacity, independently of map opacity.
    ctx.save();const fontSize=Math.max(8,mw/35),strip=fontSize*1.65;ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(x,y+mh-strip,mw,strip);ctx.fillStyle='#26372f';ctx.font=`400 ${fontSize}px Arial, sans-serif`;ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(map.attribution,x+fontSize*.35,y+mh-strip/2,mw-fontSize*.7);ctx.restore();
   }
@@ -68,7 +80,10 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
   bounds.text={x:x0,y:y0,w:x1-x0,h:y1-y0,shrunk:factor<.99};
   if(s.background){ctx.fillStyle=`rgba(0,0,0,${s.background/100})`;ctx.fillRect(x0-edge,y0-edge,x1-x0+2*edge,y1-y0+2*edge);}
   ctx.globalAlpha=s.opacity/100;ctx.fillStyle=s.color;ctx.textAlign='left';ctx.textBaseline='alphabetic';
-  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||3264);ctx.shadowColor=`rgba(0,0,0,${(s.shadowOpacity??34)/100})`;ctx.shadowBlur=(s.shadowBlur??2)*unit;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??2)*offsetUnit;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??2)*offsetUnit;}
+  // Canvas shadow lengths ignore the current transform. Scale them explicitly
+  // so a downsampled preview has the same shadow as the full-resolution export.
+  ctx.shadowColor='transparent';ctx.shadowBlur=ctx.shadowOffsetX=ctx.shadowOffsetY=0;
+  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||3264);ctx.shadowColor=`rgba(0,0,0,${(s.shadowOpacity??55)/100})`;ctx.shadowBlur=(s.shadowBlur??1.25)*unit*scale;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??1.25)*offsetUnit*scale;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??1.25)*offsetUnit*scale;}
   for(let i=0;i<rows.length;i++)ctx.fillText(rows[i].text,positions[i].x,positions[i].y);
  }
  ctx.restore();return bounds;
