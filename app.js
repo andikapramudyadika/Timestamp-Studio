@@ -1,5 +1,5 @@
-import {LABELS,DEFAULT_LINES,defaultStyle,SHADOW_PRESETS,formatWita,outputSize,cleanFileName,render} from './renderer.js?v=1.3.1';
-import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.3.1';
+import {LABELS,DEFAULT_LINES,defaultStyle,SHADOW_PRESETS,formatWita,outputSize,cleanFileName,render} from './renderer.js?v=1.3';
+import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.3';
 const $=id=>document.getElementById(id);
 const state={photo:null,map:null,lines:[formatWita(),...DEFAULT_LINES.slice(1)],visible:Array(7).fill(true),style:defaultStyle(),fit:'contain',exportPreset:'original',preset:'camera'};
 let bounds={},toastTimer,showOriginal=false,previewFrame=0,photoSequence=0,mapSequence=0,exporting=false,dragEnabled=!matchMedia('(max-width:760px)').matches;
