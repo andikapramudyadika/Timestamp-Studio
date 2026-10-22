@@ -1,5 +1,9 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.3.1: bayangan screenshot terbaru
+
+Bayangan diperkuat menjadi 75%, offset X 1,5 dan Y 2, dengan blur tetap 1,25 pada acuan 1280. Offset lebih turun membuat tepi gelap lebih terlihat di bawah huruf. Versi 1.3 disediakan sebagai preset halus terpisah. Tidak ada perubahan geometri atau ketebalan teks. Angka ini merupakan penyesuaian visual; tidak mengklaim hasil identik per piksel.
+
 ## Versi 1.3: bayangan foto referensi dan Google Maps
 
 Bawaan baru memakai bayangan hitam 55%, blur 1,25 dan offset X/Y 1,25 pada acuan sisi panjang 1280. Pada ekspor 2448 × 3264 panjang tersebut menjadi sekitar 3,19 piksel. Efek diarahkan ke kanan bawah, lebih tegas daripada acuan PixelLab lama. Nilai ini merupakan penyesuaian visual terhadap foto pengguna terbaru, bukan hasil ekstraksi angka dari aplikasi asli. Ukuran, posisi, dan ketebalan huruf tidak berubah.

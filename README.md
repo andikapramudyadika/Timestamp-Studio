@@ -1,4 +1,4 @@
-# Timestamp Studio v1.3
+# Timestamp Studio v1.3.1
 
 Editor foto berbahasa Indonesia untuk tujuh baris timestamp dan peta. Foto diproses di browser, dengan unduhan JPG/PNG pada resolusi asli atau 2448 × 3264. Aplikasi statis ini dapat dijalankan di GitHub Pages tanpa build, npm install, atau backend.
 
@@ -10,15 +10,17 @@ Versi 1.3 menambahkan Google Maps melalui API resmi dan memperjelas bayangan tip
 2. Ekstrak ZIP, lalu unggah **isi folder** `timestamp-studio-github` ke halaman utama repository melalui **Add file → Upload files**. Jangan unggah ZIP sebagai satu berkas.
 3. Pastikan `index.html`, `app.js`, `renderer.js`, `maps.js`, `style.css`, `mobile.css`, `icon.svg`, `.nojekyll`, dan folder `fonts/` berada langsung di root repository.
 4. Buka **Settings → Pages → Deploy from a branch → main → /(root) → Save**. Gunakan nama branch Anda jika berbeda.
-5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.3**.
+5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.3.1**.
 
 Untuk memperbarui aplikasi lama, lihat [PEMBARUAN.md](PEMBARUAN.md). Semua aset memakai jalur relatif sehingga mendukung alamat Pages dengan subfolder repository.
 
 ## Bayangan tulisan
 
-Bawaan **Foto asli · bayangan tipis** memakai hitam 55%, blur 1,25, offset X/Y 1,25 pada acuan sisi panjang 1280. Pada foto 2448 × 3264, blur dan offset menjadi sekitar 3,19 piksel. Bayangan mengikuti ukuran foto dan diperkecil secara eksplisit pada pratinjau agar sebanding dengan unduhan.
+Versi 1.3.1 memperkuat bayangan berdasarkan screenshot pembanding terbaru; jenis, ketebalan, ukuran, dan posisi huruf tetap sama.
 
-Buka **Penyesuaian tampilan → Acuan bayangan** untuk memilih preset baru, PixelLab lama (34%), atau Kode APK (50%). Kekuatan, kelembutan, offset, dan sakelar bayangan tetap dapat diubah. Preset tersimpan lama mempertahankan pengaturan Anda; pilih **Foto asli · bayangan tipis** untuk menerapkan bayangan baru tanpa mengubah isian teks. **Reset pengaturan** mengembalikan seluruh tampilan bawaan.
+Bawaan **Foto asli · bayangan tegas** memakai hitam 75%, blur 1,25, offset X 1,5 dan Y 2 pada acuan sisi panjang 1280. Pada foto 2448 × 3264, blur menjadi 3,19 piksel dan offset X/Y sekitar 3,83/5,10 piksel. Dibanding v1.3, bayangan lebih gelap dan lebih turun agar lebih terlihat seperti referensi terbaru. Bayangan mengikuti ukuran foto dan diperkecil secara eksplisit pada pratinjau agar sebanding dengan unduhan.
+
+Buka **Penyesuaian tampilan → Acuan bayangan** untuk memilih preset baru, versi 1.3 yang lebih halus, PixelLab lama (34%), atau Kode APK (50%). Kekuatan, kelembutan, offset, dan sakelar bayangan tetap dapat diubah. Preset tersimpan lama mempertahankan pengaturan Anda; pilih **Foto asli · bayangan tegas** untuk menerapkan bayangan baru tanpa mengubah isian teks. **Reset pengaturan** mengembalikan seluruh tampilan bawaan.
 
 ## Google Maps
 
@@ -40,6 +42,12 @@ Panduan resmi:
 - [Roadmap tiles](https://developers.google.com/maps/documentation/tile/roadmap)
 - [Penggunaan dan billing](https://developers.google.com/maps/documentation/tile/usage-and-billing)
 - [Atribusi Google Maps](https://developers.google.com/maps/documentation/tile/policies)
+
+## Estimasi pemakaian Google Maps
+
+Menurut harga resmi Google yang diperiksa pada 22 Oktober 2026, SKU 2D Map Tiles memiliki 100.000 permintaan tile gratis per bulan pada skema pay-as-you-go. Billing dan API key tetap diperlukan. Aplikasi ini umumnya meminta 9 tile untuk satu pembuatan peta: estimasi konservatif sekitar 11.000 pembuatan peta per bulan bila kuota tidak digunakan aplikasi lain. Permintaan ulang dan perubahan zoom/lokasi ikut menggunakan kuota; mengunduh ulang foto dengan peta yang masih dimuat tidak membuat permintaan tile baru.
+
+Luas wilayah Kendari tidak menentukan harga: yang dihitung adalah permintaan tile. Batasi kuota harian di Google Cloud bila ingin membatasi biaya. Alternatif tanpa API key tersedia melalui OpenStreetMap atau gambar peta unggahan. Lihat [harga resmi](https://developers.google.com/maps/billing-and-pricing/pricing) dan [billing/kuota](https://developers.google.com/maps/documentation/tile/usage-and-billing).
 
 ## Pemakaian dan privasi
 

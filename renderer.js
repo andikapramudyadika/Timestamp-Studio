@@ -1,7 +1,8 @@
 export const LABELS = ['Hari, tanggal dan waktu','Koordinat','Nama lorong / jalan','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const DEFAULT_LINES = ['Kamis, 22 Oktober 2026 12.37','Koordinat lokasi','Nama jalan / lorong','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const SHADOW_PRESETS = {
- camera:{shadow:true,shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
+ camera:{shadow:true,shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.5,shadowOffsetY:2,shadowOpacity:75},
+ camera13:{shadow:true,shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
  pixellab:{shadow:true,shadowBlur:2,shadowReference:3264,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34},
  apk:{shadow:true,shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50}
 };
@@ -83,7 +84,7 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
   // Canvas shadow lengths ignore the current transform. Scale them explicitly
   // so a downsampled preview has the same shadow as the full-resolution export.
   ctx.shadowColor='transparent';ctx.shadowBlur=ctx.shadowOffsetX=ctx.shadowOffsetY=0;
-  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||3264);ctx.shadowColor=`rgba(0,0,0,${(s.shadowOpacity??55)/100})`;ctx.shadowBlur=(s.shadowBlur??1.25)*unit*scale;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??1.25)*offsetUnit*scale;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??1.25)*offsetUnit*scale;}
+  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||1280);ctx.shadowColor=`rgba(0,0,0,${(s.shadowOpacity??75)/100})`;ctx.shadowBlur=(s.shadowBlur??1.25)*unit*scale;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??1.5)*offsetUnit*scale;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??2)*offsetUnit*scale;}
   for(let i=0;i<rows.length;i++)ctx.fillText(rows[i].text,positions[i].x,positions[i].y);
  }
  ctx.restore();return bounds;

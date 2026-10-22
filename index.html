@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
   <title>Timestamp Studio — Editor foto</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.3"><link rel="stylesheet" href="mobile.css?v=1.3">
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.3.1"><link rel="stylesheet" href="mobile.css?v=1.3.1">
 </head>
 <body>
 <svg class="icon-defs" aria-hidden="true"><defs>
@@ -46,10 +46,10 @@
     <div class="two-col"><div><label class="control-label" for="margin-x">Margin samping (%)</label><input id="margin-x" type="number" min="0" max="40" step="0.1" value="0"></div><div><label class="control-label" for="margin-y">Margin vertikal (%)</label><input id="margin-y" type="number" min="0" max="40" step="0.1" value="0"></div></div>
     <label class="control-label" for="text-opacity">Opasitas teks <output id="text-opacity-value">100%</output></label><input id="text-opacity" type="range" min="0" max="100" value="100">
     <label class="switch-row"><span>Bayangan teks</span><input id="text-shadow" type="checkbox" class="switch" checked></label>
-    <label class="control-label" for="shadow-preset">Acuan bayangan</label><select id="shadow-preset"><option value="camera">Foto asli · bayangan tipis</option><option value="pixellab">PixelLab Anda · 34%, offset 2/2</option><option value="apk">Kode APK · 50%, offset 1/1</option><option value="custom" disabled>Disesuaikan manual</option></select>
-    <label class="control-label" for="shadow-opacity">Kekuatan bayangan <output id="shadow-opacity-value">55%</output></label><input id="shadow-opacity" type="range" min="0" max="100" value="55">
-    <label class="control-label" for="shadow-blur">Kelembutan bayangan <output id="shadow-blur-value">2</output></label><input id="shadow-blur" type="range" min="0" max="6" step="0.25" value="2">
-    <div class="two-col"><div><label class="control-label" for="shadow-offset-x">Offset X <output id="shadow-offset-x-value">2</output></label><input id="shadow-offset-x" type="range" min="0" max="5" step="0.25" value="2"></div><div><label class="control-label" for="shadow-offset-y">Offset Y <output id="shadow-offset-y-value">2</output></label><input id="shadow-offset-y" type="range" min="0" max="5" step="0.25" value="2"></div></div>
+    <label class="control-label" for="shadow-preset">Acuan bayangan</label><select id="shadow-preset"><option value="camera">Foto asli · bayangan tegas</option><option value="camera13">Versi 1.3 · lebih halus</option><option value="pixellab">PixelLab Anda · 34%, offset 2/2</option><option value="apk">Kode APK · 50%, offset 1/1</option><option value="custom" disabled>Disesuaikan manual</option></select>
+    <label class="control-label" for="shadow-opacity">Kekuatan bayangan <output id="shadow-opacity-value">75%</output></label><input id="shadow-opacity" type="range" min="0" max="100" value="75">
+    <label class="control-label" for="shadow-blur">Kelembutan bayangan <output id="shadow-blur-value">1.25</output></label><input id="shadow-blur" type="range" min="0" max="6" step="0.25" value="1.25">
+    <div class="two-col"><div><label class="control-label" for="shadow-offset-x">Offset X <output id="shadow-offset-x-value">1.5</output></label><input id="shadow-offset-x" type="range" min="0" max="5" step="0.25" value="1.5"></div><div><label class="control-label" for="shadow-offset-y">Offset Y <output id="shadow-offset-y-value">2</output></label><input id="shadow-offset-y" type="range" min="0" max="5" step="0.25" value="2"></div></div>
     <p class="hint">Bayangan tipis ke kanan bawah mengikuti ukuran foto. Kekuatan, kelembutan, dan offset dapat disesuaikan.</p>
     <label class="control-label" for="background-opacity">Latar belakang teks <output id="background-opacity-value">0%</output></label><input id="background-opacity" type="range" min="0" max="100" value="0">
     <label class="control-label" for="time-separator">Pemisah jam saat mengisi waktu otomatis</label><select id="time-separator"><option value=".">Titik — 12.37</option><option value=":">Titik dua — 12:37</option></select>
@@ -101,7 +101,7 @@
  </section>
  </div>
 </main>
-<footer><span>timestamp studio v1.3 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
+<footer><span>timestamp studio v1.3.1 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="app.js?v=1.3"></script>
+<script type="module" src="app.js?v=1.3.1"></script>
 </body></html>
