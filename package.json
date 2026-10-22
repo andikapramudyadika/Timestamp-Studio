@@ -1,10 +1,10 @@
 {
   "name": "timestamp-studio",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "description": "Editor timestamp foto statis, siap untuk GitHub Pages tanpa build.",
   "scripts": {
-    "test": "node --test tests/renderer.test.mjs"
+    "test": "node --test tests/*.test.mjs"
   }
 }
