@@ -7,19 +7,30 @@
 
 Foto asli tidak ditimpa. Unduhan merupakan berkas baru.
 
-## Tampilan v1.3
+## Tampilan v1.4.1
 
 | Pengaturan | Bawaan |
 | --- | --- |
 | Font / ketebalan | Roboto variabel / 380 |
 | Ukuran / jarak antarbaris | 40 (Medium) / 10,25 |
 | Warna / posisi | Putih / kanan bawah |
-| Bayangan | Hitam 55%, blur 1,25, offset X/Y 1,25/1,25 |
+| Bayangan | Tipis: hitam 35%, blur 1, offset X/Y 0,75/0,75 |
 | Acuan bayangan | Sisi panjang 1280 |
 | Latar teks | Transparan |
 | Lebar / opasitas peta | 30% / 65% |
 
-Pada foto 2448 × 3264, blur dan offset sekitar 3,19 piksel. Untuk menerapkan bayangan v1.3 setelah memuat preset lain, pilih **Penyesuaian tampilan → Acuan bayangan → Foto asli · bayangan tipis**. Isi teks tetap dipertahankan. **Reset pengaturan** mengembalikan seluruh tampilan bawaan.
+Pada foto 2448 × 3264, blur sekitar 2,55 piksel dan offset sekitar 1,91 piksel. Nilai ini adalah titik awal; sesuaikan sambil membandingkan foto dari aplikasi asli.
+
+## Menyesuaikan bayangan
+
+1. Buka **Bayangan teks**; pada ponsel pilih tab **Teks**.
+2. Mulai dari **Tipis · 35%**, atau pilih **Versi 1.3 · 55%** untuk membandingkan tampilan lama. Preset ini hanya mengubah bayangan.
+3. Gunakan slider atau ketik angka. Turunkan opasitas bila terlalu hitam, kurangi blur bila terlalu menyebar, dan kecilkan offset bila terlalu jauh. X negatif menggeser ke kiri; Y negatif ke atas.
+4. Pilih warna abu-abu gelap bila hitam masih terasa terlalu kuat.
+5. Buka **Detail teks · 100%**, pilih latar dan baris, lalu geser area detail untuk menilai pada ukuran hasil unduhan. Bawaan **Putih bersih** memperjelas bayangan; **Abu-abu terang** memperjelas huruf putih dan bayangannya. Pilih **Foto saat ini** untuk menilai dalam konteks foto. Detail mengikuti resolusi dan penyesuaian rasio ekspor.
+6. Klik **Simpan preset** untuk menyimpan pilihan Anda. Preset lama tetap mempertahankan nilainya. **Reset pengaturan** mengembalikan bawaan Tipis.
+
+Latar putih/abu-abu hanya digunakan untuk pemeriksaan detail; pratinjau foto utama dan unduhan tetap memakai foto Anda. Pada latar putih, huruf putih menyatu dengan latar sehingga yang terlihat terutama bayangannya. Untuk membandingkan langsung dengan hasil unduhan, pilih **Foto saat ini** dan gunakan PNG tanpa perubahan kompresi JPG.
 
 ## Peta
 
@@ -40,7 +51,7 @@ JPG memiliki pengaturan kualitas. PNG menyimpan render tanpa kompresi lossy. Pil
 | Gejala | Langkah |
 | --- | --- |
 | Tampilan lama masih muncul | Tunggu penerbitan Pages, muat ulang tanpa cache, atau coba tab privat. |
-| Bayangan berubah setelah memuat preset | Pilih kembali **Foto asli · bayangan tipis**. |
+| Bayangan berubah setelah memuat preset | Pilih **Bayangan teks → Tipis · 35%**, atau sesuaikan lalu simpan preset kembali. |
 | Peta Google tidak muncul | Periksa key, aktivasi API/billing, izin domain, dan kuota. |
 | Peta OSM gagal | Periksa koneksi dan coba lagi; layanan tile dapat membatasi permintaan. |
 | Font unggahan hilang setelah membuka ulang | Unggah kembali berkas font. |

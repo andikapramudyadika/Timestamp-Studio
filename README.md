@@ -3,7 +3,7 @@
   <h1>Timestamp Studio</h1>
   <p>Editor timestamp foto dengan peta lokasi dan ekspor resolusi penuh.</p>
   <p>
-    <img alt="Versi stabil 1.3" src="https://img.shields.io/badge/version-1.3-496235">
+    <img alt="Versi stabil 1.4.1" src="https://img.shields.io/badge/version-1.4.1-496235">
     <a href="https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml"><img alt="Pemeriksaan otomatis" src="https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml/badge.svg"></a>
     <img alt="Foto diproses di browser" src="https://img.shields.io/badge/photo_processing-local-496235">
     <img alt="Tanpa build" src="https://img.shields.io/badge/build-not_required-496235">
@@ -13,7 +13,7 @@
 
 ![Timestamp Studio pada desktop, menggunakan kanvas contoh](docs/images/preview-desktop.jpg)
 
-**Versi stabil saat ini: v1.3.** Preset bayangan font 55% dipertahankan sebagai acuan tampilan yang telah dipilih. Riwayat fitur v1.0–v1.3 tersedia di [CHANGELOG.md](CHANGELOG.md).
+**Versi saat ini: v1.4.1.** Panel bayangan memiliki slider dan input angka, pilihan warna, serta detail teks 100%. Bawaan baru **Tipis · 35%** membantu mengurangi kesan terlalu gelap; preset **Versi 1.3 · 55%** tetap tersedia. Lihat [CHANGELOG.md](CHANGELOG.md).
 
 ## Fitur
 
@@ -21,9 +21,9 @@
 | --- | --- |
 | Timestamp | Tujuh baris dengan sakelar masing-masing; waktu otomatis WITA |
 | Tipografi | Roboto variabel lokal, ketebalan 250–500, warna, ukuran, jarak, margin, serta font unggahan |
-| Bayangan | Preset foto asli, PixelLab, dan APK; kontrol kekuatan, blur, serta offset |
+| Bayangan | Preset Tipis 35%, versi 1.3 55%, PixelLab, dan APK; warna, opasitas, blur, serta offset dengan slider/input angka |
 | Peta | Google Maps resmi, OpenStreetMap, atau gambar peta unggahan |
-| Pratinjau | Perubahan langsung, geser objek, dan pembandingan foto asli |
+| Pratinjau | Perubahan langsung, detail teks 100% per baris, geser objek, dan pembandingan foto asli |
 | Ekspor | JPG/PNG; resolusi asli atau 2448 × 3264; foto utuh atau potong tengah |
 | Preset | Simpan teks dan pengaturan di browser melalui localStorage |
 | Ponsel | Navigasi Foto · Teks · Peta · Unduh dan kontrol sentuh |
@@ -37,7 +37,7 @@
 
 Editor foto berbahasa Indonesia untuk tujuh baris timestamp dan peta. Foto diproses di browser, dengan unduhan JPG/PNG pada resolusi asli atau 2448 × 3264. Aplikasi statis ini dapat dijalankan di GitHub Pages tanpa build, npm install, atau backend.
 
-Versi 1.3 menambahkan Google Maps melalui API resmi dan memperjelas bayangan tipis tulisan berdasarkan foto referensi. Font, ukuran, susunan teks, dan posisi peta versi 1.2 dipertahankan.
+Versi 1.4 menyediakan penyesuaian bayangan yang lebih presisi. Font, ukuran, susunan teks, dan peta dipertahankan.
 
 ## Menjalankan di GitHub Pages
 
@@ -45,15 +45,24 @@ Versi 1.3 menambahkan Google Maps melalui API resmi dan memperjelas bayangan tip
 2. Ekstrak ZIP, lalu unggah **isi folder** `timestamp-studio-github` ke halaman utama repository melalui **Add file → Upload files**. Jangan unggah ZIP sebagai satu berkas.
 3. Pastikan `index.html`, `app.js`, `renderer.js`, `maps.js`, `style.css`, `mobile.css`, `icon.svg`, `.nojekyll`, dan folder `fonts/` berada langsung di root repository.
 4. Buka **Settings → Pages → Deploy from a branch → main → /(root) → Save**. Gunakan nama branch Anda jika berbeda.
-5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.3**.
+5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.4.1**.
 
 Untuk memperbarui aplikasi lama, lihat [PEMBARUAN.md](PEMBARUAN.md). Semua aset memakai jalur relatif sehingga mendukung alamat Pages dengan subfolder repository.
 
 ## Bayangan tulisan
 
-Bawaan **Foto asli · bayangan tipis** memakai hitam 55%, blur 1,25, offset X/Y 1,25 pada acuan sisi panjang 1280. Pada foto 2448 × 3264, blur dan offset menjadi sekitar 3,19 piksel. Bayangan mengikuti ukuran foto dan diperkecil secara eksplisit pada pratinjau agar sebanding dengan unduhan.
+Buka panel **Bayangan teks** (tab **Teks** pada ponsel). Bawaan **Tipis · 35%** memakai hitam, blur **1**, offset X/Y **0,75**, pada acuan sisi panjang **1280**. Pada ekspor 2448 × 3264, blur sekitar **2,55 px** dan offset **1,91 px**. Nilai ini adalah titik awal penyesuaian visual; belum dikalibrasi ulang terhadap foto aplikasi asli milik pengguna.
 
-Buka **Penyesuaian tampilan → Acuan bayangan** untuk memilih preset baru, PixelLab lama (34%), atau Kode APK (50%). Kekuatan, kelembutan, offset, dan sakelar bayangan tetap dapat diubah. Preset tersimpan lama mempertahankan pengaturan Anda; pilih **Foto asli · bayangan tipis** untuk menerapkan bayangan baru tanpa mengubah isian teks. **Reset pengaturan** mengembalikan seluruh tampilan bawaan.
+- Pilih warna bayangan, termasuk abu-abu gelap untuk hasil yang lebih ringan.
+- Atur opasitas 0–100%, blur 0–6, dan offset X/Y −5 sampai 5. Blur dan offset memiliki langkah 0,05; tersedia slider dan input angka.
+- Pilih **Versi 1.3 · 55%** untuk membandingkan tampilan sebelumnya. Preset PixelLab dan APK tetap tersedia. Memilih preset hanya mengganti bayangan.
+- Buka **Detail teks · 100%**, pilih latar dan baris, lalu geser area detail. Bawaan **Putih bersih (#FFFFFF)** membantu memeriksa bayangan; huruf putih menyatu dengan latar. **Abu-abu terang (#E5E7EB)** memperjelas huruf sekaligus bayangannya. **Foto saat ini** menampilkan area foto seperti hasil unduhan.
+- Pilihan latar hanya memengaruhi detail pemeriksaan; pratinjau foto utama dan unduhan tetap memakai foto Anda. Skala teks/bayangan tetap 100% dan mengikuti resolusi ekspor. Untuk membandingkan langsung dengan unduhan, pilih **Foto saat ini** dan format PNG.
+- **Simpan preset** menyimpan warna dan seluruh pengaturan bayangan bersama teks. Preset lama tetap memakai nilainya sendiri; warna yang belum tersimpan memakai hitam. **Reset pengaturan** kembali ke bawaan Tipis.
+
+![Panel bayangan dengan detail teks 100%](docs/images/shadow-controls.png)
+
+![Perbandingan bayangan 55% dan Tipis 35% pada latar uji yang sama](docs/images/shadow-comparison.png)
 
 ## Google Maps
 
@@ -88,7 +97,7 @@ Font Roboto variabel disertakan di `fonts/` bersama lisensinya. Pengaturan keteb
 
 ## Pemeriksaan lokal
 
-Gunakan Node.js 22 atau lebih baru. Tidak perlu `npm install`: tidak ada dependensi npm. [GitHub Actions](https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml) menjalankan pemeriksaan sintaks dan 18 pengujian v1.3 pada push/pull request. Alur Google telah diperiksa dengan respons simulasi; akses Google sebenarnya tetap memerlukan key dan billing aktif.
+Gunakan Node.js 22 atau lebih baru. Tidak perlu `npm install`: tidak ada dependensi npm. [GitHub Actions](https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml) menjalankan pemeriksaan sintaks dan 21 pengujian v1.4 pada push/pull request. Alur Google telah diperiksa dengan respons simulasi; akses Google sebenarnya tetap memerlukan key dan billing aktif.
 
 Jalankan `node --test tests/*.test.mjs` untuk memeriksa koordinat, viewport, pesan kesalahan Google, waktu WITA, susunan teks, atribusi, serta skala bayangan.
 
@@ -101,7 +110,7 @@ Untuk menjalankan aplikasi, sajikan folder ini dengan server statis, misalnya `p
 | [Panduan penggunaan](docs/GETTING_STARTED.md) | Alur editor, peta, ekspor, preset, dan pemecahan masalah |
 | [Google Maps](docs/GOOGLE_MAPS.md) | API key, pembatasan domain, kuota, dan alternatif |
 | [Pengembangan](docs/DEVELOPMENT.md) | Struktur source dan pemeriksaan lokal/browser |
-| [Changelog](CHANGELOG.md) | Riwayat fitur v1.0–v1.3 |
+| [Changelog](CHANGELOG.md) | Riwayat fitur v1.0–v1.4 |
 | [Kalibrasi](KALIBRASI.md) | Metode pengukuran dan batas interpretasi |
 | [Kontribusi](CONTRIBUTING.md) | Laporan bug dan pull request |
 | [Aset pihak ketiga](THIRD_PARTY_NOTICES.md) | Font, lisensi, dan sumber peta |

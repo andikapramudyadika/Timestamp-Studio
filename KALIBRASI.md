@@ -1,5 +1,19 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.4.1: latar pemeriksaan bayangan
+
+Detail teks 100% menyediakan Putih bersih (#FFFFFF, bawaan), Abu-abu terang (#E5E7EB), serta Foto saat ini. Latar netral hanya untuk pemeriksaan teks dan bayangan; peta/foto tidak ditampilkan pada detail netral. Ukuran teks, posisi, warna, blur, offset, opasitas, dan latar teks yang diatur pengguna tetap mengikuti editor.
+
+Untuk membandingkan piksel detail dengan unduhan, gunakan Foto saat ini dan format PNG. Pergantian latar pemeriksaan tidak mengubah pratinjau foto utama atau file ekspor; PNG fixture Chrome identik sebelum/sesudah pergantian latar.
+
+## Versi 1.4: penyesuaian bayangan manual
+
+Bawaan Tipis memakai hitam 35%, blur 1 dan offset X/Y 0,75 pada acuan sisi panjang 1280. Pada ekspor 2448 × 3264, blur menjadi 2,55 px dan offset sekitar 1,91 px. Angka ini adalah titik awal yang disetujui untuk mengurangi kegelapan bayangan; belum dikalibrasi ulang terhadap foto aplikasi asli pengguna.
+
+Preset versi 1.3 mempertahankan hitam 55%, blur dan offset 1,25. Semua preset menyertakan warna; preset tersimpan lama yang belum memiliki warna memakai hitam. Skala blur serta offset PixelLab/APK tidak diubah. Font dan baseline dipertahankan.
+
+Panel bayangan mendukung warna, opasitas 0–100%, blur 0–6, serta offset X/Y −5 sampai 5. Blur/offset memakai langkah 0,05. Detail per baris memakai potongan tanpa penskalaan dari render resolusi penuh; pengujian Chrome membandingkannya dengan PNG unduhan dan memperoleh selisih nol pada fixture.
+
 ## Versi 1.3: bayangan foto referensi dan Google Maps
 
 Bawaan baru memakai bayangan hitam 55%, blur 1,25 dan offset X/Y 1,25 pada acuan sisi panjang 1280. Pada ekspor 2448 × 3264 panjang tersebut menjadi sekitar 3,19 piksel. Efek diarahkan ke kanan bawah, lebih tegas daripada acuan PixelLab lama. Nilai ini merupakan penyesuaian visual terhadap foto pengguna terbaru, bukan hasil ekstraksi angka dari aplikasi asli. Ukuran, posisi, dan ketebalan huruf tidak berubah.

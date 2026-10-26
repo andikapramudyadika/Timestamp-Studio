@@ -1,6 +1,8 @@
-# Memperbarui GitHub ke v1.3
+# Memperbarui GitHub ke v1.4.1
 
-Ekstrak ZIP, lalu unggah ulang berkas berikut ke lokasi yang sama pada halaman utama repository:
+Ekstrak paket ZIP v1.4.1. Unggah **isi folder timestamp-studio-github** ke lokasi yang sama pada halaman utama repository melalui **Add file → Upload files → Commit changes**. Jangan mengunggah ZIP sebagai satu berkas.
+
+Untuk memperbarui runtime yang sudah ada, ganti berkas berikut bersama-sama:
 
 ```text
 index.html
@@ -11,15 +13,16 @@ style.css
 mobile.css
 ```
 
-Pertahankan `fonts/`, `icon.svg`, dan `.nojekyll`. Untuk pemasangan baru, unggah seluruh isi folder `timestamp-studio-github`, termasuk folder `fonts/` dan berkas `.nojekyll`. Jangan mengunggah ZIP langsung; GitHub Pages tidak mengekstraknya.
-
-Gunakan **Add file → Upload files → Commit changes**. Konfigurasi Pages tetap **Deploy from a branch → main → /(root)**. Setelah penerbitan selesai, footer harus menampilkan **timestamp studio v1.3**. Aset memakai versi cache baru; bila masih terlihat versi lama, buka tab privat atau muat ulang tanpa cache.
+Pertahankan fonts/, icon.svg, dan .nojekyll. Sertakan dokumentasi dan pengujian dari paket bila memperbarui repository lengkap. Konfigurasi Pages tetap **Deploy from a branch → main → /(root)**. Setelah penerbitan, footer menampilkan **timestamp studio v1.4.1**. Semua aset memakai penanda cache v1.4.1; jika tampilan masih lama, muat ulang tanpa cache atau gunakan tab privat.
 
 ## Perubahan
 
-- Bayangan bawaan baru **Foto asli · bayangan tipis** lebih tegas, dengan arah kanan bawah. Skala bayangan pratinjau dan ekspor sudah disamakan.
-- Sumber peta utama **Google Maps**, melalui Map Tiles API resmi. Masukkan API key pada aplikasi setelah mengaktifkan Map Tiles API dan billing di Google Cloud. Lihat [README.md](README.md) untuk pengaturan key dan kuota.
-- Tanpa key: unggah gambar Google Maps Anda, atau pilih OpenStreetMap secara manual. Key tidak disimpan dalam preset atau source.
-- Nama penyedia dan atribusi peta tetap ikut pada unduhan.
+- Pilihan latar detail: **Putih bersih** (bawaan), **Abu-abu terang**, dan **Foto saat ini**. Pilihan ini hanya untuk pemeriksaan; unduhan tetap menggunakan foto Anda.
 
-Jika memuat preset lama, pilih **Penyesuaian tampilan → Acuan bayangan → Foto asli · bayangan tipis** untuk memakai bayangan baru. Isi teks dan pengaturan lainnya tetap dipertahankan. **Reset pengaturan** mengembalikan seluruh tampilan bawaan.
+- Panel **Bayangan teks** tersendiri (tab **Teks** pada ponsel).
+- Bawaan **Tipis · 35%**, blur 1, offset X/Y 0,75. Tampilan lama tetap tersedia sebagai **Versi 1.3 · 55%**.
+- Pilihan warna, slider dan input angka, serta offset negatif.
+- **Detail teks · 100%** untuk memeriksa satu baris pada resolusi unduhan; gunakan PNG untuk membandingkan tanpa kompresi JPG.
+- Warna dan pengaturan ikut tersimpan dalam preset. Preset lama tetap mempertahankan nilainya; pilih Tipis bila ingin menerapkan bawaan baru.
+
+Memilih preset bayangan hanya mengubah bayangan. **Reset pengaturan** mengembalikan seluruh tampilan ke bawaan v1.4.1 sambil mempertahankan foto, peta, dan isi teks.

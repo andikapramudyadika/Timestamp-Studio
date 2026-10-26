@@ -1,11 +1,25 @@
 export const LABELS = ['Hari, tanggal dan waktu','Koordinat','Nama lorong / jalan','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const DEFAULT_LINES = ['Kamis, 22 Oktober 2026 12.37','Koordinat lokasi','Nama jalan / lorong','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const SHADOW_PRESETS = {
- camera:{shadow:true,shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
- pixellab:{shadow:true,shadowBlur:2,shadowReference:3264,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34},
- apk:{shadow:true,shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50}
+ thin:{shadow:true,shadowColor:'#000000',shadowBlur:1,shadowReference:1280,shadowOffsetX:.75,shadowOffsetY:.75,shadowOpacity:35},
+ camera:{shadow:true,shadowColor:'#000000',shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
+ pixellab:{shadow:true,shadowColor:'#000000',shadowBlur:2,shadowReference:3264,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34},
+ apk:{shadow:true,shadowColor:'#000000',shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50}
 };
-export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_PRESETS.camera,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
+export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_PRESETS.thin,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
+export function shadowColor(style) {
+ const hex=/^#[\da-f]{6}$/i.test(style.shadowColor)?style.shadowColor:'#000000';
+ const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
+ const opacity=Number(style.shadowOpacity??55);
+ return `rgba(${rgb.join(',')},${Number.isFinite(opacity)?Math.max(0,Math.min(100,opacity))/100:.55})`;
+}
+// Crop output coordinates without resizing: one output pixel per canvas pixel.
+export function textDetailCrop(row,width,height,style) {
+ const unit=Math.max(width,height)/1280,offsetUnit=Math.max(width,height)/(style.shadowReference||3264);
+ const padding=style.shadow?Math.ceil(Math.max(12,(style.shadowBlur??1)*unit*3+Math.max(Math.abs(style.shadowOffsetX??style.shadowOffset??0),Math.abs(style.shadowOffsetY??style.shadowOffset??0))*offsetUnit+4)):12;
+ const x=Math.max(0,Math.floor(row.x-padding)),y=Math.max(0,Math.floor(row.y-padding));
+ return {x,y,w:Math.max(1,Math.min(width,Math.ceil(row.x+row.w+padding))-x),h:Math.max(1,Math.min(height,Math.ceil(row.y+row.h+padding))-y)};
+}
 export function formatWita(date = new Date(), separator = '.') {
  const parts = new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Makassar',weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date);
  const get = k => parts.find(p=>p.type===k)?.value || '';
@@ -25,7 +39,7 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
  const {photo,map,lines,visible,style:s,fit='contain'}=scene;
  ctx.save();ctx.scale(scale,scale);ctx.clearRect(0,0,width,height);ctx.fillStyle='#111713';ctx.fillRect(0,0,width,height);
  if(photo){const r=fitRect(photo.width,photo.height,width,height,fit);ctx.drawImage(photo.image,r.x,r.y,r.w,r.h);}
- const bounds={text:null,map:null};
+ const bounds={text:null,map:null,textRows:[]};
  if(original){ctx.restore();return bounds;}
  // Android captures a landscape sensor buffer before applying EXIF rotation.
  // The long edge reproduces the scale of the supplied portrait reference.
@@ -78,12 +92,14 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
   const x0=Math.min(...rows.map((r,i)=>positions[i].x-r.left)),x1=Math.max(...rows.map((r,i)=>positions[i].x-r.left+r.width));
   const y0=Math.min(...rows.map((r,i)=>positions[i].y-r.ascent)),y1=Math.max(...rows.map((r,i)=>positions[i].y+r.descent));
   bounds.text={x:x0,y:y0,w:x1-x0,h:y1-y0,shrunk:factor<.99};
+  const indexes=lines.flatMap((line,i)=>visible[i]&&line.trim()?[i]:[]);
+  bounds.textRows=rows.map((r,i)=>({index:indexes[i],x:positions[i].x-r.left,y:positions[i].y-r.ascent,w:r.width,h:r.ascent+r.descent}));
   if(s.background){ctx.fillStyle=`rgba(0,0,0,${s.background/100})`;ctx.fillRect(x0-edge,y0-edge,x1-x0+2*edge,y1-y0+2*edge);}
   ctx.globalAlpha=s.opacity/100;ctx.fillStyle=s.color;ctx.textAlign='left';ctx.textBaseline='alphabetic';
   // Canvas shadow lengths ignore the current transform. Scale them explicitly
   // so a downsampled preview has the same shadow as the full-resolution export.
   ctx.shadowColor='transparent';ctx.shadowBlur=ctx.shadowOffsetX=ctx.shadowOffsetY=0;
-  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||3264);ctx.shadowColor=`rgba(0,0,0,${(s.shadowOpacity??55)/100})`;ctx.shadowBlur=(s.shadowBlur??1.25)*unit*scale;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??1.25)*offsetUnit*scale;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??1.25)*offsetUnit*scale;}
+  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||3264);ctx.shadowColor=shadowColor(s);ctx.shadowBlur=(s.shadowBlur??1.25)*unit*scale;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??1.25)*offsetUnit*scale;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??1.25)*offsetUnit*scale;}
   for(let i=0;i<rows.length;i++)ctx.fillText(rows[i].text,positions[i].x,positions[i].y);
  }
  ctx.restore();return bounds;

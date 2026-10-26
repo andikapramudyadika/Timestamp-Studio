@@ -1,6 +1,23 @@
 # Riwayat pembaruan
 
-**v1.3 adalah versi stabil yang dipilih saat ini**, termasuk bayangan font 55%. Catatan ini merangkum perkembangan fitur; [riwayat commit asli](https://github.com/andikapramudyadika/Timestamp-Studio/commits/main) tetap dipertahankan.
+**v1.4.1 adalah versi saat ini**, dengan bawaan bayangan Tipis 35%; preset v1.3 55% tetap tersedia. Catatan ini merangkum perkembangan fitur; [riwayat commit asli](https://github.com/andikapramudyadika/Timestamp-Studio/commits/main) tetap dipertahankan.
+
+## v1.4.1 — 26 Oktober 2026
+
+- Pilihan latar pada Detail teks 100%: Putih bersih (bawaan), Abu-abu terang, dan Foto saat ini.
+- Latar netral memperjelas bayangan tanpa mengubah ukuran teks, pengaturan bayangan, pratinjau foto utama, atau unduhan.
+- Keterangan tentang huruf putih pada latar putih serta cara membandingkan dengan PNG unduhan.
+- Pengujian Chrome memeriksa warna latar, skala 100%, kesetaraan PNG sebelum/sesudah pergantian latar, dan tampilan ponsel.
+
+## v1.4 — 26 Oktober 2026
+
+- Panel **Bayangan teks** tersendiri, terlihat pada tab Teks di ponsel.
+- Preset **Tipis · 35%** sebagai bawaan: blur 1, offset X/Y 0,75, acuan sisi panjang 1280. Preset v1.3 55%, PixelLab, dan APK tetap tersedia.
+- Pilihan warna serta slider/input angka untuk opasitas, blur, dan offset. Offset mendukung arah negatif; blur dan offset mendukung langkah 0,05.
+- Detail teks per baris pada skala 100%, diambil dari render pada resolusi ekspor. PNG hasil uji memiliki piksel yang sama dengan area detail.
+- Warna dan pengaturan bayangan ikut disimpan dalam preset; preset lama tanpa warna memakai hitam dan mempertahankan nilai lama.
+- Font, ukuran, baseline, susunan teks, dan peta dipertahankan.
+- 21 pengujian Node lulus; Chrome memeriksa ekspor JPG/PNG, preset, detail 100%, serta ponsel 393/320 piksel.
 
 ## v1.3 — 22 Oktober 2026
 

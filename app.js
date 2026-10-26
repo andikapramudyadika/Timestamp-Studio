@@ -1,11 +1,15 @@
-import {LABELS,DEFAULT_LINES,defaultStyle,SHADOW_PRESETS,formatWita,outputSize,cleanFileName,render} from './renderer.js?v=1.3';
-import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.3';
+import {LABELS,DEFAULT_LINES,defaultStyle,SHADOW_PRESETS,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.4.1';
+import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.4.1';
 const $=id=>document.getElementById(id);
 const state={photo:null,map:null,lines:[formatWita(),...DEFAULT_LINES.slice(1)],visible:Array(7).fill(true),style:defaultStyle(),fit:'contain',exportPreset:'original',preset:'camera'};
 let bounds={},toastTimer,showOriginal=false,previewFrame=0,photoSequence=0,mapSequence=0,exporting=false,dragEnabled=!matchMedia('(max-width:760px)').matches;
 let mapTimer,mapController,mapLoading=false,googleKeyVersion=0;
 const canvas=$('preview'),ctx=canvas.getContext('2d');
-const controlMap={'font-size':'fontSize','font-weight':'fontWeight','line-gap':'lineGap','font-family':'fontFamily','text-color':'color','text-position':'position','margin-x':'marginX','margin-y':'marginY','text-opacity':'opacity','text-shadow':'shadow','shadow-opacity':'shadowOpacity','shadow-blur':'shadowBlur','shadow-offset-x':'shadowOffsetX','shadow-offset-y':'shadowOffsetY','background-opacity':'background','time-separator':'separator','map-enabled':'mapEnabled','map-size':'mapSize','map-shape':'mapShape','map-position':'mapPosition','map-opacity':'mapOpacity','map-border':'mapBorder'};
+const detailSource=document.createElement('canvas'),detailBackdrop=document.createElement('canvas');
+detailBackdrop.width=detailBackdrop.height=1;
+const detailBackgrounds={white:'#ffffff',gray:'#e5e7eb'};
+const controlMap={'font-size':'fontSize','font-weight':'fontWeight','line-gap':'lineGap','font-family':'fontFamily','text-color':'color','text-position':'position','margin-x':'marginX','margin-y':'marginY','text-opacity':'opacity','text-shadow':'shadow','shadow-color':'shadowColor','shadow-opacity':'shadowOpacity','shadow-blur':'shadowBlur','shadow-offset-x':'shadowOffsetX','shadow-offset-y':'shadowOffsetY','background-opacity':'background','time-separator':'separator','map-enabled':'mapEnabled','map-size':'mapSize','map-shape':'mapShape','map-position':'mapPosition','map-opacity':'mapOpacity','map-border':'mapBorder'};
+const shadowNumbers=['shadow-opacity','shadow-blur','shadow-offset-x','shadow-offset-y'];
 function notify(message){$('toast').textContent=message;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),4200);}
 
 LABELS.forEach((label,i)=>{
@@ -33,9 +37,26 @@ function updateOutputs(){
  $('shadow-offset-x-value').textContent=state.style.shadowOffsetX;
  $('shadow-offset-y-value').textContent=state.style.shadowOffsetY;
  $('shadow-opacity-value').textContent=state.style.shadowOpacity+'%';
+ $('shadow-color-value').textContent=state.style.shadowColor;
+ $('shadow-controls').disabled=!state.style.shadow;
+ for(const id of shadowNumbers){$(id).value=state.style[controlMap[id]];const number=$(id+'-number');if(document.activeElement!==number)number.value=state.style[controlMap[id]];}
  $('shadow-preset').value=Object.entries(SHADOW_PRESETS).find(([,preset])=>Object.entries(preset).every(([key,value])=>state.style[key]===value))?.[0]||'custom';
  for(const [id,key]of [['text-opacity','opacity'],['background-opacity','background'],['map-size','mapSize'],['map-opacity','mapOpacity']])$(id+'-value').textContent=state.style[key]+'%';
  $('export-quality-value').textContent=$('export-quality').value+'%';
+}
+// Permit intermediate number input (empty or minus sign); commit a valid,
+// clamped value on blur, and keep the slider in sync while typing.
+for(const id of shadowNumbers){
+ const number=$(id+'-number');
+ const apply=()=>{
+  if(number.value===''||!Number.isFinite(number.valueAsNumber))return;
+  const value=Math.min(Number(number.max),Math.max(Number(number.min),number.valueAsNumber));
+  const step=Number(number.step),min=Number(number.min);
+  state.style[controlMap[id]]=Number((min+Math.round((value-min)/step)*step).toFixed(2));
+  updateOutputs();schedule();
+ };
+ number.addEventListener('input',apply);
+ number.addEventListener('blur',()=>{apply();number.value=state.style[controlMap[id]];});
 }
 for(const [id,key]of Object.entries(controlMap)){
  const el=$(id);el.addEventListener(el.type==='checkbox'||el.tagName==='SELECT'?'change':'input',()=>{
@@ -61,7 +82,43 @@ function draw(){
  $('download-size').textContent=state.photo?`${w} × ${h} px`:'Pilih foto terlebih dahulu';
  $('preview-status').textContent=bounds.text?.shrunk?'Teks disesuaikan agar utuh':state.photo?(dragEnabled?'Geser teks atau peta':'Pratinjau hasil'):'Perubahan langsung';
  canvas.classList.toggle('editable',!!state.photo&&dragEnabled);
+ drawTextDetail(w,h);
 }
+function drawTextDetail(w,h){
+ if(!$('text-detail').open)return;
+ const detail=$('detail-canvas'),select=$('detail-line'),rows=bounds.textRows||[];
+ if(!state.photo||!rows.length){
+  detail.width=detail.height=detailSource.width=detailSource.height=1;$('detail-viewport').hidden=true;select.disabled=true;
+  select.replaceChildren(new Option('Belum ada teks',''));
+  $('detail-status').textContent=!state.photo?'Unggah foto atau coba kanvas contoh untuk memeriksa bayangan.':showOriginal?'Kembali ke hasil edit untuk memeriksa bayangan.':'Aktifkan setidaknya satu baris teks untuk melihat detail.';
+  return;
+ }
+ const selected=select.value;
+ const rowKeys=rows.map(r=>String(r.index)).join(',');
+ if([...select.options].map(o=>o.value).join(',')!==rowKeys){select.replaceChildren(...rows.map(r=>new Option(LABELS[r.index],r.index)));if(rows.some(r=>String(r.index)===selected))select.value=selected;}
+ select.disabled=false;
+ const row=rows.find(r=>String(r.index)===select.value)||rows[0];
+ const crop=textDetailCrop(row,w,h,state.style);
+ detail.width=crop.w;detail.height=crop.h;
+ // Use a separate scene for the inspection background; export keeps state.photo.
+ const background=$('detail-background').value,color=detailBackgrounds[background];
+ let detailScene=state;
+ if(color){
+  const backdropContext=detailBackdrop.getContext('2d');backdropContext.fillStyle=color;backdropContext.fillRect(0,0,1,1);
+  // A solid photo at the output aspect ratio fills the entire detail, including contain bars.
+  detailScene={...state,photo:{image:detailBackdrop,width:w,height:h},map:null};
+ }
+ // Render at export resolution before taking a 1:1 crop to keep text and shadow sizes exact.
+ if(detailSource.width!==w||detailSource.height!==h){detailSource.width=w;detailSource.height=h;}
+ render(detailSource.getContext('2d'),detailScene,w,h,1,false);
+ detail.getContext('2d').drawImage(detailSource,crop.x,crop.y,crop.w,crop.h,0,0,crop.w,crop.h);
+ detail.dataset.x=crop.x;detail.dataset.y=crop.y;
+ $('detail-viewport').hidden=false;$('detail-viewport').style.backgroundColor=color||'#171e1b';
+ $('detail-status').textContent=`${crop.w} × ${crop.h} px · ${color?$('detail-background').selectedOptions[0].textContent+' · Khusus pratinjau':'Detail pada resolusi unduhan'}${state.style.shadow?'':' · Bayangan dimatikan'}`;
+}
+$('text-detail').addEventListener('toggle',()=>{if($('text-detail').open)schedule();else $('detail-canvas').width=$('detail-canvas').height=detailSource.width=detailSource.height=1;});
+$('detail-line').addEventListener('change',()=>{$('detail-viewport').scrollLeft=0;schedule();});
+$('detail-background').addEventListener('change',schedule);
 function schedule(){cancelAnimationFrame(previewFrame);previewFrame=requestAnimationFrame(draw);}
 new ResizeObserver(schedule).observe($('preview-stage'));
 function releasePhoto(p){if(p?.image?.close)p.image.close();if(p?.url)URL.revokeObjectURL(p.url);}
