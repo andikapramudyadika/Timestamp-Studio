@@ -1,5 +1,5 @@
-import {LABELS,DEFAULT_LINES,defaultStyle,SHADOW_PRESETS,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.4.1';
-import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.4.1';
+import {LABELS,DEFAULT_LINES,defaultStyle,restoreStyle,SHADOW_PRESETS,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.5.0';
+import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.5.0';
 const $=id=>document.getElementById(id);
 const state={photo:null,map:null,lines:[formatWita(),...DEFAULT_LINES.slice(1)],visible:Array(7).fill(true),style:defaultStyle(),fit:'contain',exportPreset:'original',preset:'camera'};
 let bounds={},toastTimer,showOriginal=false,previewFrame=0,photoSequence=0,mapSequence=0,exporting=false,dragEnabled=!matchMedia('(max-width:760px)').matches;
@@ -8,8 +8,8 @@ const canvas=$('preview'),ctx=canvas.getContext('2d');
 const detailSource=document.createElement('canvas'),detailBackdrop=document.createElement('canvas');
 detailBackdrop.width=detailBackdrop.height=1;
 const detailBackgrounds={white:'#ffffff',gray:'#e5e7eb'};
-const controlMap={'font-size':'fontSize','font-weight':'fontWeight','line-gap':'lineGap','font-family':'fontFamily','text-color':'color','text-position':'position','margin-x':'marginX','margin-y':'marginY','text-opacity':'opacity','text-shadow':'shadow','shadow-color':'shadowColor','shadow-opacity':'shadowOpacity','shadow-blur':'shadowBlur','shadow-offset-x':'shadowOffsetX','shadow-offset-y':'shadowOffsetY','background-opacity':'background','time-separator':'separator','map-enabled':'mapEnabled','map-size':'mapSize','map-shape':'mapShape','map-position':'mapPosition','map-opacity':'mapOpacity','map-border':'mapBorder'};
-const shadowNumbers=['shadow-opacity','shadow-blur','shadow-offset-x','shadow-offset-y'];
+const controlMap={'font-size':'fontSize','font-weight':'fontWeight','line-gap':'lineGap','font-family':'fontFamily','text-color':'color','text-position':'position','margin-x':'marginX','margin-y':'marginY','text-opacity':'opacity','text-shadow':'shadow','shadow-mode':'shadowMode','shadow-core-opacity':'shadowCoreOpacity','shadow-core-offset-x':'shadowCoreOffsetX','shadow-core-offset-y':'shadowCoreOffsetY','shadow-color':'shadowColor','shadow-opacity':'shadowOpacity','shadow-blur':'shadowBlur','shadow-offset-x':'shadowOffsetX','shadow-offset-y':'shadowOffsetY','background-opacity':'background','time-separator':'separator','map-enabled':'mapEnabled','map-size':'mapSize','map-shape':'mapShape','map-position':'mapPosition','map-opacity':'mapOpacity','map-border':'mapBorder'};
+const shadowNumbers=['shadow-core-opacity','shadow-core-offset-x','shadow-core-offset-y','shadow-opacity','shadow-blur','shadow-offset-x','shadow-offset-y'];
 function notify(message){$('toast').textContent=message;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),4200);}
 
 LABELS.forEach((label,i)=>{
@@ -39,6 +39,12 @@ function updateOutputs(){
  $('shadow-opacity-value').textContent=state.style.shadowOpacity+'%';
  $('shadow-color-value').textContent=state.style.shadowColor;
  $('shadow-controls').disabled=!state.style.shadow;
+ $('shadow-core-controls').hidden=state.style.shadowMode!=='layered';
+ const dex=state.style.shadowMode==='dex';
+ for(const id of ['shadow-color','shadow-opacity','shadow-opacity-number'])$(id).disabled=dex;
+ $('shadow-opacity-value').textContent=dex?'½ opasitas teks':state.style.shadowOpacity+'%';
+ $('shadow-mode-note').textContent=dex?'Acuan DEX: satu bayangan hitam, alpha setengah teks; blur dikonversi dari radius Android.':state.style.shadowMode==='layered'?'Inti tegas di kanan bawah dan bayangan luar lembut. Preset visual yang dapat disesuaikan.':'Satu lapisan bayangan seperti versi sebelumnya.';
+ for(const id of ['shadow-core-opacity','shadow-core-offset-x','shadow-core-offset-y'])$(id+'-value').textContent=state.style[controlMap[id]]+(id==='shadow-core-opacity'?'%':'');
  for(const id of shadowNumbers){$(id).value=state.style[controlMap[id]];const number=$(id+'-number');if(document.activeElement!==number)number.value=state.style[controlMap[id]];}
  $('shadow-preset').value=Object.entries(SHADOW_PRESETS).find(([,preset])=>Object.entries(preset).every(([key,value])=>state.style[key]===value))?.[0]||'custom';
  for(const [id,key]of [['text-opacity','opacity'],['background-opacity','background'],['map-size','mapSize'],['map-opacity','mapOpacity']])$(id+'-value').textContent=state.style[key]+'%';
@@ -61,6 +67,7 @@ for(const id of shadowNumbers){
 for(const [id,key]of Object.entries(controlMap)){
  const el=$(id);el.addEventListener(el.type==='checkbox'||el.tagName==='SELECT'?'change':'input',()=>{
  state.style[key]=el.type==='checkbox'?el.checked:['range','number'].includes(el.type)?Math.min(Number(el.max)||100,Math.max(Number(el.min)||0,Number(el.value)||0)):el.value;
+ if(id==='shadow-mode'&&state.style.shadowMode==='dex'){state.style.shadowColor='#000000';state.style.shadowOpacity=50;$('shadow-color').value='#000000';}
  if(id==='map-position'){state.style.mapX=0;state.style.mapY=0;}
  if(id==='map-enabled'){
   if(!el.checked){clearTimeout(mapTimer);mapController?.abort();++mapSequence;mapLoading=false;$('generate-map').removeAttribute('aria-busy');$('generate-map').querySelector('span').textContent='Buat peta';refreshDownloadAvailability();}
@@ -156,7 +163,7 @@ $('font-input').addEventListener('change',async e=>{
  try{if(f.size>10*1024*1024)throw new Error('Ukuran font maksimum 10 MB.');const face=new FontFace('UploadedTimestamp',await f.arrayBuffer());await face.load();for(const old of document.fonts)if(old.family==='UploadedTimestamp')document.fonts.delete(old);document.fonts.add(face);$('font-family').querySelector('[value=custom]').disabled=false;state.style.fontFamily='custom';$('font-note').textContent=f.name;sync();notify('Font siap digunakan.');}catch{notify('Font tidak dapat dibaca. Gunakan berkas TTF, OTF, atau WOFF yang valid.');}finally{e.target.value='';}
 });
 $('save-preset').addEventListener('click',()=>{try{localStorage.setItem('timestamp-studio-preset-v1',JSON.stringify({version:1,style:state.style,lines:state.lines,visible:state.visible,preset:state.preset}));notify('Preset tersimpan di browser ini. Foto dan peta tidak ikut disimpan.');}catch{notify('Browser tidak mengizinkan penyimpanan preset.');}});
-$('load-preset').addEventListener('click',()=>{try{const data=JSON.parse(localStorage.getItem('timestamp-studio-preset-v1'));if(!data||data.version!==1||!Array.isArray(data.lines)||data.lines.length!==7)throw new Error();state.style={...defaultStyle(),...data.style};state.lines=data.lines.map(x=>String(x).slice(0,250));state.visible=data.visible?.length===7?data.visible.map(Boolean):Array(7).fill(true);state.preset=data.preset==='pixellab'?'pixellab':'camera';if(state.style.fontFamily==='custom'&&![...document.fonts].some(f=>f.family==='UploadedTimestamp'&&f.status==='loaded')){state.style.fontFamily='camera';notify('Preset dimuat. Unggah kembali font kustom Anda.');}else notify('Preset dimuat.');sync();}catch{notify('Belum ada preset tersimpan di browser ini.');}});
+$('load-preset').addEventListener('click',()=>{try{const data=JSON.parse(localStorage.getItem('timestamp-studio-preset-v1'));if(!data||data.version!==1||!Array.isArray(data.lines)||data.lines.length!==7)throw new Error();state.style=restoreStyle(data.style);state.lines=data.lines.map(x=>String(x).slice(0,250));state.visible=data.visible?.length===7?data.visible.map(Boolean):Array(7).fill(true);state.preset=data.preset==='pixellab'?'pixellab':'camera';if(state.style.fontFamily==='custom'&&![...document.fonts].some(f=>f.family==='UploadedTimestamp'&&f.status==='loaded')){state.style.fontFamily='camera';notify('Preset dimuat. Unggah kembali font kustom Anda.');}else notify('Preset dimuat.');sync();}catch{notify('Belum ada preset tersimpan di browser ini.');}});
 $('reset').addEventListener('click',()=>{state.style=defaultStyle();state.preset='camera';state.visible=Array(7).fill(true);sync();notify('Tampilan direset. Foto, peta, dan isi teks tetap dipertahankan.');});
 
 document.querySelectorAll('[data-download]').forEach(b=>b.addEventListener('click',async()=>{

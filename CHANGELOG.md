@@ -1,6 +1,15 @@
 # Riwayat pembaruan
 
-**v1.4.1 adalah versi saat ini**, dengan bawaan bayangan Tipis 35%; preset v1.3 55% tetap tersedia. Catatan ini merangkum perkembangan fitur; [riwayat commit asli](https://github.com/andikapramudyadika/Timestamp-Studio/commits/main) tetap dipertahankan.
+**v1.5.0 adalah versi saat ini**, dengan bayangan Berlapis sebagai bawaan dan Acuan DEX sebagai pembanding. Preset lama tetap tersedia.
+
+## v1.5.0 — 27 Oktober 2026
+
+- Bayangan Berlapis: inti tegas transparan di kanan bawah, dengan bayangan luar lembut terpisah.
+- Kontrol kekuatan inti serta offset X/Y; warna bersama dan kontrol bayangan luar tetap tersedia.
+- Acuan DEX: konversi radius Android ke blur Canvas, hitam, alpha setengah teks tanpa pengurangan ganda.
+- Preview dan ekspor memakai renderer yang sama; potongan detail mencakup kedua lapisan.
+- Preset tersimpan lama mempertahankan satu lapisan, font dan tata letak tetap.
+- Berlapis merupakan preset visual yang perlu dicocokkan dengan foto asli; DEX tidak membuktikan dua lapisan terpisah.
 
 ## v1.4.1 — 26 Oktober 2026
 

@@ -1,22 +1,41 @@
 export const LABELS = ['Hari, tanggal dan waktu','Koordinat','Nama lorong / jalan','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const DEFAULT_LINES = ['Kamis, 22 Oktober 2026 12.37','Koordinat lokasi','Nama jalan / lorong','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const SHADOW_PRESETS = {
- thin:{shadow:true,shadowColor:'#000000',shadowBlur:1,shadowReference:1280,shadowOffsetX:.75,shadowOffsetY:.75,shadowOpacity:35},
- camera:{shadow:true,shadowColor:'#000000',shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
- pixellab:{shadow:true,shadowColor:'#000000',shadowBlur:2,shadowReference:3264,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34},
- apk:{shadow:true,shadowColor:'#000000',shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50}
+ layered:{shadow:true,shadowMode:'layered',shadowColor:'#000000',shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:25,shadowCoreOpacity:30,shadowCoreOffsetX:.85,shadowCoreOffsetY:.85},
+ dex:{shadow:true,shadowMode:'dex',shadowColor:'#000000',shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50,shadowCoreOpacity:0,shadowCoreOffsetX:0,shadowCoreOffsetY:0},
+ thin:{shadow:true,shadowMode:'single',shadowColor:'#000000',shadowBlur:1,shadowReference:1280,shadowOffsetX:.75,shadowOffsetY:.75,shadowOpacity:35},
+ camera:{shadow:true,shadowMode:'single',shadowColor:'#000000',shadowBlur:1.25,shadowReference:1280,shadowOffsetX:1.25,shadowOffsetY:1.25,shadowOpacity:55},
+ pixellab:{shadow:true,shadowMode:'single',shadowColor:'#000000',shadowBlur:2,shadowReference:3264,shadowOffsetX:2,shadowOffsetY:2,shadowOpacity:34},
+ apk:{shadow:true,shadowMode:'single',shadowColor:'#000000',shadowBlur:2,shadowReference:1280,shadowOffsetX:1,shadowOffsetY:1,shadowOpacity:50}
 };
-export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_PRESETS.thin,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
+export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_PRESETS.layered,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
 export function shadowColor(style) {
  const hex=/^#[\da-f]{6}$/i.test(style.shadowColor)?style.shadowColor:'#000000';
  const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
  const opacity=Number(style.shadowOpacity??55);
  return `rgba(${rgb.join(',')},${Number.isFinite(opacity)?Math.max(0,Math.min(100,opacity))/100:.55})`;
 }
-// Crop output coordinates without resizing: one output pixel per canvas pixel.
-export function textDetailCrop(row,width,height,style) {
+// DEX uses width of the internal sensor bitmap. Keep the calibrated long-edge
+// approximation for normalized web photos; original sensor orientation is unknown.
+export function shadowMetrics(style,width,height) {
  const unit=Math.max(width,height)/1280,offsetUnit=Math.max(width,height)/(style.shadowReference||3264);
- const padding=style.shadow?Math.ceil(Math.max(12,(style.shadowBlur??1)*unit*3+Math.max(Math.abs(style.shadowOffsetX??style.shadowOffset??0),Math.abs(style.shadowOffsetY??style.shadowOffset??0))*offsetUnit+4)):12;
+ const radius=(style.shadowBlur??1.25)*unit;
+ const modern=style.shadowMode==='layered'||style.shadowMode==='dex';
+ return {blur:modern?(radius>0?2*(.57735*radius+.5):0):radius,
+  x:(style.shadowOffsetX??style.shadowOffset??1.25)*offsetUnit,
+  y:(style.shadowOffsetY??style.shadowOffset??1.25)*offsetUnit,
+  coreX:(style.shadowCoreOffsetX??.85)*unit,coreY:(style.shadowCoreOffsetY??.85)*unit};
+}
+export function restoreStyle(saved={}) {
+ if(!saved||typeof saved!=='object'||Array.isArray(saved))saved={};
+ // Old saved presets must not silently acquire the new layered appearance.
+ return {...defaultStyle(),...saved,shadowMode:['single','layered','dex'].includes(saved.shadowMode)?saved.shadowMode:'single'};
+}
+// Crop output coordinates without resizing: include both shadow layers.
+export function textDetailCrop(row,width,height,style) {
+ const m=shadowMetrics(style,width,height);
+ const core=style.shadowMode==='layered'?Math.max(Math.abs(m.coreX),Math.abs(m.coreY)):0;
+ const padding=style.shadow?Math.ceil(Math.max(12,m.blur*3+Math.max(Math.abs(m.x),Math.abs(m.y))+4,core+4)):12;
  const x=Math.max(0,Math.floor(row.x-padding)),y=Math.max(0,Math.floor(row.y-padding));
  return {x,y,w:Math.max(1,Math.min(width,Math.ceil(row.x+row.w+padding))-x),h:Math.max(1,Math.min(height,Math.ceil(row.y+row.h+padding))-y)};
 }
@@ -96,10 +115,31 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
   bounds.textRows=rows.map((r,i)=>({index:indexes[i],x:positions[i].x-r.left,y:positions[i].y-r.ascent,w:r.width,h:r.ascent+r.descent}));
   if(s.background){ctx.fillStyle=`rgba(0,0,0,${s.background/100})`;ctx.fillRect(x0-edge,y0-edge,x1-x0+2*edge,y1-y0+2*edge);}
   ctx.globalAlpha=s.opacity/100;ctx.fillStyle=s.color;ctx.textAlign='left';ctx.textBaseline='alphabetic';
-  // Canvas shadow lengths ignore the current transform. Scale them explicitly
-  // so a downsampled preview has the same shadow as the full-resolution export.
+  // Canvas shadow lengths ignore the transform: scale in device pixels.
+  const m=shadowMetrics(s,width,height);
   ctx.shadowColor='transparent';ctx.shadowBlur=ctx.shadowOffsetX=ctx.shadowOffsetY=0;
-  if(s.shadow){const offsetUnit=Math.max(width,height)/(s.shadowReference||3264);ctx.shadowColor=shadowColor(s);ctx.shadowBlur=(s.shadowBlur??1.25)*unit*scale;ctx.shadowOffsetX=(s.shadowOffsetX??s.shadowOffset??1.25)*offsetUnit*scale;ctx.shadowOffsetY=(s.shadowOffsetY??s.shadowOffset??1.25)*offsetUnit*scale;}
+  if(s.shadow&&(s.shadowMode==='layered'||s.shadowMode==='dex')){
+   const textAlpha=Math.max(0,Math.min(1,s.opacity/100));
+   const softAlpha=s.shadowMode==='dex'?(m.blur>0?Math.floor(Math.floor(textAlpha*255)/2)/255:0):textAlpha*Math.max(0,Math.min(100,s.shadowOpacity))/100;
+   // Draw only the soft shadow: the opaque source glyphs sit outside the photo,
+   // while a compensated offset places their shadow at the intended position.
+   // This avoids a second visible text fill or a full-photo temporary bitmap.
+   const shift=width+maxWidth+Math.abs(m.x)+m.blur*4+100;
+   ctx.save();ctx.beginPath();ctx.rect(0,0,width,height);ctx.clip();
+   ctx.globalAlpha=1;ctx.fillStyle='#000000';
+   ctx.shadowColor=shadowColor({...s,shadowColor:s.shadowMode==='dex'?'#000000':s.shadowColor,shadowOpacity:softAlpha*100});
+   ctx.shadowBlur=m.blur*scale;ctx.shadowOffsetX=(shift+m.x)*scale;ctx.shadowOffsetY=m.y*scale;
+   for(let i=0;i<rows.length;i++)ctx.fillText(rows[i].text,positions[i].x-shift,positions[i].y);
+   ctx.restore();
+   ctx.shadowColor='transparent';ctx.shadowBlur=ctx.shadowOffsetX=ctx.shadowOffsetY=0;
+   if(s.shadowMode==='layered'){
+    ctx.globalAlpha=textAlpha;ctx.fillStyle=shadowColor({...s,shadowOpacity:s.shadowCoreOpacity??30});
+    for(let i=0;i<rows.length;i++)ctx.fillText(rows[i].text,positions[i].x+m.coreX,positions[i].y+m.coreY);
+   }
+   ctx.globalAlpha=textAlpha;ctx.fillStyle=s.color;
+  }else if(s.shadow){
+   ctx.shadowColor=shadowColor(s);ctx.shadowBlur=m.blur*scale;ctx.shadowOffsetX=m.x*scale;ctx.shadowOffsetY=m.y*scale;
+  }
   for(let i=0;i<rows.length;i++)ctx.fillText(rows[i].text,positions[i].x,positions[i].y);
  }
  ctx.restore();return bounds;

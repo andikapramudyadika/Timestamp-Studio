@@ -1,5 +1,24 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.5.0: inti tegas dan bayangan luar
+
+Bawaan **Berlapis** adalah pendekatan visual terhadap deskripsi pengguna: siluet hitam transparan 30% tanpa blur pada offset X/Y 0,85, di bawah teks utama; di belakangnya bayangan luar hitam 25%, radius Android 2, offset X/Y 1. Semua panjang memakai acuan sisi panjang 1280. Angka inti/luar merupakan titik awal yang dapat diubah, bukan hasil ekstraksi dua lapisan dari DEX. Font, ukuran, perataan, baseline, dan peta tidak diubah.
+
+Preset **Acuan DEX** memakai satu lapisan: radius `2 × unit`, offset `1 × unit`, hitam, dan alpha `floor(floor(opasitasTeks/100 × 255)/2)/255`. Kontrol warna dan opasitas bayangan dikunci pada mode ini. Nilai radius dan offset tetap dapat dikalibrasi. DEX awal/reset juga memiliki alpha 128; alur pengaturan dan pemuatan memakai setengah alpha teks (127 pada teks 100%).
+
+Radius Android dikonversi menjadi Canvas shadowBlur: `radius > 0 ? 2 × (0,57735 × radius + 0,5) : 0`. Konversi dihitung pada resolusi hasil sebelum dikalikan skala preview. Pada acuan 1280: radius 2 menjadi shadowBlur 3,3094. Pada 4096: radius 6,4 menjadi shadowBlur 8,39008. Nilai 2 tidak disalin langsung sebagai shadowBlur.
+
+Sumber teknis:
+- Android Paint shadow: https://developer.android.com/reference/android/graphics/Paint#setShadowLayer(float,float,float,int)
+- Konversi radius/sigma: https://android.googlesource.com/platform/frameworks/base/+/refs/heads/main/libs/hwui/utils/Blur.cpp
+- Canvas shadows: https://html.spec.whatwg.org/multipage/canvas.html#shadows
+
+DEX memakai lebar bitmap sensor internal sebelum rotasi. Web tetap memakai sisi panjang foto yang telah dinormalisasi karena acuan ini sudah mendekati foto pengguna; data orientasi buffer sensor asli tidak tersedia dari semua gambar unggahan. Label Acuan DEX berarti mengikuti model/parameter kode yang diperiksa, bukan jaminan kesamaan semua jalur kamera atau piksel foto.
+
+Bayangan luar digambar terpisah dengan sumber huruf berada di luar kanvas dan offset kompensasi; hanya bayangannya yang masuk area foto. Inti digambar berikutnya tanpa shadow, kemudian teks utama tanpa shadow tambahan. Ini mencegah penumpukan huruf utama dan pengurangan alpha dua kali. Radius 0 menonaktifkan bayangan pada mode DEX seperti Android. Pada Berlapis, radius 0 menghasilkan bayangan luar keras bila offset tidak nol.
+
+Preset Tipis, v1.3, PixelLab, dan APK lama tetap mempertahankan jalur render sebelumnya. Preset tersimpan tanpa shadowMode dimuat sebagai satu lapisan. Detail 100% memperhitungkan luas kedua lapisan. Hasil belum dikalibrasi ulang terhadap contoh keluaran aplikasi asli yang menunjukkan inti bayangan; perbandingan visual masih diperlukan.
+
 ## Versi 1.4.1: latar pemeriksaan bayangan
 
 Detail teks 100% menyediakan Putih bersih (#FFFFFF, bawaan), Abu-abu terang (#E5E7EB), serta Foto saat ini. Latar netral hanya untuk pemeriksaan teks dan bayangan; peta/foto tidak ditampilkan pada detail netral. Ukuran teks, posisi, warna, blur, offset, opasitas, dan latar teks yang diatur pengguna tetap mengikuti editor.

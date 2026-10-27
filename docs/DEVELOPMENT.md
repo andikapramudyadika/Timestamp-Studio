@@ -54,3 +54,9 @@ Detail v1.4.1 menyediakan latar putih (bawaan), abu-abu terang, dan foto. Latar 
 | `docs/` | Panduan dan gambar kanvas contoh |
 
 v1.4 memakai bayangan Tipis 35% sebagai bawaan. Preset 55% tetap tersedia sebagai acuan historis dan harus mempertahankan hasil v1.3. Font dan baseline tidak diubah. Pertahankan jalur relatif untuk mendukung subfolder Pages dan perbarui penanda cache HTML/import secara konsisten bila runtime berubah. Lihat [kalibrasi](../KALIBRASI.md) untuk catatan historis.
+
+## Bayangan v1.5.0
+
+Renderer mendukung single (legacy), layered (inti + luar), dan dex (satu shadow dengan konversi radius). restoreStyle memigrasikan preset tersimpan lama ke single. Uji semua preset, alpha teks 0/50/100%, offset negatif, shadow mati, serta simpan/muat. Periksa detail 100% terhadap PNG. Acuan skala sisi panjang dipertahankan untuk menjaga kalibrasi posisi/font; belum merekonstruksi buffer sensor semua orientasi.
+
+Validasi v1.5.0: 25 pengujian Node dan sintaks lulus. Pemeriksaan DOM terisolasi memeriksa semua preset, kontrol DEX, input negatif, simpan/muat, migrasi preset lama, reset, dan sakelar. Pemeriksaan raster Skia (@napi-rs/canvas, fixture Roboto Regular weight 400) memastikan inti dan luar sama-sama terlihat, alpha 0/shadow mati tidak meninggalkan piksel, dan geometri teks tidak berubah antar-mode. Ini bukan pengujian Chrome/Android: Chromium tidak dapat diunduh di lingkungan pengerjaan ini. Screenshot historis Chrome di atas bukan hasil pengujian v1.5.0.

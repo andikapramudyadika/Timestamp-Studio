@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
   <title>Timestamp Studio — Editor foto</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.4.1"><link rel="stylesheet" href="mobile.css?v=1.4.1">
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.5.0"><link rel="stylesheet" href="mobile.css?v=1.5.0">
 </head>
 <body>
 <svg class="icon-defs" aria-hidden="true"><defs>
@@ -52,16 +52,23 @@
   </section>
   <section class="panel shadow-panel" aria-labelledby="shadow-heading">
    <div class="section-heading"><span class="step">03</span><h2 id="shadow-heading">Bayangan teks</h2><input id="text-shadow" aria-label="Aktifkan bayangan teks" type="checkbox" class="switch" checked></div>
-   <p class="section-description">Atur gelap dan lembutnya bayangan agar mendekati foto dari aplikasi asli.</p>
-   <label class="control-label" for="shadow-preset">Preset bayangan</label><select id="shadow-preset"><option value="thin">Tipis · 35% (bawaan)</option><option value="camera">Versi 1.3 · 55%</option><option value="pixellab">PixelLab · 34%, offset 2/2</option><option value="apk">Kode APK · 50%, offset 1/1</option><option value="custom" disabled>Disesuaikan manual</option></select>
+   <p class="section-description">Inti bayangan yang tegas, dengan sebaran lembut di belakangnya.</p>
+   <label class="control-label" for="shadow-preset">Preset bayangan</label><select id="shadow-preset"><option value="layered">Berlapis · inti tegas + lembut (bawaan)</option><option value="dex">Acuan DEX · radius Android</option><option value="thin">Tipis · 35% (versi lama)</option><option value="camera">Versi 1.3 · 55%</option><option value="pixellab">PixelLab · 34%, offset 2/2</option><option value="apk">APK lama · tanpa konversi blur</option><option value="custom" disabled>Disesuaikan manual</option></select>
    <fieldset id="shadow-controls" class="shadow-controls"><legend class="sr-only">Sesuaikan bayangan</legend>
+    <label class="control-label" for="shadow-mode">Jenis bayangan</label><select id="shadow-mode"><option value="layered">Berlapis</option><option value="dex">Acuan DEX</option><option value="single">Satu lapisan · versi lama</option></select>
+    <p class="hint" id="shadow-mode-note"></p>
+    <details id="shadow-core-controls" class="advanced"><summary>Inti bayangan · tegas <span>⌄</span></summary><div class="details-body">
+    <label class="control-label" for="shadow-core-opacity">Kekuatan inti <output id="shadow-core-opacity-value">30%</output></label><div class="shadow-control"><input id="shadow-core-opacity" type="range" min="0" max="100" step="1" value="30"><input id="shadow-core-opacity-number" type="number" min="0" max="100" step="1" value="30" aria-label="Kekuatan inti"></div>
+    <label class="control-label" for="shadow-core-offset-x">Geser inti horizontal (X) <output id="shadow-core-offset-x-value">0.85</output></label><div class="shadow-control"><input id="shadow-core-offset-x" type="range" min="-5" max="5" step="0.05" value="0.85"><input id="shadow-core-offset-x-number" type="number" min="-5" max="5" step="0.05" value="0.85" aria-label="Geser inti horizontal (X)"></div>
+    <label class="control-label" for="shadow-core-offset-y">Geser inti vertikal (Y) <output id="shadow-core-offset-y-value">0.85</output></label><div class="shadow-control"><input id="shadow-core-offset-y" type="range" min="-5" max="5" step="0.05" value="0.85"><input id="shadow-core-offset-y-number" type="number" min="-5" max="5" step="0.05" value="0.85" aria-label="Geser inti vertikal (Y)"></div>
+    <p class="hint">Inti memakai warna bayangan di bawah. Hitam transparan terlihat abu-abu pada latar terang.</p></div></details>
     <label class="control-label" for="shadow-color">Warna bayangan <output id="shadow-color-value">#000000</output></label><input id="shadow-color" type="color" value="#000000">
-    <label class="control-label" for="shadow-opacity">Opasitas bayangan <output id="shadow-opacity-value">35%</output></label><div class="shadow-control"><input id="shadow-opacity" type="range" min="0" max="100" step="1" value="35"><input id="shadow-opacity-number" type="number" min="0" max="100" step="1" value="35" aria-label="Opasitas bayangan (%)"></div>
-    <label class="control-label" for="shadow-blur">Kelembutan (blur) <output id="shadow-blur-value">1</output></label><div class="shadow-control"><input id="shadow-blur" type="range" min="0" max="6" step="0.05" value="1"><input id="shadow-blur-number" type="number" min="0" max="6" step="0.05" value="1" aria-label="Kelembutan bayangan"></div>
+    <label class="control-label" for="shadow-opacity">Opasitas bayangan luar <output id="shadow-opacity-value">35%</output></label><div class="shadow-control"><input id="shadow-opacity" type="range" min="0" max="100" step="1" value="35"><input id="shadow-opacity-number" type="number" min="0" max="100" step="1" value="35" aria-label="Opasitas bayangan (%)"></div>
+    <label class="control-label" for="shadow-blur">Kelembutan luar / radius <output id="shadow-blur-value">1</output></label><div class="shadow-control"><input id="shadow-blur" type="range" min="0" max="6" step="0.05" value="1"><input id="shadow-blur-number" type="number" min="0" max="6" step="0.05" value="1" aria-label="Kelembutan bayangan"></div>
     <label class="control-label" for="shadow-offset-x">Geser horizontal (X) <output id="shadow-offset-x-value">0.75</output></label><div class="shadow-control"><input id="shadow-offset-x" type="range" min="-5" max="5" step="0.05" value="0.75"><input id="shadow-offset-x-number" type="number" min="-5" max="5" step="0.05" value="0.75" aria-label="Pergeseran horizontal bayangan"></div>
     <label class="control-label" for="shadow-offset-y">Geser vertikal (Y) <output id="shadow-offset-y-value">0.75</output></label><div class="shadow-control"><input id="shadow-offset-y" type="range" min="-5" max="5" step="0.05" value="0.75"><input id="shadow-offset-y-number" type="number" min="-5" max="5" step="0.05" value="0.75" aria-label="Pergeseran vertikal bayangan"></div>
    </fieldset>
-   <p class="hint">Opasitas lebih rendah membuat bayangan lebih ringan. X negatif ke kiri, Y negatif ke atas. Blur dan pergeseran mengikuti ukuran foto.</p>
+   <p class="hint">X negatif ke kiri, Y negatif ke atas. Radius dan pergeseran mengikuti sisi panjang foto. Mode Berlapis adalah pendekatan visual; Acuan DEX mengikuti parameter satu bayangan dari kode asli.</p>
    <details class="text-detail" id="text-detail"><summary>Detail teks · 100% <span>⌄</span></summary>
     <label class="control-label" for="detail-background">Latar pratinjau</label><select id="detail-background" aria-describedby="detail-background-note"><option value="white" selected>Putih bersih</option><option value="gray">Abu-abu terang</option><option value="photo">Foto saat ini</option></select>
     <p class="hint" id="detail-background-note">Latar ini khusus pratinjau; unduhan tetap memakai foto Anda. Pada latar putih, huruf putih menyatu dengan latar sehingga bayangannya lebih mudah diperiksa.</p>
@@ -116,7 +123,7 @@
  </section>
  </div>
 </main>
-<footer><span>timestamp studio v1.4.1 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
+<footer><span>timestamp studio v1.5.0 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="app.js?v=1.4.1"></script>
+<script type="module" src="app.js?v=1.5.0"></script>
 </body></html>
