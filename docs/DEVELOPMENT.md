@@ -21,14 +21,14 @@ node --check renderer.js
 node --check maps.js
 ```
 
-Pengujian memakai `node:test` dan `node:assert/strict`. Suite v1.4 berisi 21 pengujian untuk waktu WITA, ukuran/fit foto, baseline, bayangan, skala pratinjau, atribusi, koordinat, Mercator, viewport, dan penanganan kegagalan Google.
+Pengujian memakai `node:test` dan `node:assert/strict`. Suite v1.4 berisi 22 pengujian untuk waktu WITA, ukuran/fit foto, baseline, bayangan, skala pratinjau, atribusi, koordinat, Mercator, viewport, dan penanganan kegagalan Google.
 
 Workflow [Checks](../.github/workflows/checks.yml) menjalankan pemeriksaan sintaks dan pengujian pada push/pull request. Izin workflow hanya membaca isi repository; tidak memakai key Google.
 
 ## Pemeriksaan browser
 
 1. Gunakan kanvas contoh atau foto uji yang boleh dibagikan.
-2. Periksa baris timestamp, sakelar, preset bayangan, dan pembandingan foto asli.
+2. Periksa baris timestamp, sakelar, ketebalan/sisi bayangan, dan pembandingan foto asli.
 3. Periksa lebar ponsel sekitar 393 piksel, navigasi bawah, dan geser objek.
 4. Periksa peta unggahan serta pergantian sumber peta.
 5. Unduh JPG/PNG dan periksa dimensi, teks, bayangan, serta atribusi.
@@ -53,10 +53,12 @@ Detail v1.4.1 menyediakan latar putih (bawaan), abu-abu terang, dan foto. Latar 
 | `tests/` | Pengujian Node |
 | `docs/` | Panduan dan gambar kanvas contoh |
 
-v1.4 memakai bayangan Tipis 35% sebagai bawaan. Preset 55% tetap tersedia sebagai acuan historis dan harus mempertahankan hasil v1.3. Font dan baseline tidak diubah. Pertahankan jalur relatif untuk mendukung subfolder Pages dan perbarui penanda cache HTML/import secara konsisten bila runtime berubah. Lihat [kalibrasi](../KALIBRASI.md) untuk catatan historis.
+## Bayangan v1.6.0
 
-## Bayangan v1.5.0
+SHADOW_STYLE adalah satu-satunya gaya. Tidak ada pemilih mode/preset atau template tampilan lama. Gunakan shadowDepth, shadowSideColor (#A6B2C0), shadowSideOpacity untuk sisi; shadowOpacity, shadowBlur, shadowOffsetX/Y untuk bayangan luar hitam. Blur tetap memakai konversi radius Android. Font dan geometri teks dipertahankan.
 
-Renderer mendukung single (legacy), layered (inti + luar), dan dex (satu shadow dengan konversi radius). restoreStyle memigrasikan preset tersimpan lama ke single. Uji semua preset, alpha teks 0/50/100%, offset negatif, shadow mati, serta simpan/muat. Periksa detail 100% terhadap PNG. Acuan skala sisi panjang dipertahankan untuk menjaga kalibrasi posisi/font; belum merekonstruksi buffer sensor semua orientasi.
+Siluet sisi dibuat pada kanvas per baris memakai sumber huruf opak di beberapa posisi kontinu, baru dikomposit dengan satu alpha. Ini menghindari penumpukan alpha setiap langkah. Canvas DOM dipakai di browser utama, OffscreenCanvas untuk lingkungan yang mendukungnya. Dimensi masker dilepas setelah drawImage; seluruh foto tidak disalin ke kanvas sementara.
 
-Validasi v1.5.0: 25 pengujian Node dan sintaks lulus. Pemeriksaan DOM terisolasi memeriksa semua preset, kontrol DEX, input negatif, simpan/muat, migrasi preset lama, reset, dan sakelar. Pemeriksaan raster Skia (@napi-rs/canvas, fixture Roboto Regular weight 400) memastikan inti dan luar sama-sama terlihat, alpha 0/shadow mati tidak meninggalkan piksel, dan geometri teks tidak berubah antar-mode. Ini bukan pengujian Chrome/Android: Chromium tidak dapat diunduh di lingkungan pengerjaan ini. Screenshot historis Chrome di atas bukan hasil pengujian v1.5.0.
+restoreStyle hanya membaca kunci yang dikenal. shadowStyleVersion 2 mempertahankan nilai baru; data lama memigrasikan bayangan ke bawaan baru tanpa mengubah teks/font/peta/status sakelar. localStorage key lama tetap dipakai agar pengaturan tidak hilang.
+
+Validasi: 22 pengujian Node, sintaks, DOM terisolasi (hapus preset, swatch/picker, input angka, simpan/muat, migrasi, reset, sakelar), dan raster Skia (@napi-rs/canvas dengan fixture Roboto 400) memeriksa warna sisi, alpha sekali, blur terpisah, dan geometri tetap. Browser Android/Chrome tidak diuji langsung. Screenshot historis di repository belum mencerminkan antarmuka v1.6.0.

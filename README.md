@@ -3,7 +3,7 @@
   <h1>Timestamp Studio</h1>
   <p>Editor timestamp foto dengan peta lokasi dan ekspor resolusi penuh.</p>
   <p>
-    <img alt="Versi stabil 1.4.1" src="https://img.shields.io/badge/version-1.4.1-496235">
+    <img alt="Versi stabil 1.6.0" src="https://img.shields.io/badge/version-1.6.0-496235">
     <a href="https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml"><img alt="Pemeriksaan otomatis" src="https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml/badge.svg"></a>
     <img alt="Foto diproses di browser" src="https://img.shields.io/badge/photo_processing-local-496235">
     <img alt="Tanpa build" src="https://img.shields.io/badge/build-not_required-496235">
@@ -13,7 +13,7 @@
 
 ![Timestamp Studio pada desktop, menggunakan kanvas contoh](docs/images/preview-desktop.jpg)
 
-**Versi saat ini: v1.5.0.** Panel bayangan memiliki slider dan input angka, pilihan warna, serta detail teks 100%. Bawaan **Berlapis** menambahkan inti tegas dan bayangan luar lembut; preset **Versi 1.3 · 55%** tetap tersedia. Lihat [CHANGELOG.md](CHANGELOG.md).
+**Versi saat ini: v1.6.0.** Satu gaya bayangan **3D Halus**: huruf putih, sisi padat berwarna **#A6B2C0**, dan bayangan hitam lembut. Pilihan preset/jenis bayangan dan template tampilan lama dihapus agar editor lebih ringkas. Lihat [CHANGELOG.md](CHANGELOG.md).
 
 ## Fitur
 
@@ -21,11 +21,11 @@
 | --- | --- |
 | Timestamp | Tujuh baris dengan sakelar masing-masing; waktu otomatis WITA |
 | Tipografi | Roboto variabel lokal, ketebalan 250–500, warna, ukuran, jarak, margin, serta font unggahan |
-| Bayangan | Preset Berlapis, Acuan DEX, Tipis, versi 1.3, PixelLab, dan APK lama; warna, opasitas, blur, serta offset dengan slider/input angka |
+| Bayangan | Sisi 3D menyambung, color picker + tombol #A6B2C0, ketebalan, dan bayangan hitam lembut |
 | Peta | Google Maps resmi, OpenStreetMap, atau gambar peta unggahan |
 | Pratinjau | Perubahan langsung, detail teks 100% per baris, geser objek, dan pembandingan foto asli |
 | Ekspor | JPG/PNG; resolusi asli atau 2448 × 3264; foto utuh atau potong tengah |
-| Preset | Simpan teks dan pengaturan di browser melalui localStorage |
+| Pengaturan | Simpan teks dan pengaturan di browser melalui localStorage |
 | Ponsel | Navigasi Foto · Teks · Peta · Unduh dan kontrol sentuh |
 
 <details>
@@ -45,19 +45,19 @@ Versi 1.4 menyediakan penyesuaian bayangan yang lebih presisi. Font, ukuran, sus
 2. Ekstrak ZIP, lalu unggah **isi folder** `timestamp-studio-github` ke halaman utama repository melalui **Add file → Upload files**. Jangan unggah ZIP sebagai satu berkas.
 3. Pastikan `index.html`, `app.js`, `renderer.js`, `maps.js`, `style.css`, `mobile.css`, `icon.svg`, `.nojekyll`, dan folder `fonts/` berada langsung di root repository.
 4. Buka **Settings → Pages → Deploy from a branch → main → /(root) → Save**. Gunakan nama branch Anda jika berbeda.
-5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.5.0**.
+5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.6.0**.
 
 Untuk memperbarui aplikasi lama, lihat [PEMBARUAN.md](PEMBARUAN.md). Semua aset memakai jalur relatif sehingga mendukung alamat Pages dengan subfolder repository.
 
 ## Bayangan tulisan
 
-Buka panel **Bayangan teks** (tab **Teks** pada ponsel). Bawaan **Berlapis** memakai inti hitam 30% tanpa blur, offset 0,85/0,85; di belakangnya bayangan hitam 25%, radius Android 2, offset 1/1 pada acuan sisi panjang 1280. Preset **Acuan DEX** memakai satu bayangan dengan konversi blur dan alpha setengah teks. Ini titik awal; belum dikalibrasi ulang terhadap foto asli pengguna.
-- Pilih warna bayangan, termasuk abu-abu gelap untuk hasil yang lebih ringan.
-- Atur opasitas 0–100%, blur 0–6, dan offset X/Y −5 sampai 5. Blur dan offset memiliki langkah 0,05; tersedia slider dan input angka.
-- Pilih **Versi 1.3 · 55%** untuk membandingkan tampilan sebelumnya. Preset PixelLab dan APK tetap tersedia. Memilih preset hanya mengganti bayangan.
-- Buka **Detail teks · 100%**, pilih latar dan baris, lalu geser area detail. Bawaan **Putih bersih (#FFFFFF)** membantu memeriksa bayangan; huruf putih menyatu dengan latar. **Abu-abu terang (#E5E7EB)** memperjelas huruf sekaligus bayangannya. **Foto saat ini** menampilkan area foto seperti hasil unduhan.
-- Pilihan latar hanya memengaruhi detail pemeriksaan; pratinjau foto utama dan unduhan tetap memakai foto Anda. Skala teks/bayangan tetap 100% dan mengikuti resolusi ekspor. Untuk membandingkan langsung dengan unduhan, pilih **Foto saat ini** dan format PNG.
-- **Simpan preset** menyimpan warna dan seluruh pengaturan bayangan bersama teks. Preset lama tetap memakai nilainya sendiri; warna yang belum tersimpan memakai hitam. **Reset pengaturan** kembali ke bawaan Berlapis.
+Buka panel **Bayangan teks** (tab **Teks** pada ponsel). Tiga pengaturan utama: **Ketebalan 3D**, **Warna sisi huruf**, dan **Kekuatan bayangan lembut**. Color picker bebas tetap tersedia; tombol **#A6B2C0** mengembalikan warna abu-abu pilihan.
+
+Bagian **Penyesuaian lanjutan** berisi opasitas sisi, kelembutan, dan offset bayangan hitam. Bawaan sisi padat 100%, kedalaman 1; bayangan hitam 30%, radius 2, offset 1,5/1,5 pada acuan sisi panjang 1280. Siluet sisi digabung dahulu, lalu diberi opasitas sekali agar tidak bertumpuk gelap.
+
+**Detail teks · 100%** menyediakan latar putih, abu-abu, dan foto. Pilihan ini hanya memengaruhi detail; unduhan tetap memakai foto. Gunakan latar Foto saat ini dan PNG untuk membandingkan piksel hasil.
+
+**Simpan pengaturan** menyimpan teks dan tampilan. Pengaturan lama tetap dapat dimuat; hanya nilai bayangannya yang dimigrasikan ke gaya 3D Halus. Teks, font, peta, dan sakelar bayangan dipertahankan. **Reset pengaturan** kembali ke bawaan terbaru.
 
 Gambar berikut menunjukkan antarmuka dan perbandingan versi 1.4 sebelum mode Berlapis.
 
@@ -92,13 +92,13 @@ Unggah foto JPG, PNG, atau WebP; isi waktu dan lokasi; atur peta; lalu unduh JPG
 
 Foto, font, dan gambar peta unggahan diproses di browser. Saat meminta peta otomatis, penyedia yang dipilih menerima permintaan untuk area koordinat tersebut; foto Anda tidak dikirim. OpenStreetMap memakai `tile.openstreetmap.org` dan atribusinya ikut diekspor. Peta otomatis memerlukan internet.
 
-**Simpan preset** menyimpan teks dan pengaturan tampilan pada localStorage perangkat ini. Foto, gambar peta, font unggahan, dan API key tidak disimpan. Jangan unggah foto pribadi atau API key ke repository publik. Berkas pribadi dan foto referensi tidak disertakan dalam paket aplikasi.
+**Simpan pengaturan** menyimpan teks dan pengaturan tampilan pada localStorage perangkat ini. Foto, gambar peta, font unggahan, dan API key tidak disimpan. Jangan unggah foto pribadi atau API key ke repository publik. Berkas pribadi dan foto referensi tidak disertakan dalam paket aplikasi.
 
 Font Roboto variabel disertakan di `fonts/` bersama lisensinya. Pengaturan ketebalan huruf menyediakan 250–500, dengan bawaan 380.
 
 ## Pemeriksaan lokal
 
-Gunakan Node.js 22 atau lebih baru. Tidak perlu `npm install`: tidak ada dependensi npm. [GitHub Actions](https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml) menjalankan pemeriksaan sintaks dan 25 pengujian pada push/pull request. Alur Google telah diperiksa dengan respons simulasi; akses Google sebenarnya tetap memerlukan key dan billing aktif.
+Gunakan Node.js 22 atau lebih baru. Tidak perlu `npm install`: tidak ada dependensi npm. [GitHub Actions](https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml) menjalankan pemeriksaan sintaks dan 22 pengujian pada push/pull request. Alur Google telah diperiksa dengan respons simulasi; akses Google sebenarnya tetap memerlukan key dan billing aktif.
 
 Jalankan `node --test tests/*.test.mjs` untuk memeriksa koordinat, viewport, pesan kesalahan Google, waktu WITA, susunan teks, atribusi, serta skala bayangan.
 
@@ -111,13 +111,9 @@ Untuk menjalankan aplikasi, sajikan folder ini dengan server statis, misalnya `p
 | [Panduan penggunaan](docs/GETTING_STARTED.md) | Alur editor, peta, ekspor, preset, dan pemecahan masalah |
 | [Google Maps](docs/GOOGLE_MAPS.md) | API key, pembatasan domain, kuota, dan alternatif |
 | [Pengembangan](docs/DEVELOPMENT.md) | Struktur source dan pemeriksaan lokal/browser |
-| [Changelog](CHANGELOG.md) | Riwayat fitur v1.0–v1.5 |
+| [Changelog](CHANGELOG.md) | Riwayat fitur v1.0–v1.6 |
 | [Kalibrasi](KALIBRASI.md) | Metode pengukuran dan batas interpretasi |
 | [Kontribusi](CONTRIBUTING.md) | Laporan bug dan pull request |
 | [Aset pihak ketiga](THIRD_PARTY_NOTICES.md) | Font, lisensi, dan sumber peta |
 
 Dikelola oleh [Andika Pramudya](https://github.com/andikapramudyadika). Lisensi font disertakan di `fonts/`; repository belum menetapkan lisensi distribusi terbuka untuk kode aplikasi. Gambar dokumentasi menggunakan kanvas contoh dan tidak menyertakan foto pribadi atau API key.
-
-### Bayangan v1.5.0
-
-Pilih **Berlapis** (bawaan) untuk inti tegas + bayangan luar lembut, atau **Acuan DEX** untuk model satu bayangan Android. Sesuaikan inti melalui bagian **Inti bayangan · tegas** dan periksa lewat **Detail teks · 100%**. Preset lama tetap tersedia; lihat [kalibrasi](KALIBRASI.md) untuk parameter dan batas kesesuaian.

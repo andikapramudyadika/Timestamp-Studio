@@ -10,4 +10,4 @@ Untuk perubahan kode:
 4. Perbarui dokumentasi/changelog bila perilaku berubah.
 5. Buat pull request yang menjelaskan masalah, hasil perubahan, dan validasinya.
 
-Gunakan tampilan v1.4 dengan bayangan Tipis 35% sebagai bawaan; pertahankan preset versi 1.3 55% untuk kompatibilitas. Untuk perubahan renderer, sertakan pembanding dari gambar uji nonpribadi. Lihat [panduan pengembangan](docs/DEVELOPMENT.md).
+Gunakan gaya tunggal 3D Halus v1.6.0, sisi #A6B2C0 dan bayangan hitam lembut; jangan menambahkan kembali preset yang dihapus. Untuk perubahan renderer, sertakan pembanding dari gambar uji nonpribadi. Lihat [panduan pengembangan](docs/DEVELOPMENT.md).

@@ -1,5 +1,17 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.6.0: satu gaya 3D Halus
+
+Referensi visual pengguna menunjukkan sisi huruf padat, bukan hanya salinan transparan. Renderer kini membuat siluet menyambung dari beberapa offset bertahap (maksimum 0,25 piksel hasil per langkah), menggabungkannya pada kanvas per baris, lalu menerapkan opasitas satu kali saat komposit. Tidak ada blur pada sisi ini. Teks depan digambar terakhir, sehingga bentuk/font/baseline tetap mengikuti versi sebelumnya.
+
+Bawaan: sisi #A6B2C0 pada opasitas 100%, depth 1 per sumbu; bayangan luar hitam 30%, radius Android 2 dan offset 1,5/1,5. Semua panjang memakai acuan sisi panjang 1280. Konversi radius ke shadowBlur `2 × (0,57735 × radius + 0,5)` tetap dipakai untuk bayangan luar. Nilai sisi/kedalaman merupakan kalibrasi visual, bukan klaim bahwa DEX menerapkan ekstrusi huruf.
+
+Semua pilihan preset/jenis bayangan dan template tampilan dihapus. UI hanya menunjukkan ketebalan, warna sisi (+ swatch #A6B2C0), dan kekuatan bayangan lembut; kontrol lain berada dalam Penyesuaian lanjutan. Sisi selalu mengarah ke kanan bawah. Nilai depth 0 atau opasitas sisi 0 mematikan sisi saja; kekuatan bayangan 0 mematikan blur hitam saja; sakelar mematikan keduanya.
+
+Penyimpanan baru ditandai shadowStyleVersion 2. Preset lama dimigrasikan: nilai bayangan lama diganti dengan bawaan baru, pengaturan nonbayangan dan status sakelar tetap. Preset v1.6.0 mempertahankan warna/depth/opasitas yang disimpan. Masker per baris memakai koordinat resolusi hasil, sama untuk preview/detail/ekspor; setelah komposit, memori masker dilepas.
+
+Validasi: 22 tes Node, pemeriksaan DOM terisolasi untuk swatch/picker, angka, simpan/muat/migrasi/reset, dan pemeriksaan raster Skia dengan font fixture Roboto 400. Piksel sisi #A6B2C0 terdeteksi, setelan 50% tidak mengalami penumpukan opasitas, shadow mati/alpha teks 0 tidak meninggalkan bayangan, dan geometri teks tetap. Chrome/Android belum diuji langsung; screenshot historis dan catatan versi di bawah bukan bukti kesamaan piksel dengan referensi terbaru.
+
 ## Versi 1.5.0: inti tegas dan bayangan luar
 
 Bawaan **Berlapis** adalah pendekatan visual terhadap deskripsi pengguna: siluet hitam transparan 30% tanpa blur pada offset X/Y 0,85, di bawah teks utama; di belakangnya bayangan luar hitam 25%, radius Android 2, offset X/Y 1. Semua panjang memakai acuan sisi panjang 1280. Angka inti/luar merupakan titik awal yang dapat diubah, bukan hasil ekstraksi dua lapisan dari DEX. Font, ukuran, perataan, baseline, dan peta tidak diubah.

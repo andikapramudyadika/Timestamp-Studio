@@ -1,6 +1,15 @@
 # Riwayat pembaruan
 
-**v1.5.0 adalah versi saat ini**, dengan bayangan Berlapis sebagai bawaan dan Acuan DEX sebagai pembanding. Preset lama tetap tersedia.
+**v1.6.0 adalah versi saat ini**, dengan satu gaya bayangan 3D Halus dan warna sisi #A6B2C0.
+
+## v1.6.0 — 27 Oktober 2026
+
+- Hapus daftar preset bayangan, jenis bayangan, dan pilihan template Timestamp Camera/PixelLab.
+- Sisi huruf padat dan menyambung ke kanan bawah, dengan bayangan hitam lembut terpisah. Siluet digabung per baris sebelum opasitas diterapkan sekali.
+- Warna sisi bawaan #A6B2C0, color picker bebas, dan tombol warna cepat #A6B2C0.
+- Tiga pengaturan utama; opasitas sisi, blur, dan offset dipindah ke bagian lanjutan.
+- Simpan/Muat pengaturan tetap tersedia; pengaturan bayangan lama dimigrasikan ke gaya tunggal, sementara font, teks, dan peta tetap dipertahankan.
+- 22 pengujian Node, kontrol DOM, serta pemeriksaan piksel Skia lulus. Belum diuji langsung di browser Android.
 
 ## v1.5.0 — 27 Oktober 2026
 

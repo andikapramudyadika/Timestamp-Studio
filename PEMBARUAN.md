@@ -1,28 +1,7 @@
-# Memperbarui GitHub ke v1.5.0
+# Memperbarui GitHub ke v1.6.0
 
-Jika memperbarui dari paket ZIP, ekstrak terlebih dahulu. Unggah **isi folder timestamp-studio-github** ke lokasi yang sama pada halaman utama repository melalui **Add file → Upload files → Commit changes**. Jangan mengunggah ZIP sebagai satu berkas.
+Pembaruan repository mengganti index.html, app.js, renderer.js, style.css, dan package.json bersama dokumentasi/pengujian. Pertahankan fonts/, maps.js, icon.svg, mobile.css, dan .nojekyll. Penanda cache aset v1.6.0 diperbarui bersama runtime.
 
-Untuk memperbarui runtime yang sudah ada, ganti berkas berikut bersama-sama:
+GitHub Pages tetap dapat memakai main → /(root). Setelah penerbitan, footer menampilkan timestamp studio v1.6.0. Jika masih lama, muat ulang atau gunakan tab privat.
 
-```text
-index.html
-app.js
-renderer.js
-maps.js
-style.css
-mobile.css
-```
-
-Pertahankan fonts/, icon.svg, dan .nojekyll. Sertakan dokumentasi dan pengujian dari paket bila memperbarui repository lengkap. Konfigurasi Pages tetap **Deploy from a branch → main → /(root)**. Setelah penerbitan, footer menampilkan **timestamp studio v1.5.0**. Semua aset memakai penanda cache v1.5.0; jika tampilan masih lama, muat ulang tanpa cache atau gunakan tab privat.
-
-## Perubahan
-
-- Pilihan latar detail: **Putih bersih** (bawaan), **Abu-abu terang**, dan **Foto saat ini**. Pilihan ini hanya untuk pemeriksaan; unduhan tetap menggunakan foto Anda.
-
-- Panel **Bayangan teks** tersendiri (tab **Teks** pada ponsel).
-- Bawaan **Berlapis**: inti tegas + luar lembut. **Acuan DEX** tersedia untuk membandingkan model satu bayangan Android. Tampilan lama tetap tersedia sebagai **Versi 1.3 · 55%**.
-- Pilihan warna, slider dan input angka, serta offset negatif.
-- **Detail teks · 100%** untuk memeriksa satu baris pada resolusi unduhan; gunakan PNG untuk membandingkan tanpa kompresi JPG.
-- Warna dan pengaturan ikut tersimpan dalam preset. Preset lama tetap mempertahankan nilainya; pilih Berlapis bila ingin menerapkan bawaan baru.
-
-Memilih preset bayangan hanya mengubah bayangan. **Reset pengaturan** mengembalikan seluruh tampilan ke bawaan v1.5.0 sambil mempertahankan foto, peta, dan isi teks.
+Hanya satu gaya bayangan 3D Halus: sisi padat #A6B2C0 dan bayangan hitam lembut. Daftar preset/jenis dan template tampilan lama dihapus. Tombol Simpan/Muat pengaturan tetap tersedia. Pengaturan lama dimigrasikan hanya pada nilai bayangannya; foto, isi teks, font, dan peta tetap dipertahankan.

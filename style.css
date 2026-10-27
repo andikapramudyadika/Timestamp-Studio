@@ -21,3 +21,5 @@
  .text-detail summary{min-height:44px;font-size:13px}
  body[data-mobile-tab=photo] .shadow-panel,body[data-mobile-tab=map] .shadow-panel{display:none}
 }
+
+.side-color-row{display:flex;align-items:center;gap:10px}.side-color-row input[type=color]{flex:1;min-width:0}.side-color-swatch{display:flex;align-items:center;gap:7px;min-height:40px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:11px;white-space:nowrap;cursor:pointer}.side-color-swatch span{width:18px;height:18px;border-radius:50%;background:#a6b2c0;border:1px solid #0002}.side-color-swatch[aria-pressed=true]{border-color:#718349;background:#f5f8ec}
