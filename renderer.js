@@ -1,6 +1,6 @@
 export const LABELS = ['Hari, tanggal dan waktu','Koordinat','Nama lorong / jalan','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const DEFAULT_LINES = ['Kamis, 22 Oktober 2026 12.37','Koordinat lokasi','Nama jalan / lorong','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
-export const SHADOW_STYLE = {shadow:true,shadowStyleVersion:2,shadowBlur:2,shadowOffsetX:1.5,shadowOffsetY:1.5,shadowOpacity:70,shadowSideColor:'#929292',shadowSideOpacity:100,shadowDepth:1.1};
+export const SHADOW_STYLE = Object.freeze({shadow:true,shadowStyleVersion:2,shadowBlur:2,shadowOffsetX:1.5,shadowOffsetY:1.5,shadowOpacity:70,shadowSideColor:'#929292',shadowSideOpacity:100,shadowDepth:1.1});
 export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_STYLE,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
 const clamp=(value,min,max,fallback)=>Number.isFinite(Number(value))?Math.max(min,Math.min(max,Number(value))):fallback;
 export function shadowMetrics(style,width,height) {
@@ -12,11 +12,11 @@ export function shadowMetrics(style,width,height) {
 }
 export function restoreStyle(saved={}) {
  if(!saved||typeof saved!=='object'||Array.isArray(saved))saved={};
- const defaults=defaultStyle(),current=saved.shadowStyleVersion===2;
- // Retired shadow presets migrate to the sole 3D style. Preserve other settings
- // and the shadow switch; never reintroduce removed modes from localStorage.
+ const defaults=defaultStyle();
+ // Shadow is fixed at the calibrated v1.6.1 default, including older presets.
+ // All non-shadow settings keep the existing storage key and shape.
  for(const key of Object.keys(defaults)){
-  if(Object.hasOwn(saved,key)&&(!key.startsWith('shadow')||key==='shadow'||current))defaults[key]=saved[key];
+  if(Object.hasOwn(saved,key)&&!key.startsWith('shadow'))defaults[key]=saved[key];
  }
  return defaults;
 }

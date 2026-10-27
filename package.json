@@ -1,6 +1,6 @@
 {
   "name": "timestamp-studio",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "private": true,
   "type": "module",
   "description": "Editor timestamp foto dengan peta, pemrosesan lokal, dan ekspor resolusi penuh.",
@@ -16,6 +16,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node scripts/check-browser.cjs"
   }
 }

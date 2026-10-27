@@ -1,3 +1,7 @@
+# Catatan v1.7.0
+
+Bayangan dikunci pada default v1.6.1. Semua catatan kontrol bayangan pada bagian historis di bawah tidak lagi berlaku untuk UI saat ini. Renderer dan kalibrasi piksel tetap dipertahankan.
+
 # Kalibrasi preset Timestamp Camera
 
 ## Versi 1.6.1: bawaan referensi dan HEX

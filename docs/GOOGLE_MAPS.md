@@ -1,6 +1,6 @@
 # Konfigurasi Google Maps
 
-Timestamp Studio v1.3 memakai **Map Tiles API / 2D roadmap**: membuat sesi, membaca atribusi viewport, mengambil tile pada area yang terlihat, lalu menempatkan pin merah pada koordinat.
+Timestamp Studio memakai **Map Tiles API / 2D roadmap**: membuat sesi, membaca atribusi viewport, mengambil tile pada area yang terlihat, lalu menempatkan pin merah pada koordinat.
 
 ## Pengaturan Google Cloud
 
@@ -14,7 +14,7 @@ Masukkan key pada kolom aplikasi. Key tidak perlu ditulis di source, GitHub Secr
 
 ## Penggunaan
 
-Pilih Google Maps, isi key, tempel koordinat, lalu tekan **Buat peta** atau gunakan pembuatan otomatis. Tunggu pesan **Peta Google Maps siap**. Atribusi penyedia data ikut digambar pada foto. Gaya Google dapat berubah dan tidak dijamin identik dengan foto referensi lama.
+Buka Peta → Buat peta dari koordinat. Pilih Google Maps dan isi key. Tempel koordinat di bagian Teks, lalu kembali ke Peta dan tekan **Buat peta** atau gunakan pembuatan otomatis. Tunggu pesan **Peta Google Maps siap**. Atribusi penyedia data ikut digambar pada foto. Gaya Google dapat berubah dan tidak dijamin identik dengan foto referensi lama.
 
 Mengubah lokasi atau zoom dapat membuat permintaan tile baru. Mengunduh kembali foto yang memakai peta sama dan masih dimuat tidak memerlukan tile baru. Aplikasi tidak berpindah ke OSM secara otomatis bila Google gagal.
 

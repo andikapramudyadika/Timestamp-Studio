@@ -47,14 +47,14 @@ test('sole shadow style defaults to connected gray sides; Android blur conversio
  const m=shadowMetrics(s,960,1280);assert.ok(Math.abs(m.blur-3.3094)<1e-9);assert.equal(m.x,1.5);assert.equal(m.depth,1.1);
  assert.ok(Math.abs(shadowMetrics(s,3072,4096).depth-3.52)<1e-9);
 });
-test('retired saved presets migrate only shadow parameters; new gray settings round-trip',()=>{
+test('all saved presets preserve other settings and lock the v1.6.1 shadow',()=>{
  for(const mode of [undefined,'single','layered','dex']){
   const s=restoreStyle({fontSize:56,mapSize:22,shadow:false,shadowMode:mode,shadowOpacity:55,shadowReference:3264});
-  assert.equal(s.fontSize,56);assert.equal(s.mapSize,22);assert.equal(s.shadow,false);
+  assert.equal(s.fontSize,56);assert.equal(s.mapSize,22);assert.equal(s.shadow,true);
   assert.equal(s.shadowOpacity,SHADOW_STYLE.shadowOpacity);assert.equal('shadowMode' in s,false);assert.equal('shadowReference' in s,false);
  }
  const s={...defaultStyle(),shadowSideColor:'#778899',shadowDepth:2.2,shadowSideOpacity:50};
- assert.deepEqual(restoreStyle(JSON.parse(JSON.stringify(s))),s);
+ assert.deepEqual(restoreStyle(JSON.parse(JSON.stringify(s))),defaultStyle());
  assert.deepEqual(restoreStyle(null),defaultStyle());
 });
 test('side silhouette is connected and composited once; foreground geometry stays unchanged',()=>{

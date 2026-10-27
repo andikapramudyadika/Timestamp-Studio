@@ -6,13 +6,22 @@ export function parseCoordinates(value){
  const hemi=text.match(/^([\d.,]+)\s*([NS])\s+([\d.,]+)\s*([EW])$/i);
  if(hemi)return validate(Number(hemi[1].replace(',','.'))*(/s/i.test(hemi[2])?-1:1),Number(hemi[3].replace(',','.'))*(/w/i.test(hemi[4])?-1:1));
  if(/^https?:\/\//i.test(text)){
-  try{const url=new URL(text);const at=url.pathname.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);if(at)return validate(+at[1],+at[2]);text=url.searchParams.get('q')||url.searchParams.get('query')||url.searchParams.get('ll')||'';}catch{return null;}
+  try{
+   const url=new URL(text);if(!isGoogleMapsUrl(url))return null;
+   // A place's actual pin wins over the map camera's @lat,lon viewport.
+   const path=decodeURIComponent(url.pathname+url.search),pin=path.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);
+   if(pin)return validate(+pin[1],+pin[2]);
+   for(const key of ['q','query','ll','destination']){const pair=url.searchParams.get(key);if(pair){const parsed=parseCoordinates(pair);if(parsed)return parsed;}}
+   const at=path.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);return at?validate(+at[1],+at[2]):null;
+  }catch{return null;}
  }
  const decimalComma=text.match(/^(-?\d+(?:,\d+)?)\s*;\s*(-?\d+(?:,\d+)?)$/);
  if(decimalComma)return validate(+decimalComma[1].replace(',','.'),+decimalComma[2].replace(',','.'));
  const pair=text.match(/^(-?\d+(?:\.\d+)?)\s*[,;\s]\s*(-?\d+(?:\.\d+)?)$/);
  return pair?validate(+pair[1],+pair[2]):null;
 }
+function isGoogleMapsUrl(url){return url.protocol==='https:'&&(url.hostname==='maps.app.goo.gl'||url.hostname==='goo.gl'&&url.pathname.startsWith('/maps')||/^(?:www\.|maps\.)?google\.(?:com|co\.id|co\.uk|com\.au)$/.test(url.hostname)&&(url.pathname.startsWith('/maps')||url.hostname.startsWith('maps.')));}
+export function shortMapsLink(value){try{const url=new URL(value);return isGoogleMapsUrl(url)&&['maps.app.goo.gl','goo.gl'].includes(url.hostname)?url.href:null;}catch{return null;}}
 function validate(lat,lon){return Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180?{lat,lon}:null;}
 export function formatCoordinates({lat,lon}){const number=n=>Math.abs(n).toFixed(5).replace('.',',');return `${number(lat)}${lat<0?'S':'N'} ${number(lon)}${lon<0?'W':'E'}`;}
 export function worldPoint({lat,lon},zoom){const size=256*2**zoom;const sin=Math.sin(Math.max(-85.05112878,Math.min(85.05112878,lat))*Math.PI/180);return{x:(lon+180)/360*size,y:(.5-Math.log((1+sin)/(1-sin))/(4*Math.PI))*size};}

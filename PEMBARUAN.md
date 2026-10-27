@@ -1,7 +1,11 @@
-# Memperbarui GitHub ke v1.6.1
+# Memperbarui ke v1.7.0
 
-Pembaruan repository mengganti index.html, app.js, renderer.js, style.css, dan package.json bersama dokumentasi/pengujian. Pertahankan fonts/, maps.js, icon.svg, mobile.css, dan .nojekyll. Penanda cache aset v1.6.1 diperbarui bersama runtime.
+Unggah isi paket ke repository aplikasi, termasuk berkas baru location.js dan map-crop.js. Pertahankan fonts/, .nojekyll dan semua berkas aplikasi lainnya. GitHub Pages tetap menggunakan root branch tanpa build.
 
-GitHub Pages tetap dapat memakai main → /(root). Setelah penerbitan, footer menampilkan timestamp studio v1.6.1. Jika masih lama, muat ulang atau gunakan tab privat.
+Setelan lama tetap ada pada browser/domain yang sama. Tekan Muat pengaturan untuk memulihkannya. Setelan teks, font, visibilitas, posisi dan peta dipertahankan; bayangan selalu memakai default v1.6.1 dan tidak lagi dapat diubah. Gambar dan font unggahan perlu dipilih kembali sebagaimana versi sebelumnya.
 
-Hanya satu gaya bayangan 3D Halus: sisi padat #929292 dan bayangan hitam lembut. Daftar preset/jenis dan template tampilan lama dihapus. Input HEX tersedia untuk warna sisi dan teks; tombol #A6B2C0 serta Simpan/Muat pengaturan tetap tersedia. Pengaturan lama dimigrasikan hanya pada nilai bayangannya; foto, isi teks, font, dan peta tetap dipertahankan.
+Navigasi Foto, Teks, Peta, Unduh tersedia di desktop dan ponsel. Lokasi otomatis berada dalam Teks. Dua pilihan unggahan peta berada dalam Peta; pengaturan peta online dipindah ke bagian lanjutan.
+
+Muat ulang halaman setelah Pages selesai diperbarui. Footer harus menampilkan v1.7.0. Jika masih lama, gunakan hard reload atau tab privat. Jangan menghapus penyimpanan situs bila ingin mempertahankan setelan.
+
+Foto pribadi dari pengujian tidak disertakan dalam paket ini.

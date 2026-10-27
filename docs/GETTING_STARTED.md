@@ -1,56 +1,31 @@
-# Panduan penggunaan
+# Panduan penggunaan v1.7.0
 
-1. Buka [Timestamp Studio](https://andikapramudyadika.github.io/Timestamp-Studio/), lalu unggah JPG, PNG, atau WebP. Kanvas contoh tersedia untuk mencoba editor.
-2. Isi tanggal/waktu, koordinat, jalan, kelurahan, kecamatan, kabupaten/kota, dan provinsi. Matikan sakelar baris yang tidak diperlukan.
-3. **Gunakan waktu sekarang** mengambil waktu WITA; tanggal/waktu juga bisa ditulis manual.
-4. Tambahkan peta, sesuaikan tampilan, lalu unduh hasilnya.
+## Foto
 
-Foto asli tidak ditimpa. Unduhan merupakan berkas baru.
+Unggah JPG, PNG atau WebP, atau coba kanvas contoh. Foto asli tetap utuh di perangkat. Unduhan membuat berkas baru. Lanjutkan dengan tombol Lanjut ke Teks atau navigasi Foto/Teks/Peta/Unduh.
 
-## Tampilan v1.6.1
+## Teks dan lokasi
 
-| Pengaturan | Bawaan |
-| --- | --- |
-| Font / ketebalan | Roboto variabel / 380 |
-| Ukuran / jarak antarbaris | 40 (Medium) / 10,25 |
-| Warna / posisi | Putih / kanan bawah |
-| Bayangan | 3D Halus: sisi #929292 100%, bayangan hitam 70% |
-| Acuan bayangan | Sisi panjang 1280 |
-| Latar teks | Transparan |
-| Lebar / opasitas peta | 30% / 65% |
+Tempel pasangan koordinat atau URL Google Maps lengkap pada Isi dari lokasi. Sakelar Isi timestamp otomatis mencari alamat setelah masukan lengkap; tombol Isi alamat & waktu dapat dipakai kapan saja. Tanggal dan waktu memakai waktu WITA saat pengisian, lalu dapat diubah manual. Semua kolom tetap dapat diedit, termasuk saat pencarian berjalan. Toggle tiap baris menyembunyikan baris dari hasil tanpa menghapus teks.
 
-## Menyesuaikan bayangan
+Alamat berasal dari Photon/OpenStreetMap, dengan nama lokal. Sebagian tingkat administrasi dapat kosong atau berbeda dari Google Maps; periksa hasil dan lengkapi kolom manual. Foto tidak dikirim. Matikan pengisian otomatis bila ingin mengisi sendiri.
 
-1. Buka **Bayangan teks**; pada ponsel pilih tab **Teks**.
-2. Atur **Ketebalan 3D**, **Warna sisi huruf**, dan **Kekuatan bayangan lembut**.
-3. Ketik kode HEX pada kolom warna sisi atau teks (3/6 digit, boleh tanpa #), atau gunakan color picker. Klik tombol **#A6B2C0** untuk memakai abu-abu pilihan, atau pilih warna lain lewat color picker.
-4. Buka **Penyesuaian lanjutan** bila perlu mengatur opasitas sisi, blur, dan offset hitam. Sisi selalu mengarah ke kanan bawah.
-5. Periksa **Detail teks · 100%** pada latar putih/abu-abu/foto. Latar ini hanya untuk pemeriksaan; hasil unduhan tetap memakai foto.
-6. **Simpan pengaturan** menyimpan teks dan tampilan; **Muat pengaturan** memulihkannya. Nilai bayangan lama dimigrasikan ke gaya 3D terbaru. Reset mengembalikan bawaan tanpa membuang foto, peta, atau teks.
+URL pendek perlu dibuka dulu. Gunakan tautan Buka tautan Google Maps, kemudian salin URL lengkap pada bilah alamat browser atau koordinat titiknya. Aplikasi statis tidak dapat membuka redirect Google yang dibatasi CORS.
 
-Gunakan latar **Foto saat ini** dan format PNG untuk membandingkan detail dengan unduhan tanpa kompresi JPG.
+Penyesuaian tampilan menyediakan font, ukuran, ketebalan, jarak, warna, posisi, margin, dan latar. Bayangan tetap memakai default v1.6.1; tidak ada kontrol untuk mengubahnya. Detail teks 100% tersedia di bawahnya. Pilih Foto saat ini untuk membandingkan dengan PNG hasil unduhan.
 
 ## Peta
 
-- **Google Maps:** memerlukan key, Map Tiles API, dan billing aktif. Lihat [konfigurasi Google Maps](GOOGLE_MAPS.md).
-- **OpenStreetMap:** tidak memerlukan API key; internet diperlukan untuk mengambil tile area peta.
-- **Gambar sendiri:** unggah gambar peta JPG/PNG/WebP, termasuk atribusi sumbernya.
+- Gambar peta: unggah gambar yang sudah dipotong, termasuk logo/atribusi sumber.
+- Foto Timestamp asli: unggah foto asli dengan peta persegi pada sudut kiri bawah. Peta dideteksi, dipotong pada piksel asli, dan langsung diterapkan. Periksa thumbnail. Bila hasil belum tepat, buka Sesuaikan potongan untuk mengubah ukuran dan jarak kiri/bawah tanpa keluar ke galeri. Foto dengan layout lain mungkin perlu penyesuaian.
+- Buat peta dari koordinat: pilihan online Google Maps dengan API key atau OpenStreetMap tanpa key. Koordinat berasal dari bagian Teks. Ini terpisah dari pencarian alamat; mengisi alamat tidak membutuhkan key Google Maps.
 
-Koordinat dapat berupa `-3.00000, 122.00000`, `3,00000S 122,00000E`, atau URL Google Maps yang memuat koordinat lengkap. URL pendek perlu dibuka dahulu untuk menyalin koordinat. Tunggu status peta siap sebelum mengunduh.
+Ukuran/posisi, bentuk, opasitas dan garis tepi peta tersedia dalam bagian lanjutan. Hapus gambar peta juga berada di bagian ini. Logo dan atribusi pada gambar peta dipertahankan di hasil.
 
-## Ponsel, unduhan, dan preset
+## Unduh dan pengaturan tersimpan
 
-Gunakan navigasi bawah **Foto · Teks · Peta · Unduh**. Aktifkan **Geser objek** untuk memindahkan teks/peta, lalu **Selesai geser** agar area foto kembali nyaman untuk menggulir.
+Pilih JPG/PNG. JPG memiliki kontrol kualitas. Resolusi asli mempertahankan ukuran foto; 2448 × 3264 menyediakan foto utuh atau potong tengah. Unduh dirender ulang pada resolusi penuh.
 
-JPG memiliki pengaturan kualitas. PNG menyimpan render tanpa kompresi lossy. Pilih resolusi asli, atau 2448 × 3264 dengan foto utuh/potong tengah. **Simpan pengaturan** menyimpan teks dan pengaturan di browser; foto, peta, font unggahan, dan key tidak ikut disimpan.
+Simpan pengaturan menyimpan teks dan tampilan pada browser ini; Muat pengaturan memulihkannya, termasuk setelan versi lama kecuali bayangan yang sekarang tetap. Foto, peta, font unggahan dan API key tidak disimpan. Reset tampilan mempertahankan isi teks dan gambar.
 
-## Mengatasi kendala
-
-| Gejala | Langkah |
-| --- | --- |
-| Tampilan lama masih muncul | Tunggu penerbitan Pages, muat ulang tanpa cache, atau coba tab privat. |
-| Bayangan berubah setelah memuat preset | Bayangan lama dimigrasikan ke 3D Halus; sesuaikan sisi dan bayangan lalu simpan pengaturan kembali. |
-| Peta Google tidak muncul | Periksa key, aktivasi API/billing, izin domain, dan kuota. |
-| Peta OSM gagal | Periksa koneksi dan coba lagi; layanan tile dapat membatasi permintaan. |
-| Font unggahan hilang setelah membuka ulang | Unggah kembali berkas font. |
-| Gagal setelah klik ganda index.html | Gunakan server HTTP lokal atau GitHub Pages. |
+Pada ponsel, gunakan navigasi bawah. Geser objek mengaktifkan pemindahan teks/peta; Selesai geser mengembalikan area foto untuk menggulir. Antarmuka mengikuti preferensi reduced motion.

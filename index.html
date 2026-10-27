@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
   <title>Timestamp Studio — Editor foto</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.6.1"><link rel="stylesheet" href="mobile.css?v=1.6.1">
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.7.0"><link rel="stylesheet" href="mobile.css?v=1.7.0">
 </head>
 <body>
 <svg class="icon-defs" aria-hidden="true"><defs>
@@ -24,16 +24,26 @@
  <div class="header-right"><span class="privacy"><svg><use href="#i-lock"/></svg> Foto tetap di perangkat Anda</span><button class="button primary top-download" data-download disabled><svg><use href="#i-download"/></svg> Unduh foto</button></div>
 </header>
 <main>
- <div class="page-intro"><div><div class="eyebrow"><span></span> SETIAP FOTO, LENGKAP DENGAN CERITANYA</div><h1>Foto Anda. Waktu & tempatnya.</h1><p>Tambahkan timestamp yang rapi, sesuaikan detailnya, lalu simpan.</p></div><span class="local-badge"><span></span> Diproses di browser</span></div>
- <nav class="mobile-tabs" aria-label="Bagian editor"><button data-tab="photo" class="active" aria-pressed="true"><svg><use href="#i-image"/></svg>Foto</button><button data-tab="text" aria-pressed="false"><svg><use href="#i-sliders"/></svg>Teks</button><button data-tab="map" aria-pressed="false"><svg><use href="#i-pin"/></svg>Peta</button><button data-tab="export" aria-pressed="false"><svg><use href="#i-download"/></svg>Unduh</button></nav>
+ <div class="page-intro"><div><div class="eyebrow"><span></span> RUANG KERJA FOTO ANDA</div><h1>Detail yang berarti.</h1><p>Foto, waktu, dan tempat. Sempurnakan dalam satu ruang.</p></div><span class="local-badge"><span></span> Diproses di browser</span></div>
  <div class="studio">
  <aside class="editor" aria-label="Pengaturan foto dan timestamp">
+ <nav class="mobile-tabs" aria-label="Bagian editor"><button data-tab="photo" class="active" aria-pressed="true"><svg><use href="#i-image"/></svg>Foto</button><button data-tab="text" aria-pressed="false"><svg><use href="#i-sliders"/></svg>Teks</button><button data-tab="map" aria-pressed="false"><svg><use href="#i-pin"/></svg>Peta</button><button data-tab="export" aria-pressed="false"><svg><use href="#i-download"/></svg>Unduh</button></nav>
   <section class="panel upload-panel"><div class="section-heading"><span class="step">01</span><h2>Foto Anda</h2><span class="mini-label">MULAI DI SINI</span></div>
-   <label class="dropzone" id="photo-drop" for="photo-input"><span class="upload-icon"><svg><use href="#i-upload"/></svg></span><strong id="photo-label">Klik atau letakkan foto di sini</strong><span>JPG atau PNG · resolusi asli dipertahankan</span><input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
+   <label class="dropzone" id="photo-drop" for="photo-input"><span class="upload-icon"><svg><use href="#i-upload"/></svg></span><strong id="photo-label">Pilih foto untuk mulai</strong><span>JPG, PNG, WebP · resolusi asli</span><input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
    <div id="photo-info" class="file-info" hidden></div>
+   <div class="photo-guide"><strong>Satu foto, lengkap dengan ceritanya.</strong>Isi waktu dan alamat pada Teks. Tambahkan peta, lalu unduh hasil dengan resolusi penuh.<button id="continue-text" class="button secondary">Lanjut ke Teks <span aria-hidden="true">→</span></button></div>
   </section>
   <section class="panel timestamp-panel"><div class="section-heading"><span class="step">02</span><h2>Isi timestamp</h2><span class="mini-label">7 BARIS</span></div>
-   <div id="timestamp-fields"></div>
+   <div class="location-card">
+    <div class="location-heading"><svg><use href="#i-pin"/></svg><strong>Isi dari lokasi</strong><span>OTOMATIS</span></div>
+    <label class="control-label" for="map-coordinates">Link Google Maps atau koordinat</label><input id="map-coordinates" type="text" placeholder="-4.0034, 122.5286 atau link Maps" autocomplete="off" spellcheck="false" maxlength="2000" aria-describedby="location-status">
+     <label class="switch-row"><span>Isi timestamp otomatis</span><input id="auto-location" type="checkbox" class="switch" checked></label>
+    <button id="fill-location" class="button secondary"><svg><use href="#i-pin"/></svg><span>Isi alamat & waktu</span></button>
+    <p id="location-status" class="location-status" role="status" aria-live="polite">Provinsi, kota, kecamatan, jalan, koordinat, dan waktu WITA. Semua bisa diedit.</p>
+    <a id="open-maps-link" class="text-button" target="_blank" rel="noopener noreferrer" hidden>Buka tautan Google Maps ↗</a>
+    <small class="location-credit">Alamat: <a href="https://photon.komoot.io" target="_blank" rel="noopener noreferrer">Photon</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a>. Koordinat dikirim untuk mencari alamat.</small>
+   </div>
+   <div class="manual-heading"><strong>Detail timestamp</strong><span>Bisa diedit langsung</span></div><div id="timestamp-fields"></div>
    <div class="quick-actions"><button id="time-now" class="text-button">Gunakan waktu sekarang</button><span>WITA</span></div>
    <details class="advanced" id="appearance"><summary><svg><use href="#i-sliders"/></svg> Penyesuaian tampilan <span>⌄</span></summary><div class="details-body">
     <label class="control-label" for="font-family">Jenis huruf</label><select id="font-family"><option value="camera">Android / sans-serif</option><option value="arial">Arial</option><option value="custom" disabled>Font unggahan</option></select>
@@ -48,21 +58,6 @@
     <label class="control-label" for="time-separator">Pemisah jam saat mengisi waktu otomatis</label><select id="time-separator"><option value=".">Titik — 12.37</option><option value=":">Titik dua — 12:37</option></select>
     <p class="hint">Teks panjang diperkecil bersama agar semua baris tetap utuh. Anda juga dapat menggeser blok teks pada pratinjau.</p>
    </div></details>
-  </section>
-  <section class="panel shadow-panel" aria-labelledby="shadow-heading">
-   <div class="section-heading"><span class="step">03</span><h2 id="shadow-heading">Bayangan teks</h2><input id="text-shadow" aria-label="Aktifkan bayangan teks" type="checkbox" class="switch" checked></div>
-   <p class="section-description">Sisi abu-abu yang menyambung dengan huruf, dengan bayangan hitam lembut di belakangnya.</p>
-   <fieldset id="shadow-controls" class="shadow-controls"><legend class="sr-only">Sesuaikan efek 3D halus</legend>
-    <label class="control-label" for="shadow-depth">Ketebalan 3D <output id="shadow-depth-value">1.1</output></label><div class="shadow-control"><input id="shadow-depth" type="range" min="0" max="4" step="0.05" value="1.1"><input id="shadow-depth-number" type="number" min="0" max="4" step="0.05" value="1.1" aria-label="Ketebalan 3D"></div>
-    <label class="control-label" for="shadow-side-color">Warna sisi huruf</label><div class="side-color-row"><input id="shadow-side-color" type="color" value="#929292"><input id="shadow-side-hex" class="hex-input" type="text" value="#929292" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Kode HEX warna sisi huruf" aria-describedby="shadow-side-hex-error" placeholder="#929292"></div><span id="shadow-side-hex-error" class="hint hex-error" role="status" hidden></span><button id="side-color-swatch" type="button" class="side-color-swatch" aria-label="Gunakan warna sisi abu-abu #A6B2C0" aria-pressed="false"><span aria-hidden="true"></span>#A6B2C0</button>
-    <label class="control-label" for="shadow-opacity">Kekuatan bayangan lembut <output id="shadow-opacity-value">70%</output></label><div class="shadow-control"><input id="shadow-opacity" type="range" min="0" max="100" step="1" value="70"><input id="shadow-opacity-number" type="number" min="0" max="100" step="1" value="70" aria-label="Kekuatan bayangan lembut"></div>
-    <details class="advanced"><summary>Penyesuaian lanjutan <span>⌄</span></summary><div class="details-body">
-    <label class="control-label" for="shadow-side-opacity">Opasitas sisi huruf <output id="shadow-side-opacity-value">100%</output></label><div class="shadow-control"><input id="shadow-side-opacity" type="range" min="0" max="100" step="1" value="100"><input id="shadow-side-opacity-number" type="number" min="0" max="100" step="1" value="100" aria-label="Opasitas sisi huruf"></div>
-    <label class="control-label" for="shadow-blur">Kelembutan bayangan <output id="shadow-blur-value">2</output></label><div class="shadow-control"><input id="shadow-blur" type="range" min="0" max="6" step="0.05" value="2"><input id="shadow-blur-number" type="number" min="0" max="6" step="0.05" value="2" aria-label="Kelembutan bayangan"></div>
-    <label class="control-label" for="shadow-offset-x">Geser bayangan horizontal (X) <output id="shadow-offset-x-value">1.5</output></label><div class="shadow-control"><input id="shadow-offset-x" type="range" min="-5" max="5" step="0.05" value="1.5"><input id="shadow-offset-x-number" type="number" min="-5" max="5" step="0.05" value="1.5" aria-label="Geser bayangan horizontal (X)"></div>
-    <label class="control-label" for="shadow-offset-y">Geser bayangan vertikal (Y) <output id="shadow-offset-y-value">1.5</output></label><div class="shadow-control"><input id="shadow-offset-y" type="range" min="-5" max="5" step="0.05" value="1.5"><input id="shadow-offset-y-number" type="number" min="-5" max="5" step="0.05" value="1.5" aria-label="Geser bayangan vertikal (Y)"></div>
-    <p class="hint">Sisi huruf mengarah ke kanan bawah. X negatif menggeser bayangan lembut ke kiri, Y negatif ke atas.</p></div></details>
-   </fieldset>
    <details class="text-detail" id="text-detail"><summary>Detail teks · 100% <span>⌄</span></summary>
     <label class="control-label" for="detail-background">Latar pratinjau</label><select id="detail-background" aria-describedby="detail-background-note"><option value="white" selected>Putih bersih</option><option value="gray">Abu-abu terang</option><option value="photo">Foto saat ini</option></select>
     <p class="hint" id="detail-background-note">Latar ini khusus pratinjau; unduhan tetap memakai foto Anda. Pada latar putih, huruf putih menyatu dengan latar sehingga bayangannya lebih mudah diperiksa.</p>
@@ -72,24 +67,34 @@
     <p class="hint">1 piksel hasil = 1 piksel tampilan. Geser area detail untuk melihat seluruh baris. Untuk membandingkan dengan unduhan, pilih Foto saat ini dan gunakan PNG tanpa kompresi lossy.</p>
    </details>
   </section>
-  <section class="panel map-panel"><div class="section-heading"><span class="step">04</span><h2>Peta lokasi</h2><input id="map-enabled" aria-label="Tampilkan peta" type="checkbox" class="switch" checked></div>
-   <p class="section-description">Tempel koordinat dari Google Maps. Pin merah muncul pada titik tersebut.</p>
+  <section class="panel map-panel"><div class="section-heading"><span class="step">03</span><h2>Peta lokasi</h2><input id="map-enabled" aria-label="Tampilkan peta" type="checkbox" class="switch" checked></div>
+   <p class="section-description">Gunakan gambar peta Anda, atau buat peta dari koordinat di bagian Teks.</p>
+   <div id="map-uploads" class="map-uploads">
+    <label class="map-upload" for="map-input"><svg><use href="#i-image"/></svg><span><strong id="map-label">Gambar peta</strong><small>Pakai gambar peta yang sudah dipotong</small></span><span>+</span><input id="map-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
+    <label class="map-upload" for="timestamp-map-input"><svg><use href="#i-camera"/></svg><span><strong>Foto Timestamp asli</strong><small>Potong otomatis peta di kiri bawah</small></span><span>+</span><input id="timestamp-map-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
+   </div>
+   <p id="map-upload-status" class="map-status" role="status" aria-live="polite"></p>
+   <details id="crop-settings" class="advanced" hidden><summary>Sesuaikan potongan <span>⌄</span></summary><div class="details-body">
+    <label class="control-label" for="crop-size">Lebar potongan dari foto <output id="crop-size-value">30%</output></label><input id="crop-size" type="range" min="10" max="60" step="0.01" value="30">
+    <div class="two-col"><div><label class="control-label" for="crop-left">Jarak kiri (%)</label><input id="crop-left" type="number" min="0" max="40" step="0.1" value="0"></div><div><label class="control-label" for="crop-bottom">Jarak bawah (%)</label><input id="crop-bottom" type="number" min="0" max="40" step="0.1" value="0"></div></div>
+    <p id="crop-result" class="hint"></p>
+   </div></details>
+   <div id="map-thumbnail-wrap" class="map-thumbnail-wrap" hidden><img id="map-thumbnail" alt="Pratinjau gambar peta yang akan digunakan"><a id="map-attribution" href="https://maps.google.com/" target="_blank" rel="noopener noreferrer">Google Maps</a></div>
+   <div id="map-empty-note" class="hint">Foto dipotong di perangkat Anda. Periksa hasil sebelum mengunduh.</div>
+   <details class="advanced" id="online-map"><summary>Buat peta dari koordinat <span>⌄</span></summary><div class="details-body">
+   <p class="hint">Tempel link atau koordinat pada bagian Teks terlebih dahulu.</p>
    <label class="control-label" for="map-provider">Sumber peta</label><select id="map-provider"><option value="google">Google Maps · seperti foto asli</option><option value="osm">OpenStreetMap · gratis, tanpa API key</option></select>
    <div id="google-map-settings">
     <label class="control-label" for="google-api-key">API key Google Maps</label><input id="google-api-key" type="password" placeholder="Masukkan API key Anda" autocomplete="off" spellcheck="false" maxlength="200" aria-describedby="google-key-note">
     <p class="hint" id="google-key-note">Aktifkan Map Tiles API dan billing di Google Cloud. Kunci hanya digunakan selama halaman ini terbuka dan tidak ikut disimpan dalam preset. <a href="https://developers.google.com/maps/documentation/tile/get-api-key" target="_blank" rel="noopener noreferrer">Panduan API key</a></p>
-    <p class="hint">Belum punya key? Unggah gambar Google Maps di bawah, atau pilih OpenStreetMap.</p>
+    <p class="hint">Belum punya key? Unggah gambar Google Maps di atas, atau pilih OpenStreetMap.</p>
    </div>
-   <label class="control-label" for="map-coordinates">Koordinat lokasi</label><input id="map-coordinates" type="text" placeholder="Lintang, bujur" autocomplete="off" spellcheck="false" maxlength="200">
    <label class="switch-row"><span>Buat otomatis setelah ditempel</span><input id="auto-map" type="checkbox" class="switch" checked></label>
    <label class="control-label" for="map-zoom">Detail peta <output id="map-zoom-value">17</output></label><input id="map-zoom" type="range" min="13" max="19" step="1" value="17">
    <button id="generate-map" class="button secondary map-generate"><svg><use href="#i-pin"/></svg><span>Buat peta</span></button>
    <p id="map-status" class="map-status" role="status" aria-live="polite">Google Maps · masukkan API key, atau unggah gambar Google Maps.</p>
-   <div id="map-thumbnail-wrap" class="map-thumbnail-wrap" hidden><img id="map-thumbnail" alt="Pratinjau peta lokasi dengan pin merah"><a id="map-attribution" href="https://maps.google.com/" target="_blank" rel="noopener noreferrer">Google Maps</a></div>
    <p class="hint" id="map-privacy">Koordinat digunakan untuk meminta peta ke Google Maps. Foto tetap di perangkat Anda.</p>
-   <div class="map-divider">atau gunakan gambar sendiri</div>
-   <label class="map-upload" for="map-input"><svg><use href="#i-pin"/></svg><span id="map-label">Unggah gambar peta</span><span>+</span><input id="map-input" type="file" accept="image/jpeg,image/png,image/webp" class="file-input"></label>
-   <div id="map-empty-note" class="hint">Peta otomatis menyertakan pin dan atribusi dalam hasil unduhan.</div>
+   </div></details>
    <details class="advanced"><summary>Ukuran & posisi peta <span>⌄</span></summary><div class="details-body">
     <label class="control-label" for="map-size">Lebar peta <output id="map-size-value">30%</output></label><input id="map-size" type="range" min="10" max="60" value="30">
     <label class="control-label" for="map-shape">Bentuk peta</label><select id="map-shape"><option value="square">Persegi · potong tengah</option><option value="original">Rasio gambar asli</option></select>
@@ -99,13 +104,6 @@
     <button id="remove-map" class="text-button danger" disabled>Hapus gambar peta</button>
    </div></details>
   </section>
-  <div class="preset-actions"><button id="save-preset" class="button secondary"><svg><use href="#i-save"/></svg> Simpan pengaturan</button><button id="load-preset" class="button secondary">Muat pengaturan</button><button id="reset" class="icon-button" aria-label="Reset pengaturan" title="Reset pengaturan"><svg><use href="#i-reset"/></svg></button></div>
- </aside>
- <section class="preview-column" aria-label="Pratinjau dan unduhan">
-  <div class="preview-panel"><div class="preview-toolbar"><div><span class="live-dot"></span><h2>Pratinjau langsung</h2></div><span id="resolution">Belum ada foto</span></div>
-   <div id="preview-stage" class="preview-stage"><div class="canvas-wrap" id="canvas-wrap"><canvas id="preview" aria-label="Pratinjau foto dan timestamp"></canvas><div class="empty-state" id="empty-state"><div class="empty-icon"><svg><use href="#i-image"/></svg></div><h3>Mulai dengan sebuah foto</h3><p>Detail waktu dan tempat akan tampil di sini.</p><label for="photo-input" class="button primary"><svg><use href="#i-upload"/></svg> Pilih foto</label><button id="demo" class="demo-button">atau coba kanvas contoh →</button></div><span class="demo-label" id="demo-label" hidden>KANVAS CONTOH</span></div></div>
-   <div class="preview-bottom"><button id="drag-mode" class="text-button" aria-pressed="false">Geser objek</button><span><svg><use href="#i-check"/></svg> <span id="preview-status">Perubahan terlihat secara langsung</span></span><button id="compare" class="text-button" disabled aria-pressed="false">Lihat foto asli</button></div>
-  </div>
   <section class="export-panel"><div class="export-heading"><div class="export-icon"><svg><use href="#i-download"/></svg></div><div><h2>Siap untuk disimpan</h2><p>Timestamp dan peta menyatu dengan foto Anda.</p></div></div>
    <div class="export-options"><div><label for="export-format">Format</label><select id="export-format"><option value="jpeg">JPG · ukuran lebih ringan</option><option value="png">PNG · tanpa kompresi lossy</option></select></div><div><label for="export-size">Resolusi</label><select id="export-size"><option value="original">Resolusi asli</option><option value="pixellab">2448 × 3264 · 3:4</option></select></div></div>
    <div id="fit-options" hidden><label class="control-label" for="export-fit">Penyesuaian rasio foto</label><select id="export-fit"><option value="contain">Utuh · tambah bidang hitam</option><option value="cover">Penuhi bidang · potong tengah</option></select></div>
@@ -113,11 +111,19 @@
    <button class="button primary download-main" data-download disabled><svg><use href="#i-download"/></svg><span>Unduh foto</span><small id="download-size">Pilih foto terlebih dahulu</small></button>
    <p class="export-note">Tanpa watermark tambahan. Foto asli tetap tersimpan di perangkat.</p>
   </section>
+  <div class="preset-actions"><button id="save-preset" class="button secondary"><svg><use href="#i-save"/></svg> Simpan pengaturan</button><button id="load-preset" class="button secondary">Muat pengaturan</button><button id="reset" class="icon-button" aria-label="Reset pengaturan" title="Reset pengaturan"><svg><use href="#i-reset"/></svg></button></div>
+ </aside>
+ <section class="preview-column" aria-label="Pratinjau dan unduhan">
+  <div class="preview-panel"><div class="preview-toolbar"><div><span class="live-dot"></span><h2>Pratinjau langsung</h2></div><span id="resolution">Belum ada foto</span></div>
+   <div id="preview-stage" class="preview-stage"><div class="canvas-wrap" id="canvas-wrap"><canvas id="preview" aria-label="Pratinjau foto dan timestamp"></canvas><div class="empty-state" id="empty-state"><div class="empty-icon"><svg><use href="#i-image"/></svg></div><h3>Mulai dengan sebuah foto</h3><p>Detail waktu dan tempat akan tampil di sini.</p><label for="photo-input" class="button primary"><svg><use href="#i-upload"/></svg> Pilih foto</label><button id="demo" class="demo-button">atau coba kanvas contoh →</button></div><span class="demo-label" id="demo-label" hidden>KANVAS CONTOH</span></div></div>
+   <div class="preview-bottom"><button id="drag-mode" class="text-button" disabled aria-pressed="false">Geser objek</button><span><svg><use href="#i-check"/></svg> <span id="preview-status">Perubahan terlihat secara langsung</span></span><button id="compare" class="text-button" disabled aria-pressed="false">Lihat foto asli</button></div>
+  </div>
+
   <div class="workflow-note"><span>01 <b>Unggah</b></span><i>—</i><span>02 <b>Sesuaikan</b></span><i>—</i><span>03 <b>Simpan</b></span></div>
  </section>
  </div>
 </main>
-<footer><span>timestamp studio v1.6.1 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
+<footer><span>timestamp studio v1.7.0 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="app.js?v=1.6.1"></script>
+<script type="module" src="app.js?v=1.7.0"></script>
 </body></html>

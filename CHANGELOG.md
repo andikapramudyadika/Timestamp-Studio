@@ -1,6 +1,15 @@
 # Riwayat pembaruan
 
-**v1.6.1 adalah versi saat ini**, dengan bawaan bayangan yang disesuaikan dari referensi dan input HEX.
+**v1.7.0 adalah versi saat ini.**
+
+## v1.7.0 — 27 Oktober 2026
+
+- Hapus pengaturan bayangan dan kunci hasil pada default v1.6.1, termasuk saat memuat setelan lama.
+- Isi koordinat, alamat yang tersedia, tanggal dan waktu WITA dari titik/URL Google Maps. Pengeditan manual tetap langsung; respons lama dan edit selama request dilindungi.
+- Unggahan peta siap pakai atau foto Timestamp asli dengan deteksi/crop persegi kiri bawah. Crop memakai piksel asli; kontrol penyesuaian tersedia.
+- Editor netral dengan satu aksen, pratinjau gelap, navigasi empat bagian pada desktop/ponsel, kontrol seragam dan feedback loading/error/sukses.
+- Render input digabung per frame, ukuran kanvas stabil, preview menyesuaikan layar dan detail 100% memakai debounce. Ekspor penuh tetap identik dengan default renderer v1.6.1.
+- Dokumentasi desain/pemeliharaan, unit test dan pemeriksaan Playwright pada 360/393/430/1366 CSS px. Lihat docs/VERIFICATION-v1.7.md untuk batas pengujian.
 
 ## v1.6.1 — 27 Oktober 2026
 
