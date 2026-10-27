@@ -23,3 +23,5 @@
 }
 
 .side-color-row{display:flex;align-items:center;gap:10px}.side-color-row input[type=color]{flex:1;min-width:0}.side-color-swatch{display:flex;align-items:center;gap:7px;min-height:40px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:11px;white-space:nowrap;cursor:pointer}.side-color-swatch span{width:18px;height:18px;border-radius:50%;background:#a6b2c0;border:1px solid #0002}.side-color-swatch[aria-pressed=true]{border-color:#718349;background:#f5f8ec}
+
+.side-color-row input[type=color]{flex:0 0 48px;width:48px}.hex-input{font-variant-numeric:tabular-nums;text-transform:uppercase;letter-spacing:.5px;min-width:0;width:100%}.side-color-row .hex-input{flex:1;width:0}.side-color-swatch{margin-top:8px}.hex-error{display:block;color:#a13b31}.hex-input[aria-invalid=true]{border-color:#a13b31}#text-color-hex{margin-top:6px}

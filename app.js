@@ -1,5 +1,5 @@
-import {LABELS,DEFAULT_LINES,defaultStyle,restoreStyle,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.6.0';
-import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.6.0';
+import {LABELS,DEFAULT_LINES,defaultStyle,normalizeHex,restoreStyle,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.6.1';
+import {parseCoordinates,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.6.1';
 const $=id=>document.getElementById(id);
 const state={photo:null,map:null,lines:[formatWita(),...DEFAULT_LINES.slice(1)],visible:Array(7).fill(true),style:defaultStyle(),fit:'contain',exportPreset:'original'};
 let bounds={},toastTimer,showOriginal=false,previewFrame=0,photoSequence=0,mapSequence=0,exporting=false,dragEnabled=!matchMedia('(max-width:760px)').matches;
@@ -36,7 +36,9 @@ function updateOutputs(){
  $('shadow-offset-x-value').textContent=state.style.shadowOffsetX;
  $('shadow-offset-y-value').textContent=state.style.shadowOffsetY;
  $('shadow-opacity-value').textContent=state.style.shadowOpacity+'%';
- $('shadow-side-color-value').textContent=state.style.shadowSideColor.toUpperCase();
+ for(const [id,key] of [['shadow-side-hex','shadowSideColor'],['text-color-hex','color']]){
+  if(document.activeElement!==$(id)){$(id).value=state.style[key].toUpperCase();$(id).removeAttribute('aria-invalid');$(id+'-error').hidden=true;}
+ }
  $('side-color-swatch').setAttribute('aria-pressed',String(state.style.shadowSideColor.toLowerCase()==='#a6b2c0'));
  $('shadow-depth-value').textContent=state.style.shadowDepth;
  $('shadow-side-opacity-value').textContent=state.style.shadowSideOpacity+'%';
@@ -45,6 +47,20 @@ function updateOutputs(){
  for(const id of shadowNumbers){$(id).value=state.style[controlMap[id]];const number=$(id+'-number');if(document.activeElement!==number)number.value=state.style[controlMap[id]];}
  for(const [id,key]of [['text-opacity','opacity'],['background-opacity','background'],['map-size','mapSize'],['map-opacity','mapOpacity']])$(id+'-value').textContent=state.style[key]+'%';
  $('export-quality-value').textContent=$('export-quality').value+'%';
+}
+// HEX edits are committed only when complete; incomplete/invalid text never
+// reaches Canvas or saved settings. The picker and swatch use the same state.
+for(const [id,picker,key] of [['shadow-side-hex','shadow-side-color','shadowSideColor'],['text-color-hex','text-color','color']]){
+ const input=$(id),error=$(id+'-error');
+ const apply=()=>{
+  const color=normalizeHex(input.value);
+  if(!color)return false;
+  state.style[key]=color;$(picker).value=color;input.removeAttribute('aria-invalid');error.hidden=true;updateOutputs();schedule();return true;
+ };
+ input.addEventListener('input',()=>{if(!apply()){input.removeAttribute('aria-invalid');error.hidden=true;}});
+ input.addEventListener('blur',()=>{if(apply())input.value=state.style[key].toUpperCase();else{input.setAttribute('aria-invalid','true');error.textContent='Gunakan HEX 3 atau 6 digit, misalnya #929292.';error.hidden=false;}});
+ input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();input.blur();}});
+ $(picker).addEventListener('input',()=>{input.value=state.style[key].toUpperCase();input.removeAttribute('aria-invalid');error.hidden=true;});
 }
 // Permit intermediate number input (empty or minus sign); commit a valid,
 // clamped value on blur, and keep the slider in sync while typing.

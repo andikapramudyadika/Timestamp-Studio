@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
   <title>Timestamp Studio — Editor foto</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.6.0"><link rel="stylesheet" href="mobile.css?v=1.6.0">
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.6.1"><link rel="stylesheet" href="mobile.css?v=1.6.1">
 </head>
 <body>
 <svg class="icon-defs" aria-hidden="true"><defs>
@@ -41,7 +41,7 @@
     <label class="control-label" for="font-size">Ukuran teks <output id="font-size-value">40 · Medium</output></label><input id="font-size" type="range" min="16" max="100" step="1" value="40">
     <label class="control-label" for="font-weight">Ketebalan huruf <output id="font-weight-value">380</output></label><input id="font-weight" type="range" min="250" max="500" step="10" value="380"><p class="hint">300 tipis · 400 regular. Gunakan 360–390 bila hasil terlihat terlalu tebal.</p>
     <label class="control-label" for="line-gap">Jarak antarbaris <output id="line-gap-value">10.25</output></label><input id="line-gap" type="range" min="0" max="24" step="0.25" value="10.25">
-    <div class="two-col"><div><label class="control-label" for="text-color">Warna teks</label><input type="color" id="text-color" value="#ffffff"></div><div><label class="control-label" for="text-position">Posisi teks</label><select id="text-position"><option value="br">Kanan bawah</option><option value="bl">Kiri bawah</option><option value="tr">Kanan atas</option><option value="tl">Kiri atas</option></select></div></div>
+    <div class="two-col"><div><label class="control-label" for="text-color">Warna teks</label><input type="color" id="text-color" value="#ffffff"><input id="text-color-hex" class="hex-input" type="text" value="#FFFFFF" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Kode HEX warna teks" aria-describedby="text-color-hex-error" placeholder="#FFFFFF"><span id="text-color-hex-error" class="hint hex-error" role="status" hidden></span></div><div><label class="control-label" for="text-position">Posisi teks</label><select id="text-position"><option value="br">Kanan bawah</option><option value="bl">Kiri bawah</option><option value="tr">Kanan atas</option><option value="tl">Kiri atas</option></select></div></div>
     <div class="two-col"><div><label class="control-label" for="margin-x">Margin samping (%)</label><input id="margin-x" type="number" min="0" max="40" step="0.1" value="0"></div><div><label class="control-label" for="margin-y">Margin vertikal (%)</label><input id="margin-y" type="number" min="0" max="40" step="0.1" value="0"></div></div>
     <label class="control-label" for="text-opacity">Opasitas teks <output id="text-opacity-value">100%</output></label><input id="text-opacity" type="range" min="0" max="100" value="100">
     <label class="control-label" for="background-opacity">Latar belakang teks <output id="background-opacity-value">0%</output></label><input id="background-opacity" type="range" min="0" max="100" value="0">
@@ -53,9 +53,9 @@
    <div class="section-heading"><span class="step">03</span><h2 id="shadow-heading">Bayangan teks</h2><input id="text-shadow" aria-label="Aktifkan bayangan teks" type="checkbox" class="switch" checked></div>
    <p class="section-description">Sisi abu-abu yang menyambung dengan huruf, dengan bayangan hitam lembut di belakangnya.</p>
    <fieldset id="shadow-controls" class="shadow-controls"><legend class="sr-only">Sesuaikan efek 3D halus</legend>
-    <label class="control-label" for="shadow-depth">Ketebalan 3D <output id="shadow-depth-value">1</output></label><div class="shadow-control"><input id="shadow-depth" type="range" min="0" max="4" step="0.05" value="1"><input id="shadow-depth-number" type="number" min="0" max="4" step="0.05" value="1" aria-label="Ketebalan 3D"></div>
-    <label class="control-label" for="shadow-side-color">Warna sisi huruf <output id="shadow-side-color-value">#a6b2c0</output></label><div class="side-color-row"><input id="shadow-side-color" type="color" value="#a6b2c0"><button id="side-color-swatch" type="button" class="side-color-swatch" aria-label="Gunakan warna sisi abu-abu #A6B2C0" aria-pressed="true"><span aria-hidden="true"></span>#A6B2C0</button></div>
-    <label class="control-label" for="shadow-opacity">Kekuatan bayangan lembut <output id="shadow-opacity-value">30%</output></label><div class="shadow-control"><input id="shadow-opacity" type="range" min="0" max="100" step="1" value="30"><input id="shadow-opacity-number" type="number" min="0" max="100" step="1" value="30" aria-label="Kekuatan bayangan lembut"></div>
+    <label class="control-label" for="shadow-depth">Ketebalan 3D <output id="shadow-depth-value">1.1</output></label><div class="shadow-control"><input id="shadow-depth" type="range" min="0" max="4" step="0.05" value="1.1"><input id="shadow-depth-number" type="number" min="0" max="4" step="0.05" value="1.1" aria-label="Ketebalan 3D"></div>
+    <label class="control-label" for="shadow-side-color">Warna sisi huruf</label><div class="side-color-row"><input id="shadow-side-color" type="color" value="#929292"><input id="shadow-side-hex" class="hex-input" type="text" value="#929292" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Kode HEX warna sisi huruf" aria-describedby="shadow-side-hex-error" placeholder="#929292"></div><span id="shadow-side-hex-error" class="hint hex-error" role="status" hidden></span><button id="side-color-swatch" type="button" class="side-color-swatch" aria-label="Gunakan warna sisi abu-abu #A6B2C0" aria-pressed="false"><span aria-hidden="true"></span>#A6B2C0</button>
+    <label class="control-label" for="shadow-opacity">Kekuatan bayangan lembut <output id="shadow-opacity-value">70%</output></label><div class="shadow-control"><input id="shadow-opacity" type="range" min="0" max="100" step="1" value="70"><input id="shadow-opacity-number" type="number" min="0" max="100" step="1" value="70" aria-label="Kekuatan bayangan lembut"></div>
     <details class="advanced"><summary>Penyesuaian lanjutan <span>⌄</span></summary><div class="details-body">
     <label class="control-label" for="shadow-side-opacity">Opasitas sisi huruf <output id="shadow-side-opacity-value">100%</output></label><div class="shadow-control"><input id="shadow-side-opacity" type="range" min="0" max="100" step="1" value="100"><input id="shadow-side-opacity-number" type="number" min="0" max="100" step="1" value="100" aria-label="Opasitas sisi huruf"></div>
     <label class="control-label" for="shadow-blur">Kelembutan bayangan <output id="shadow-blur-value">2</output></label><div class="shadow-control"><input id="shadow-blur" type="range" min="0" max="6" step="0.05" value="2"><input id="shadow-blur-number" type="number" min="0" max="6" step="0.05" value="2" aria-label="Kelembutan bayangan"></div>
@@ -117,7 +117,7 @@
  </section>
  </div>
 </main>
-<footer><span>timestamp studio v1.6.0 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
+<footer><span>timestamp studio v1.6.1 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="app.js?v=1.6.0"></script>
+<script type="module" src="app.js?v=1.6.1"></script>
 </body></html>

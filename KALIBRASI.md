@@ -1,5 +1,13 @@
 # Kalibrasi preset Timestamp Camera
 
+## Versi 1.6.1: bawaan referensi dan HEX
+
+Sampel pita sisi di bawah angka 2 pada gambar pengguna (sekitar x58–190/y360–369) memuat nilai abu-abu netral sekitar RGB 137–152. Dipilih #929292 (146/146/146) sebagai pendekatan warna sisi. Gambar memiliki pencahayaan/gradien dan tidak menyediakan parameter pembuatannya; ini perkiraan visual, bukan rekonstruksi piksel identik.
+
+Bawaan baru: warna sisi #929292, opacity 100%, depth 1,1; bayangan hitam opacity 70%, radius Android 2, offset 1,5/1,5. #A6B2C0 tetap swatch opsional sesuai permintaan sebelumnya. Font/ukuran/posisi tetap. Preset v1.6 yang tersimpan tetap dibaca utuh, Reset memakai bawaan baru.
+
+Input HEX sisi dan teks menerima #RGB/#RRGGBB atau tanpa #, case-insensitive. State disimpan sebagai #rrggbb. Ketikan belum valid tidak mengubah warna; blur menampilkan kesalahan untuk input tidak valid. Picker, swatch, reset dan load menyinkronkan kolom HEX. 23 tes Node dan pemeriksaan DOM/raster Skia lulus; belum ada uji browser Android langsung.
+
 ## Versi 1.6.0: satu gaya 3D Halus
 
 Referensi visual pengguna menunjukkan sisi huruf padat, bukan hanya salinan transparan. Renderer kini membuat siluet menyambung dari beberapa offset bertahap (maksimum 0,25 piksel hasil per langkah), menggabungkannya pada kanvas per baris, lalu menerapkan opasitas satu kali saat komposit. Tidak ada blur pada sisi ini. Teks depan digambar terakhir, sehingga bentuk/font/baseline tetap mengikuti versi sebelumnya.

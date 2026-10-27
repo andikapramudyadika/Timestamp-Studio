@@ -1,6 +1,14 @@
 # Riwayat pembaruan
 
-**v1.6.0 adalah versi saat ini**, dengan satu gaya bayangan 3D Halus dan warna sisi #A6B2C0.
+**v1.6.1 adalah versi saat ini**, dengan bawaan bayangan yang disesuaikan dari referensi dan input HEX.
+
+## v1.6.1 — 27 Oktober 2026
+
+- Sisi abu-abu netral #929292 (perkiraan dari sampel gambar), kedalaman 1,1, opasitas sisi 100%; bayangan hitam 70%, radius 2 dan offset 1,5/1,5.
+- Input HEX untuk warna sisi dan teks, menerima 3/6 digit dengan atau tanpa #; tersinkron dengan color picker, tombol #A6B2C0, dan simpan/muat.
+- Input tidak valid tidak mengubah render atau warna tersimpan; kesalahan ditampilkan setelah kolom ditinggalkan.
+- #A6B2C0 tetap tersedia sebagai warna cepat. Pengaturan yang sudah disimpan tetap dipertahankan; Reset menerapkan bawaan terbaru.
+- 23 pengujian Node, pemeriksaan interaksi DOM, dan raster Skia lulus; belum diuji langsung di Android.
 
 ## v1.6.0 — 27 Oktober 2026
 

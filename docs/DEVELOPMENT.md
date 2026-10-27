@@ -62,3 +62,7 @@ Siluet sisi dibuat pada kanvas per baris memakai sumber huruf opak di beberapa p
 restoreStyle hanya membaca kunci yang dikenal. shadowStyleVersion 2 mempertahankan nilai baru; data lama memigrasikan bayangan ke bawaan baru tanpa mengubah teks/font/peta/status sakelar. localStorage key lama tetap dipakai agar pengaturan tidak hilang.
 
 Validasi: 22 pengujian Node, sintaks, DOM terisolasi (hapus preset, swatch/picker, input angka, simpan/muat, migrasi, reset, sakelar), dan raster Skia (@napi-rs/canvas dengan fixture Roboto 400) memeriksa warna sisi, alpha sekali, blur terpisah, dan geometri tetap. Browser Android/Chrome tidak diuji langsung. Screenshot historis di repository belum mencerminkan antarmuka v1.6.0.
+
+## HEX dan bawaan v1.6.1
+
+normalizeHex memvalidasi 3/6 digit dengan/tanpa # dan menormalisasi ke #rrggbb. Input belum valid tidak menyentuh state renderer/localStorage; blur menampilkan kesalahan. updateOutputs tidak menimpa ketikan saat kolom aktif. Picker/swatch/reset/load menyinkronkan kolom. Bawaan sisi #929292 depth 1,1, hitam 70% berasal dari kalibrasi visual gambar, bukan DEX. 23 pengujian Node serta DOM untuk kasus valid/invalid/blur/swatch/load dan raster Skia lulus.

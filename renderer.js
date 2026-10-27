@@ -1,6 +1,6 @@
 export const LABELS = ['Hari, tanggal dan waktu','Koordinat','Nama lorong / jalan','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
 export const DEFAULT_LINES = ['Kamis, 22 Oktober 2026 12.37','Koordinat lokasi','Nama jalan / lorong','Kelurahan','Kecamatan','Kabupaten / kota','Provinsi'];
-export const SHADOW_STYLE = {shadow:true,shadowStyleVersion:2,shadowBlur:2,shadowOffsetX:1.5,shadowOffsetY:1.5,shadowOpacity:30,shadowSideColor:'#a6b2c0',shadowSideOpacity:100,shadowDepth:1};
+export const SHADOW_STYLE = {shadow:true,shadowStyleVersion:2,shadowBlur:2,shadowOffsetX:1.5,shadowOffsetY:1.5,shadowOpacity:70,shadowSideColor:'#929292',shadowSideOpacity:100,shadowDepth:1.1};
 export const defaultStyle = () => ({fontSize:40,fontWeight:380,lineGap:10.25,fontFamily:'camera',color:'#ffffff',opacity:100,...SHADOW_STYLE,background:0,position:'br',marginX:0,marginY:0,separator:'.',mapEnabled:true,mapSize:30,mapShape:'square',mapPosition:'bl',mapOpacity:65,mapBorder:false,mapX:0,mapY:0});
 const clamp=(value,min,max,fallback)=>Number.isFinite(Number(value))?Math.max(min,Math.min(max,Number(value))):fallback;
 export function shadowMetrics(style,width,height) {
@@ -8,7 +8,7 @@ export function shadowMetrics(style,width,height) {
  const unit=Math.max(width,height)/1280,radius=clamp(style.shadowBlur,0,6,2)*unit;
  return {blur:radius>0?2*(.57735*radius+.5):0,
   x:clamp(style.shadowOffsetX,-5,5,1.5)*unit,y:clamp(style.shadowOffsetY,-5,5,1.5)*unit,
-  depth:clamp(style.shadowDepth,0,4,1)*unit};
+  depth:clamp(style.shadowDepth,0,4,1.1)*unit};
 }
 export function restoreStyle(saved={}) {
  if(!saved||typeof saved!=='object'||Array.isArray(saved))saved={};
@@ -20,6 +20,12 @@ export function restoreStyle(saved={}) {
  }
  return defaults;
 }
+export function normalizeHex(value){
+ if(typeof value!=='string')return null;
+ const match=value.trim().match(/^#?([\da-f]{3}|[\da-f]{6})$/i);
+ if(!match)return null;
+ const hex=match[1];return '#'+(hex.length===3?[...hex].map(c=>c+c).join(''):hex).toLowerCase();
+}
 function sideLayer(ctx,row,position,depth,color){
  // Rasterize a connected opaque silhouette, then apply opacity once on composite.
  // Per-line surfaces limit memory at full photo resolution.
@@ -27,7 +33,7 @@ function sideLayer(ctx,row,position,depth,color){
  if(!layer)throw new Error('Browser tidak mendukung kanvas untuk sisi huruf.');
  const x=Math.floor(position.x-row.left)-2,y=Math.floor(position.y-row.ascent)-2;
  layer.width=Math.max(1,Math.ceil(row.width+depth+5));layer.height=Math.max(1,Math.ceil(row.ascent+row.descent+depth+5));
- const c=layer.getContext('2d');c.font=ctx.font;c.textAlign='left';c.textBaseline='alphabetic';c.fillStyle=/^#[\da-f]{6}$/i.test(color)?color:'#a6b2c0';
+ const c=layer.getContext('2d');c.font=ctx.font;c.textAlign='left';c.textBaseline='alphabetic';c.fillStyle=/^#[\da-f]{6}$/i.test(color)?color:'#929292';
  const steps=Math.max(1,Math.ceil(depth/.25));
  for(let i=0;i<=steps;i++){const d=depth*i/steps;c.fillText(row.text,position.x-x+d,position.y-y+d);}
  return {layer,x,y};
@@ -121,7 +127,7 @@ export function render(ctx, scene, width, height, scale=1, original=false) {
   ctx.shadowColor='transparent';ctx.shadowBlur=ctx.shadowOffsetX=ctx.shadowOffsetY=0;
   if(s.shadow){
    const textAlpha=clamp(s.opacity,0,100,100)/100;
-   const softAlpha=textAlpha*clamp(s.shadowOpacity,0,100,30)/100;
+   const softAlpha=textAlpha*clamp(s.shadowOpacity,0,100,70)/100;
    // The source glyphs are outside the photo; only their compensated shadow
    // enters the canvas. This avoids an extra visible text fill.
    if(softAlpha>0){

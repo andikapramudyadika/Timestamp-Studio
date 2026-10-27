@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {formatWita,fitRect,outputSize,cleanFileName,render,defaultStyle,SHADOW_STYLE,textDetailCrop,shadowMetrics,restoreStyle} from '../renderer.js';
+import {formatWita,fitRect,outputSize,cleanFileName,render,defaultStyle,SHADOW_STYLE,normalizeHex,textDetailCrop,shadowMetrics,restoreStyle} from '../renderer.js';
 test('WITA crosses midnight independently of host timezone',()=>{assert.equal(formatWita(new Date('2026-10-21T16:37:00Z')),'Kamis, 22 Oktober 2026 00.37');assert.equal(formatWita(new Date('2026-10-22T04:37:00Z'),':'),'Kamis, 22 Oktober 2026 12:37');});
 test('image fitting keeps proportions for contain and cover',()=>{assert.deepEqual(fitRect(400,200,300,400),{x:0,y:125,w:300,h:150});assert.deepEqual(fitRect(400,200,300,400,'cover'),{x:-250,y:0,w:800,h:400});});
 test('original and custom output sizes',()=>{assert.deepEqual(outputSize({width:3072,height:4096},'original'),{w:3072,h:4096});assert.deepEqual(outputSize({width:3072,height:4096},'pixellab'),{w:2448,h:3264});assert.equal(cleanFileName('foto:u ji.jpg'),'foto_u ji');});
@@ -43,9 +43,9 @@ function shadowContext(){
  return {c,layers,images,passes};
 }
 test('sole shadow style defaults to connected gray sides; Android blur conversion is preserved',()=>{
- const s=defaultStyle();assert.equal(s.shadowSideColor,'#a6b2c0');assert.equal(s.shadowSideOpacity,100);assert.equal(s.shadowDepth,1);assert.equal('shadowMode' in s,false);
- const m=shadowMetrics(s,960,1280);assert.ok(Math.abs(m.blur-3.3094)<1e-9);assert.equal(m.x,1.5);assert.equal(m.depth,1);
- assert.equal(shadowMetrics(s,3072,4096).depth,3.2);
+ const s=defaultStyle();assert.equal(s.shadowSideColor,'#929292');assert.equal(s.shadowSideOpacity,100);assert.equal(s.shadowDepth,1.1);assert.equal('shadowMode' in s,false);
+ const m=shadowMetrics(s,960,1280);assert.ok(Math.abs(m.blur-3.3094)<1e-9);assert.equal(m.x,1.5);assert.equal(m.depth,1.1);
+ assert.ok(Math.abs(shadowMetrics(s,3072,4096).depth-3.52)<1e-9);
 });
 test('retired saved presets migrate only shadow parameters; new gray settings round-trip',()=>{
  for(const mode of [undefined,'single','layered','dex']){
@@ -60,7 +60,7 @@ test('retired saved presets migrate only shadow parameters; new gray settings ro
 test('side silhouette is connected and composited once; foreground geometry stays unchanged',()=>{
  const style={...defaultStyle(),shadowSideOpacity:50,opacity:80},scene={lines:['text'],visible:[true],style};
  const {c,images,passes}=shadowContext(),bounds=render(c,scene,960,1280);
- assert.equal(images.length,1);assert.equal(images[0].color,'#a6b2c0');assert.equal(images[0].alpha,.4);
+ assert.equal(images.length,1);assert.equal(images[0].color,'#929292');assert.equal(images[0].alpha,.4);
  const glyphs=images[0].glyphs;assert.ok(glyphs.length>=5);
  for(let i=1;i<glyphs.length;i++){assert.ok(glyphs[i][1]-glyphs[i-1][1]<=.25);assert.ok(glyphs[i][2]-glyphs[i-1][2]<=.25);}
  assert.equal(passes.length,2);assert.ok(passes[0].x<0);assert.equal(passes[0].alpha,1);assert.equal(passes[1].fill,'#ffffff');assert.equal(passes[1].alpha,.8);assert.equal(passes[1].blur,0);
@@ -75,4 +75,10 @@ test('full-resolution sides and shadow lengths keep the same preview scale',()=>
 test('zero depth or side opacity skips sides; zero text alpha skips every shadow',()=>{
  for(const patch of [{shadowDepth:0},{shadowSideOpacity:0}]){const r=shadowContext();render(r.c,{lines:['text'],visible:[true],style:{...defaultStyle(),...patch}},960,1280);assert.equal(r.images.length,0);}
  const r=shadowContext();render(r.c,{lines:['text'],visible:[true],style:{...defaultStyle(),opacity:0}},960,1280);assert.equal(r.images.length,0);assert.equal(r.passes.length,1);assert.equal(r.passes[0].alpha,0);
+});
+
+test('HEX input accepts six/three digits with optional hash and rejects unsafe or incomplete values',()=>{
+ for(const value of ['#929292','929292','  #929292  '])assert.equal(normalizeHex(value),'#929292');
+ assert.equal(normalizeHex('#A6B2C0'),'#a6b2c0');assert.equal(normalizeHex('abc'),'#aabbcc');assert.equal(normalizeHex('#FFF'),'#ffffff');
+ for(const value of ['', '#', '#12', '#1234', '#12345G', '#12345678', 'red', null, 123])assert.equal(normalizeHex(value),null);
 });

@@ -7,14 +7,14 @@
 
 Foto asli tidak ditimpa. Unduhan merupakan berkas baru.
 
-## Tampilan v1.6.0
+## Tampilan v1.6.1
 
 | Pengaturan | Bawaan |
 | --- | --- |
 | Font / ketebalan | Roboto variabel / 380 |
 | Ukuran / jarak antarbaris | 40 (Medium) / 10,25 |
 | Warna / posisi | Putih / kanan bawah |
-| Bayangan | 3D Halus: sisi #A6B2C0 100%, bayangan hitam 30% |
+| Bayangan | 3D Halus: sisi #929292 100%, bayangan hitam 70% |
 | Acuan bayangan | Sisi panjang 1280 |
 | Latar teks | Transparan |
 | Lebar / opasitas peta | 30% / 65% |
@@ -23,7 +23,7 @@ Foto asli tidak ditimpa. Unduhan merupakan berkas baru.
 
 1. Buka **Bayangan teks**; pada ponsel pilih tab **Teks**.
 2. Atur **Ketebalan 3D**, **Warna sisi huruf**, dan **Kekuatan bayangan lembut**.
-3. Klik tombol **#A6B2C0** untuk memakai abu-abu pilihan, atau pilih warna lain lewat color picker.
+3. Ketik kode HEX pada kolom warna sisi atau teks (3/6 digit, boleh tanpa #), atau gunakan color picker. Klik tombol **#A6B2C0** untuk memakai abu-abu pilihan, atau pilih warna lain lewat color picker.
 4. Buka **Penyesuaian lanjutan** bila perlu mengatur opasitas sisi, blur, dan offset hitam. Sisi selalu mengarah ke kanan bawah.
 5. Periksa **Detail teks · 100%** pada latar putih/abu-abu/foto. Latar ini hanya untuk pemeriksaan; hasil unduhan tetap memakai foto.
 6. **Simpan pengaturan** menyimpan teks dan tampilan; **Muat pengaturan** memulihkannya. Nilai bayangan lama dimigrasikan ke gaya 3D terbaru. Reset mengembalikan bawaan tanpa membuang foto, peta, atau teks.

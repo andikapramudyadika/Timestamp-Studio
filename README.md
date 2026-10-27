@@ -3,7 +3,7 @@
   <h1>Timestamp Studio</h1>
   <p>Editor timestamp foto dengan peta lokasi dan ekspor resolusi penuh.</p>
   <p>
-    <img alt="Versi stabil 1.6.0" src="https://img.shields.io/badge/version-1.6.0-496235">
+    <img alt="Versi stabil 1.6.1" src="https://img.shields.io/badge/version-1.6.1-496235">
     <a href="https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml"><img alt="Pemeriksaan otomatis" src="https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml/badge.svg"></a>
     <img alt="Foto diproses di browser" src="https://img.shields.io/badge/photo_processing-local-496235">
     <img alt="Tanpa build" src="https://img.shields.io/badge/build-not_required-496235">
@@ -13,7 +13,7 @@
 
 ![Timestamp Studio pada desktop, menggunakan kanvas contoh](docs/images/preview-desktop.jpg)
 
-**Versi saat ini: v1.6.0.** Satu gaya bayangan **3D Halus**: huruf putih, sisi padat berwarna **#A6B2C0**, dan bayangan hitam lembut. Pilihan preset/jenis bayangan dan template tampilan lama dihapus agar editor lebih ringkas. Lihat [CHANGELOG.md](CHANGELOG.md).
+**Versi saat ini: v1.6.1.** Satu gaya bayangan **3D Halus**: huruf putih, sisi padat abu-abu netral **#929292**, dan bayangan hitam lembut. Pilihan preset/jenis bayangan dan template tampilan lama dihapus agar editor lebih ringkas. Lihat [CHANGELOG.md](CHANGELOG.md).
 
 ## Fitur
 
@@ -21,7 +21,7 @@
 | --- | --- |
 | Timestamp | Tujuh baris dengan sakelar masing-masing; waktu otomatis WITA |
 | Tipografi | Roboto variabel lokal, ketebalan 250–500, warna, ukuran, jarak, margin, serta font unggahan |
-| Bayangan | Sisi 3D menyambung, color picker + tombol #A6B2C0, ketebalan, dan bayangan hitam lembut |
+| Bayangan | Sisi 3D menyambung, color picker + input HEX + tombol #A6B2C0, ketebalan, dan bayangan hitam lembut |
 | Peta | Google Maps resmi, OpenStreetMap, atau gambar peta unggahan |
 | Pratinjau | Perubahan langsung, detail teks 100% per baris, geser objek, dan pembandingan foto asli |
 | Ekspor | JPG/PNG; resolusi asli atau 2448 × 3264; foto utuh atau potong tengah |
@@ -45,15 +45,15 @@ Versi 1.4 menyediakan penyesuaian bayangan yang lebih presisi. Font, ukuran, sus
 2. Ekstrak ZIP, lalu unggah **isi folder** `timestamp-studio-github` ke halaman utama repository melalui **Add file → Upload files**. Jangan unggah ZIP sebagai satu berkas.
 3. Pastikan `index.html`, `app.js`, `renderer.js`, `maps.js`, `style.css`, `mobile.css`, `icon.svg`, `.nojekyll`, dan folder `fonts/` berada langsung di root repository.
 4. Buka **Settings → Pages → Deploy from a branch → main → /(root) → Save**. Gunakan nama branch Anda jika berbeda.
-5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.6.0**.
+5. Buka alamat Pages setelah penerbitan selesai. Footer menampilkan **timestamp studio v1.6.1**.
 
 Untuk memperbarui aplikasi lama, lihat [PEMBARUAN.md](PEMBARUAN.md). Semua aset memakai jalur relatif sehingga mendukung alamat Pages dengan subfolder repository.
 
 ## Bayangan tulisan
 
-Buka panel **Bayangan teks** (tab **Teks** pada ponsel). Tiga pengaturan utama: **Ketebalan 3D**, **Warna sisi huruf**, dan **Kekuatan bayangan lembut**. Color picker bebas tetap tersedia; tombol **#A6B2C0** mengembalikan warna abu-abu pilihan.
+Buka panel **Bayangan teks** (tab **Teks** pada ponsel). Tiga pengaturan utama: **Ketebalan 3D**, **Warna sisi huruf**, dan **Kekuatan bayangan lembut**. Kolom HEX menerima 3 atau 6 digit, dengan/tanpa #, untuk sisi dan teks. Input tidak valid tidak mengubah render. Color picker bebas tetap tersedia; tombol **#A6B2C0** mengembalikan warna abu-abu pilihan.
 
-Bagian **Penyesuaian lanjutan** berisi opasitas sisi, kelembutan, dan offset bayangan hitam. Bawaan sisi padat 100%, kedalaman 1; bayangan hitam 30%, radius 2, offset 1,5/1,5 pada acuan sisi panjang 1280. Siluet sisi digabung dahulu, lalu diberi opasitas sekali agar tidak bertumpuk gelap.
+Bagian **Penyesuaian lanjutan** berisi opasitas sisi, kelembutan, dan offset bayangan hitam. Bawaan sisi #929292 padat 100%, kedalaman 1,1; bayangan hitam 70%, radius 2, offset 1,5/1,5 pada acuan sisi panjang 1280. Siluet sisi digabung dahulu, lalu diberi opasitas sekali agar tidak bertumpuk gelap.
 
 **Detail teks · 100%** menyediakan latar putih, abu-abu, dan foto. Pilihan ini hanya memengaruhi detail; unduhan tetap memakai foto. Gunakan latar Foto saat ini dan PNG untuk membandingkan piksel hasil.
 
@@ -98,7 +98,7 @@ Font Roboto variabel disertakan di `fonts/` bersama lisensinya. Pengaturan keteb
 
 ## Pemeriksaan lokal
 
-Gunakan Node.js 22 atau lebih baru. Tidak perlu `npm install`: tidak ada dependensi npm. [GitHub Actions](https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml) menjalankan pemeriksaan sintaks dan 22 pengujian pada push/pull request. Alur Google telah diperiksa dengan respons simulasi; akses Google sebenarnya tetap memerlukan key dan billing aktif.
+Gunakan Node.js 22 atau lebih baru. Tidak perlu `npm install`: tidak ada dependensi npm. [GitHub Actions](https://github.com/andikapramudyadika/Timestamp-Studio/actions/workflows/checks.yml) menjalankan pemeriksaan sintaks dan 23 pengujian pada push/pull request. Alur Google telah diperiksa dengan respons simulasi; akses Google sebenarnya tetap memerlukan key dan billing aktif.
 
 Jalankan `node --test tests/*.test.mjs` untuk memeriksa koordinat, viewport, pesan kesalahan Google, waktu WITA, susunan teks, atribusi, serta skala bayangan.
 

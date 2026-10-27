@@ -1,6 +1,6 @@
 {
   "name": "timestamp-studio",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "private": true,
   "type": "module",
   "description": "Editor timestamp foto dengan peta, pemrosesan lokal, dan ekspor resolusi penuh.",
