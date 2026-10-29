@@ -1,6 +1,15 @@
 # Riwayat pembaruan
 
-**v1.7.0 adalah versi saat ini.**
+**v1.7.1 adalah versi saat ini.**
+
+## v1.7.1 — 29 Oktober 2026
+
+- Ambil posisi perangkat sekali melalui tombol, dengan izin lokasi, perkiraan akurasi, pembatalan dan pesan gagal. Aplikasi tetap statis tanpa backend/proxy.
+- Tombol Sync hari, tanggal & waktu di atas isian pertama. Waktu WITA tetap dapat diedit tanpa timer.
+- Koordinat detail bebas diedit tanpa memicu pencarian atau mengganti alamat. Edit sumber Maps memicu pengisian hanya saat sakelar otomatis aktif; tombol tetap dapat dipakai secara eksplisit.
+- Default Kota Kendari/Sulawesi Tenggara, normalisasi awalan Kecamatan, serta contoh URL lengkap Maps di aplikasi.
+- Beberapa preset lokasi bernama: simpan, muat, perbarui dengan nama sama, hapus, dan penyimpanan browser terpisah dari pengaturan lama. Memuat lokasi mempertahankan waktu dan tidak mencari alamat ulang.
+- Pengujian regresi perangkat/lokasi dengan simulasi, respons terlambat, perlindungan edit, kegagalan penyimpanan dan tampilan empat ukuran layar.
 
 ## v1.7.0 — 27 Oktober 2026
 

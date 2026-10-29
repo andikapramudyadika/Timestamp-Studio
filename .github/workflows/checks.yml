@@ -34,6 +34,7 @@ jobs:
           node --check renderer.js
           node --check maps.js
           node --check location.js
+          node --check location-presets.js
           node --check map-crop.js
       - name: Run unit tests
         run: npm test

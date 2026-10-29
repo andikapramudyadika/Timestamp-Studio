@@ -1,10 +1,20 @@
-# Panduan penggunaan v1.7.0
+# Panduan penggunaan v1.7.1
 
 ## Foto
 
 Unggah JPG, PNG atau WebP, atau coba kanvas contoh. Foto asli tetap utuh di perangkat. Unduhan membuat berkas baru. Lanjutkan dengan tombol Lanjut ke Teks atau navigasi Foto/Teks/Peta/Unduh.
 
 ## Teks dan lokasi
+
+Nilai awal provinsi adalah Sulawesi Tenggara dan kota Kota Kendari; hasil lokasi yang valid menggantikan nilai awal ini. Kecamatan diberi awalan Kecamatan tanpa menggandakan awalan. Nama kecamatan yang belum diketahui tetap perlu diisi manual.
+
+Untuk lokasi saat ini, tekan **Gunakan lokasi perangkat** lalu izinkan akses lokasi. Gunakan HTTPS atau localhost dan aktifkan lokasi perangkat. Perkiraan akurasi tampil bersama status. Alamat dicari dari koordinat; foto tetap lokal. Posisi perangkat saat ini dapat berbeda dari lokasi pengambilan foto lama.
+
+Contoh URL lengkap yang bisa ditempel: `https://www.google.com/maps/search/?api=1&query=-4.0034,122.5286` dan `https://www.google.com/maps/@-4.0034,122.5286,17z`. Tautan harus memuat koordinat, bukan hanya nama tempat atau Place ID. Pada URL @, titik adalah pusat tampilan peta.
+
+Tombol **Sync hari, tanggal & waktu** tepat di atas isian pertama mengisi waktu WITA sekarang satu kali. Isian tetap bebas diedit. Mengedit koordinat dalam **Detail timestamp** tidak mencari alamat atau mengubah isian sumber lokasi, dan membatalkan pencarian alamat yang masih berjalan. Untuk pengisian otomatis, edit **Link Google Maps atau koordinat** dengan sakelar otomatis dicentang. Bila dimatikan, gunakan tombol pengisian untuk meminta alamat secara eksplisit.
+
+**Preset lokasi:** buka bagian ini di dalam kartu Isi dari lokasi, beri nama (misalnya Rumah), lalu tekan **Simpan lokasi saat ini** setelah detail benar. Pilih preset lalu **Gunakan** untuk memuat enam baris lokasi tanpa mencari alamat ulang atau mengubah waktu. Untuk menyimpan perubahan, pilih nama yang sama lalu tekan **Perbarui lokasi tersimpan**. Untuk lokasi baru, ketik nama berbeda. **Hapus** menghapus preset terpilih tanpa mengubah detail saat ini. Preset bertahan setelah halaman dimuat ulang di browser dan domain yang sama, tetapi terhapus jika data situs dibersihkan. Foto, kunci API, waktu dan tampilan tidak ikut disimpan dalam preset lokasi. Simpan/Muat pengaturan lama tetap terpisah.
 
 Tempel pasangan koordinat atau URL Google Maps lengkap pada Isi dari lokasi. Sakelar Isi timestamp otomatis mencari alamat setelah masukan lengkap; tombol Isi alamat & waktu dapat dipakai kapan saja. Tanggal dan waktu memakai waktu WITA saat pengisian, lalu dapat diubah manual. Semua kolom tetap dapat diedit, termasuk saat pencarian berjalan. Toggle tiap baris menyembunyikan baris dari hasil tanpa menghapus teks.
 

@@ -1,9 +1,11 @@
-import {LABELS,DEFAULT_LINES,defaultStyle,normalizeHex,restoreStyle,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.7.0';
-import {parseCoordinates,shortMapsLink,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.7.0';
-import {lookupAddress} from './location.js?v=1.7.0';
-import {cropRect,detectMapCrop,extractMap} from './map-crop.js?v=1.7.0';
+import {LABELS,DEFAULT_LINES,defaultStyle,normalizeHex,restoreStyle,formatWita,outputSize,cleanFileName,render,textDetailCrop} from './renderer.js?v=1.7.1';
+import {parseCoordinates,shortMapsLink,formatCoordinates,createOsmMap,createGoogleMap} from './maps.js?v=1.7.1';
+import {lookupAddress,districtName,getDeviceLocation} from './location.js?v=1.7.1';
+import {readLocations,saveLocation,deleteLocation,presetName} from './location-presets.js?v=1.7.1';
+import {cropRect,detectMapCrop,extractMap} from './map-crop.js?v=1.7.1';
 const $=id=>document.getElementById(id);
 const state={photo:null,map:null,lines:[formatWita(),...DEFAULT_LINES.slice(1)],visible:Array(7).fill(true),style:defaultStyle(),fit:'contain',exportPreset:'original'};
+state.lines[5]='Kota Kendari';state.lines[6]='Sulawesi Tenggara';
 let bounds={},toastTimer,showOriginal=false,previewFrame=0,photoSequence=0,mapSequence=0,exporting=false,dragEnabled=!matchMedia('(max-width:760px)').matches;
 let mapTimer,mapController,mapLoading=false,googleKeyVersion=0;
 const canvas=$('preview'),ctx=canvas.getContext('2d');
@@ -16,9 +18,10 @@ const fieldRevisions=Array(7).fill(0);
 function notify(message){$('toast').textContent=message;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),4200);}
 
 function cancelLocation(){
- clearTimeout(locationTimer);locationController?.abort();++locationSequence;
+ clearTimeout(locationTimer);locationTimer=null;locationController?.abort();++locationSequence;
  $('fill-location').disabled=false;
  $('fill-location').removeAttribute('aria-busy');$('fill-location').querySelector('span').textContent='Isi alamat & waktu';
+ $('device-location').disabled=false;$('device-location').removeAttribute('aria-busy');$('device-location').querySelector('span').textContent='Gunakan lokasi perangkat';
 }
 function locationInputStatus(){
  const value=$('map-coordinates').value.trim(),short=shortMapsLink(value),link=$('open-maps-link');
@@ -36,7 +39,7 @@ function queueLocation(){
  const revisions=[...fieldRevisions];$('location-status').textContent='Menyiapkan detail lokasi…';
  locationTimer=setTimeout(()=>fillLocation(false,revisions),1000);
 }
-async function fillLocation(force=false,revisions=[...fieldRevisions]){
+async function fillLocation(force=false,revisions=[...fieldRevisions],accuracy=null){
  cancelLocation();const point=locationInputStatus();if(!point)return;
  const key=`${point.lat},${point.lon}`;if(!force&&lastLocation===key)return;
  const seq=locationSequence,controller=new AbortController();locationController=controller;
@@ -44,7 +47,8 @@ async function fillLocation(force=false,revisions=[...fieldRevisions]){
  const assign=(i,value)=>{if(fieldRevisions[i]===revisions[i]){state.lines[i]=value;$(`line-${i}`).value=value;}};
  assign(0,formatWita(new Date(),state.style.separator));assign(1,formatCoordinates(point));schedule();
  $('fill-location').setAttribute('aria-busy','true');$('fill-location').querySelector('span').textContent='Mencari alamat…';
- $('location-status').classList.remove('error');$('location-status').textContent='Mengambil alamat untuk titik ini… Anda tetap bisa mengedit teks.';
+ const accuracyNote=accuracy===null?'':` Akurasi lokasi perangkat ±${accuracy} m.`;
+ $('location-status').classList.remove('error');$('location-status').textContent='Mengambil alamat untuk titik ini… Anda tetap bisa mengedit teks.'+accuracyNote;
  try{
   const result=await lookupAddress(point,{signal:controller.signal});if(seq!==locationSequence)return;
   let missing=0,retained=0;
@@ -52,9 +56,22 @@ async function fillLocation(force=false,revisions=[...fieldRevisions]){
   lastLocation=key;
   $('location-status').textContent=missing?'Lokasi & waktu terisi. Beberapa detail alamat belum tersedia; lengkapi manual.':'Alamat & waktu WITA terisi. Ketuk kolom mana pun untuk mengedit.';
   if(retained)$('location-status').textContent+=' Perubahan manual Anda dipertahankan.';
+  $('location-status').textContent+=accuracyNote;
   schedule();
- }catch(e){if(seq===locationSequence&&e.name!=='AbortError'){$('location-status').classList.add('error');$('location-status').textContent=(e.message||'Pencarian alamat gagal.')+' Koordinat dan waktu terisi; periksa alamat sebelumnya atau isi manual.';}}
+ }catch(e){if(seq===locationSequence&&e.name!=='AbortError'){$('location-status').classList.add('error');$('location-status').textContent=(e.message||'Pencarian alamat gagal.')+' Koordinat dan waktu diperbarui jika belum diedit; periksa alamat sebelumnya atau isi manual.'+accuracyNote;}}
  finally{if(seq===locationSequence){$('fill-location').disabled=false;$('fill-location').removeAttribute('aria-busy');$('fill-location').querySelector('span').textContent='Isi alamat & waktu';}}
+}
+
+async function fillDeviceLocation(){
+ cancelLocation();const seq=locationSequence,revisions=[...fieldRevisions],controller=new AbortController();locationController=controller;
+ $('device-location').disabled=true;$('device-location').setAttribute('aria-busy','true');$('device-location').querySelector('span').textContent='Mengambil lokasi…';$('fill-location').disabled=true;
+ $('location-status').classList.remove('error');$('location-status').textContent='Izinkan akses lokasi jika diminta. Mengambil posisi perangkat…';
+ try{
+  const point=await getDeviceLocation({signal:controller.signal});if(seq!==locationSequence)return;
+  $('map-coordinates').value=`${point.lat}, ${point.lon}`;
+  queueMap();await fillLocation(true,revisions,point.accuracy);
+ }catch(error){if(seq===locationSequence&&error.name!=='AbortError'){$('location-status').classList.add('error');$('location-status').textContent=error.message;}}
+ finally{if(seq===locationSequence)cancelLocation();}
 }
 
 LABELS.forEach((label,i)=>{
@@ -65,8 +82,50 @@ LABELS.forEach((label,i)=>{
  name.append(number,document.createTextNode(label));
  const toggle=document.createElement('input');toggle.type='checkbox';toggle.checked=true;toggle.id=`visible-${i}`;toggle.setAttribute('aria-label',`Tampilkan ${label}`);
  const input=document.createElement('input');input.type='text';input.id=`line-${i}`;input.value=state.lines[i];input.placeholder=label;input.autocomplete='off';input.maxLength=250;
- input.addEventListener('input',()=>{fieldRevisions[i]++;state.lines[i]=input.value;schedule();if(i===1){$('map-coordinates').value=input.value;queueLocation();queueMap();}});toggle.addEventListener('change',()=>{state.visible[i]=toggle.checked;schedule();});
- row.append(name,toggle);field.append(row,input);$('timestamp-fields').append(field);
+ input.addEventListener('input',()=>{fieldRevisions[i]++;state.lines[i]=input.value;schedule();if(i===1){cancelLocation();lastLocation='';$('location-status').classList.remove('error');$('location-status').textContent='Koordinat detail diedit manual. Alamat dan sumber lokasi tidak berubah.';}});toggle.addEventListener('change',()=>{state.visible[i]=toggle.checked;schedule();});
+ if(i===4)input.addEventListener('blur',()=>{const value=districtName(input.value);if(value!==input.value){fieldRevisions[i]++;state.lines[i]=input.value=value;schedule();}});
+ row.append(name,toggle);field.append(row);
+ if(i===0){const actions=document.createElement('div');actions.className='quick-actions time-sync';const button=document.createElement('button');button.id='time-now';button.className='text-button';button.textContent='↻ Sync hari, tanggal & waktu';button.setAttribute('aria-label','Sinkronkan hari, tanggal dan waktu ke WITA sekarang');const zone=document.createElement('span');zone.textContent='WITA';actions.append(button,zone);field.append(actions);}
+ if(i===1)input.setAttribute('aria-describedby','manual-coordinate-note');
+ field.append(input);
+ if(i===1){const note=document.createElement('p');note.id='manual-coordinate-note';note.className='hint';note.textContent='Edit teks koordinat di sini tanpa mengubah alamat. Untuk mencari alamat, gunakan isian Link Google Maps atau koordinat di atas.';field.append(note);}
+ $('timestamp-fields').append(field);
+});
+
+function locationPresetStatus(message,error=false){$('location-preset-status').textContent=message;$('location-preset-status').classList.toggle('error',error);}
+function refreshLocationPresets(selected=$('location-preset-select').value){
+ try{
+  const locations=readLocations(localStorage),select=$('location-preset-select');select.replaceChildren(new Option(locations.length?'Pilih lokasi tersimpan':'Belum ada preset lokasi',''));
+  for(const item of locations)select.add(new Option(item.name,item.id));
+  select.disabled=!locations.length;select.value=locations.some(item=>item.id===selected)?selected:'';
+  $('apply-location-preset').disabled=$('delete-location-preset').disabled=!select.value;
+  const name=presetName($('location-preset-name').value).toLocaleLowerCase('id');
+  $('save-location-preset').querySelector('span').textContent=locations.some(item=>item.name.toLocaleLowerCase('id')===name)?'Perbarui lokasi tersimpan':'Simpan lokasi saat ini';
+ }catch{locationPresetStatus('Preset lokasi tidak dapat dibaca atau penyimpanan browser diblokir. Data lama tetap dipertahankan.',true);$('location-preset-select').disabled=$('apply-location-preset').disabled=$('delete-location-preset').disabled=true;}
+}
+$('location-preset-name').addEventListener('input',()=>{refreshLocationPresets();$('location-preset-name').removeAttribute('aria-invalid');});
+$('location-preset-name').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();$('save-location-preset').click();}});
+$('location-preset-select').addEventListener('change',()=>{
+ try{const item=readLocations(localStorage).find(item=>item.id===$('location-preset-select').value);$('location-preset-name').value=item?.name||'';refreshLocationPresets();locationPresetStatus(item?'Tekan Gunakan untuk memuat, atau Perbarui untuk menyimpan detail saat ini dengan nama ini.':'Pilih lokasi atau beri nama untuk menyimpan lokasi baru.');}catch{locationPresetStatus('Preset lokasi belum dapat dibaca.',true);}
+});
+$('save-location-preset').addEventListener('click',()=>{
+ if(!presetName($('location-preset-name').value)){$('location-preset-name').setAttribute('aria-invalid','true');$('location-preset-name').focus();locationPresetStatus('Beri nama lokasi terlebih dahulu.',true);return;}
+ if(locationTimer||$('fill-location').hasAttribute('aria-busy')||$('device-location').hasAttribute('aria-busy')){locationPresetStatus('Tunggu pencarian lokasi selesai sebelum menyimpan preset.',true);return;}
+ try{const result=saveLocation(localStorage,{name:$('location-preset-name').value,lines:state.lines.slice(1),source:$('map-coordinates').value});refreshLocationPresets(result.id);locationPresetStatus(result.updated?'Preset lokasi diperbarui.':'Preset lokasi tersimpan di browser ini.');}
+ catch(error){locationPresetStatus(error.message.includes('preset')||error.message.includes('lokasi')?error.message:'Lokasi gagal disimpan. Penyimpanan browser mungkin penuh atau diblokir.',true);}
+});
+$('apply-location-preset').addEventListener('click',()=>{
+ try{
+  const item=readLocations(localStorage).find(item=>item.id===$('location-preset-select').value);if(!item)throw new Error();
+  cancelLocation();lastLocation='';fieldRevisions.forEach((_,i)=>fieldRevisions[i]++);
+  state.lines.splice(1,6,...item.lines);$('map-coordinates').value=item.source;locationInputStatus();queueMap();sync();
+  $('location-status').classList.remove('error');$('location-status').textContent=`Preset ${item.name} digunakan. Alamat tersimpan dimuat tanpa pencarian ulang; waktu tetap dipertahankan.`;
+  locationPresetStatus('Lokasi dimuat. Gunakan Sync hari, tanggal & waktu bila diperlukan.');
+ }catch{refreshLocationPresets();locationPresetStatus('Preset lokasi belum dapat dimuat. Pilih kembali lokasi tersimpan.',true);}
+});
+$('delete-location-preset').addEventListener('click',()=>{
+ try{deleteLocation(localStorage,$('location-preset-select').value);$('location-preset-name').value='';refreshLocationPresets('');locationPresetStatus('Preset lokasi dihapus. Detail timestamp saat ini tetap dipertahankan.');}
+ catch{locationPresetStatus('Preset belum dapat dihapus. Penyimpanan browser mungkin diblokir.',true);}
 });
 function sync(){
  state.lines.forEach((s,i)=>{$(`line-${i}`).value=s;$(`visible-${i}`).checked=state.visible[i];});
@@ -160,7 +219,16 @@ $('detail-line').addEventListener('change',()=>{$('detail-viewport').scrollLeft=
 $('detail-background').addEventListener('change',schedule);
 function schedule(){if(previewFrame)return;previewFrame=requestAnimationFrame(()=>{previewFrame=0;const t=performance.now();draw();performance.clearMeasures('studio-preview');performance.measure('studio-preview',{start:t,end:performance.now()});});}
 new ResizeObserver(schedule).observe($('preview-stage'));
-window.visualViewport?.addEventListener('resize',()=>{document.body.classList.toggle('keyboard-open',window.visualViewport.height<innerHeight*.75);schedule();});
+function keepEditorFieldVisible(){
+ if(!matchMedia('(max-width:760px)').matches)return;
+ const field=document.activeElement;if(!field?.matches('input:not([type=file]):not([type=checkbox]),select')||!field.closest('.editor'))return;
+ const preview=document.querySelector('.preview-panel'),viewport=window.visualViewport;
+ const top=Math.max(document.querySelector('.topbar').getBoundingClientRect().bottom,getComputedStyle(preview).position==='sticky'?preview.getBoundingClientRect().bottom:0,viewport?.offsetTop||0)+12;
+ const bottom=Math.min(document.querySelector('.mobile-tabs').getBoundingClientRect().top,(viewport?.offsetTop||0)+(viewport?.height||innerHeight))-12;
+ const rect=field.getBoundingClientRect();if(rect.top<top||rect.bottom>bottom)window.scrollBy({top:rect.top-(top+Math.max(0,(bottom-top-rect.height)/2)),behavior:'instant'});
+}
+document.querySelector('.editor').addEventListener('focusin',()=>requestAnimationFrame(keepEditorFieldVisible));
+window.visualViewport?.addEventListener('resize',()=>{document.body.classList.toggle('keyboard-open',window.visualViewport.height<innerHeight*.75);schedule();requestAnimationFrame(keepEditorFieldVisible);});
 function releasePhoto(p){if(p?.image?.close)p.image.close();if(p?.url)URL.revokeObjectURL(p.url);}
 async function decodeFile(file){
  if(!file||!/^image\/(jpeg|png|webp)$/.test(file.type))throw new Error('Pilih gambar JPG, PNG, atau WebP yang valid.');
@@ -304,7 +372,7 @@ async function generateMap(){
  finally{if(seq===mapSequence){mapLoading=false;$('generate-map').removeAttribute('aria-busy');$('generate-map').querySelector('span').textContent='Buat peta';refreshDownloadAvailability();}}
 }
 $('map-coordinates').addEventListener('input',()=>{queueLocation();queueMap();});
-$('map-coordinates').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fillLocation(true);generateMap();}});
+$('map-coordinates').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if($('auto-location').checked)fillLocation(true);generateMap();}});
 $('auto-map').addEventListener('change',queueMap);
 $('map-zoom').addEventListener('input',()=>$('map-zoom-value').textContent=$('map-zoom').value);
 $('map-zoom').addEventListener('change',queueMap);
@@ -316,5 +384,6 @@ document.body.dataset.mobileTab='photo';
 $('continue-text').addEventListener('click',()=>document.querySelector('.mobile-tabs [data-tab=text]').click());
 for(const button of document.querySelectorAll('[data-tab]'))button.addEventListener('click',()=>{document.body.dataset.mobileTab=button.dataset.tab;for(const b of document.querySelectorAll('[data-tab]')){b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));}schedule();window.scrollTo({top:0,behavior:'instant'});});
 $('fill-location').addEventListener('click',()=>fillLocation(true));
+$('device-location').addEventListener('click',fillDeviceLocation);
 $('auto-location').addEventListener('change',()=>{$('auto-location').checked?queueLocation():cancelLocation();});
-mapProviderUI();sync();document.fonts.load('380 32px CameraRoboto').then(schedule);document.fonts.ready.then(schedule);
+refreshLocationPresets();mapProviderUI();sync();document.fonts.load('380 32px CameraRoboto').then(schedule);document.fonts.ready.then(schedule);

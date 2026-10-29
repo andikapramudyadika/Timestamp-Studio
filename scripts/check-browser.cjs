@@ -19,9 +19,13 @@ async function check(){
   await page.locator('[data-tab=map]').click();await page.locator('#timestamp-map-input').setInputFiles({name:'timestamp-fixture.png',mimeType:'image/png',buffer:Buffer.from(source.split(',')[1],'base64')});await page.waitForFunction(()=>document.querySelector('#map-upload-status').textContent.includes('px'));assert.match(await page.locator('#map-upload-status').textContent(),/240 × 240/);
   for(const width of [360,393,430,1366]){await page.setViewportSize({width,height:900});for(const tab of ['photo','text','map','export']){await page.locator(`[data-tab=${tab}]`).click();await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${width}/${tab} horizontal overflow`);await page.evaluate(()=>document.querySelector('#toast').classList.remove('visible'));await page.screenshot({path:path.join(output,`${width}-${tab}.png`)});}}
   await page.locator('[data-tab=text]').click();await page.locator('#save-preset').click();await page.locator('#reset').click();await page.locator('#load-preset').click();assert.equal(await page.locator('#line-6').inputValue(),'Provinsi manual');
-  await page.locator('[data-tab=export]').click();await page.locator('#export-format').selectOption('png');const download=page.waitForEvent('download');await page.locator('.download-main').click();await (await download).saveAs(path.join(output,'export.png'));
+  await page.locator('#photo-input').setInputFiles({name:'photo-fixture.png',mimeType:'image/png',buffer:Buffer.from(source.split(',')[1],'base64')});await page.waitForFunction(()=>document.querySelector('#photo-info').textContent.includes('800 × 1000'));
+  await page.locator('#compare').click();assert.equal(await page.locator('#compare').getAttribute('aria-pressed'),'true');await page.locator('#compare').click();assert.equal(await page.locator('#compare').getAttribute('aria-pressed'),'false');
+  await page.locator('[data-tab=export]').click();
+  for(const format of ['png','jpeg']){await page.locator('#export-format').selectOption(format);const download=page.waitForEvent('download');await page.locator('.download-main').click();await (await download).saveAs(path.join(output,format==='png'?'export.png':'export.jpg'));await page.waitForFunction(()=>!document.querySelector('.download-main').disabled);}
   await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.toast').evaluate(e=>getComputedStyle(e).transitionDuration),'0s');assert.deepEqual(errors,[]);
-  console.log('Browser checks passed: 4 widths × 4 sections, address/manual editing, crop, settings, PNG export, reduced motion; '+output);
+  await require('./check-locations.cjs')(browser,`http://127.0.0.1:${server.address().port}`,output);
+  console.log('Browser checks passed: 4 widths × 4 sections, address/manual editing, photo upload/compare, crop, settings, JPG/PNG export, reduced motion; '+output);
  }finally{await browser?.close();await new Promise(r=>server.close(r));}
 }
 module.exports=check;

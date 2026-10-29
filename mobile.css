@@ -10,3 +10,4 @@
 @media(max-width:360px){.topbar{padding:0 12px}.brand{font-size:16px}.brand-icon{width:30px;height:30px}.top-download{font-size:11px;padding:9px 10px}.top-download svg{width:15px}.preset-actions .button{font-size:10px}.preset-actions .button svg{display:none}.two-col{gap:10px}}
 @media(max-height:600px) and (max-width:760px){.preview-panel{position:static}.empty-icon{display:none}.empty-state p{display:none}.empty-state h3{font-size:14px}.empty-state .button{min-height:34px;font-size:11px}.demo-button{min-height:28px}}
 @media(max-width:760px){body.keyboard-open .preview-panel{position:static}}
+@media(max-width:760px){html{scroll-padding-bottom:calc(90px + env(safe-area-inset-bottom))}.editor input,.editor select{scroll-margin-bottom:12px}}

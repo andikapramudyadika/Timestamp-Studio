@@ -14,7 +14,7 @@ test('place pin takes priority over camera center; encoded queries and navigatio
 test('address fields map available Indonesian administrative levels and leave missing levels empty',()=>{
  assert.deepEqual(addressLines({features:[{properties:{street:'Jalan Contoh',locality:'Kelurahan Baru',district:'Kambu',city:'Kota Kendari',state:'Sulawesi Tenggara'}}]}),{2:'Jalan Contoh',3:'Kelurahan Baru',4:'Kecamatan Kambu',5:'Kota Kendari',6:'Sulawesi Tenggara'});
  assert.deepEqual(addressLines({features:[{properties:{state:'Provinsi'}}]}),{2:'',3:'',4:'',5:'',6:'Provinsi'});
- assert.deepEqual(addressLines({features:[{properties:{district:'Anduonohu',city:'Kendari',state:'Sulawesi Tenggara'}}]}),{2:'',3:'Anduonohu',4:'',5:'Kendari',6:'Sulawesi Tenggara'});
+ assert.deepEqual(addressLines({features:[{properties:{district:'Anduonohu',city:'Kendari',state:'Sulawesi Tenggara'}}]}),{2:'',3:'Anduonohu',4:'',5:'Kota Kendari',6:'Sulawesi Tenggara'});
  assert.throws(()=>addressLines({features:[]}),/belum ditemukan/);
 });
 test('address lookup caches successes, rejects HTTP errors, and respects abort',async()=>{

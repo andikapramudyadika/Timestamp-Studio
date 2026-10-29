@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f8fa"><meta name="description" content="Tambahkan tujuh baris timestamp dan peta pada foto. Edit langsung di perangkat dan unduh dengan resolusi penuh.">
   <title>Timestamp Studio — Editor foto</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.7.0"><link rel="stylesheet" href="mobile.css?v=1.7.0">
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=1.7.1"><link rel="stylesheet" href="mobile.css?v=1.7.1">
 </head>
 <body>
 <svg class="icon-defs" aria-hidden="true"><defs>
@@ -37,14 +37,23 @@
    <div class="location-card">
     <div class="location-heading"><svg><use href="#i-pin"/></svg><strong>Isi dari lokasi</strong><span>OTOMATIS</span></div>
     <label class="control-label" for="map-coordinates">Link Google Maps atau koordinat</label><input id="map-coordinates" type="text" placeholder="-4.0034, 122.5286 atau link Maps" autocomplete="off" spellcheck="false" maxlength="2000" aria-describedby="location-status">
+    <details class="maps-examples"><summary>Contoh link yang bisa dibaca</summary><p class="hint">Gunakan URL lengkap yang memuat koordinat, misalnya:</p><code>https://www.google.com/maps/search/?api=1&amp;query=-4.0034,122.5286</code><code>https://www.google.com/maps/@-4.0034,122.5286,17z</code><p class="hint">Atau tempel koordinat: <strong>-4.0034, 122.5286</strong>. Untuk maps.app.goo.gl, buka Maps dahulu lalu salin URL lengkap atau koordinat titiknya. Tautan yang hanya berisi nama tempat belum bisa dibaca.</p></details>
      <label class="switch-row"><span>Isi timestamp otomatis</span><input id="auto-location" type="checkbox" class="switch" checked></label>
+    <button id="device-location" class="button primary"><svg><use href="#i-pin"/></svg><span>Gunakan lokasi perangkat</span></button>
     <button id="fill-location" class="button secondary"><svg><use href="#i-pin"/></svg><span>Isi alamat & waktu</span></button>
+    <p class="hint">Lokasi perangkat memerlukan izin lokasi dan HTTPS. Kedua tombol mengisi saat ditekan; sakelar otomatis berlaku saat link atau koordinat di atas diedit.</p>
     <p id="location-status" class="location-status" role="status" aria-live="polite">Provinsi, kota, kecamatan, jalan, koordinat, dan waktu WITA. Semua bisa diedit.</p>
     <a id="open-maps-link" class="text-button" target="_blank" rel="noopener noreferrer" hidden>Buka tautan Google Maps ↗</a>
     <small class="location-credit">Alamat: <a href="https://photon.komoot.io" target="_blank" rel="noopener noreferrer">Photon</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a>. Koordinat dikirim untuk mencari alamat.</small>
+    <details class="advanced" id="location-presets"><summary>Preset lokasi <span>⌄</span></summary><div class="details-body">
+     <label class="control-label" for="location-preset-name">Nama lokasi</label><input id="location-preset-name" type="text" maxlength="60" placeholder="Misalnya Rumah atau Kantor" autocomplete="off">
+     <button id="save-location-preset" class="button secondary"><svg><use href="#i-save"/></svg><span>Simpan lokasi saat ini</span></button>
+     <label class="control-label" for="location-preset-select">Lokasi tersimpan</label><select id="location-preset-select" disabled><option value="">Belum ada preset lokasi</option></select>
+     <div class="location-preset-actions"><button id="apply-location-preset" class="button secondary" disabled>Gunakan</button><button id="delete-location-preset" class="button secondary danger" disabled>Hapus</button></div>
+     <p id="location-preset-status" class="hint" role="status" aria-live="polite">Koordinat dan alamat disimpan di browser ini. Waktu tetap dapat diedit dan disinkronkan terpisah.</p>
+    </div></details>
    </div>
    <div class="manual-heading"><strong>Detail timestamp</strong><span>Bisa diedit langsung</span></div><div id="timestamp-fields"></div>
-   <div class="quick-actions"><button id="time-now" class="text-button">Gunakan waktu sekarang</button><span>WITA</span></div>
    <details class="advanced" id="appearance"><summary><svg><use href="#i-sliders"/></svg> Penyesuaian tampilan <span>⌄</span></summary><div class="details-body">
     <label class="control-label" for="font-family">Jenis huruf</label><select id="font-family"><option value="camera">Android / sans-serif</option><option value="arial">Arial</option><option value="custom" disabled>Font unggahan</option></select>
     <label class="font-upload text-button" for="font-input">+ Unggah font sendiri (.ttf / .otf / .woff)</label><input type="file" id="font-input" accept=".ttf,.otf,.woff,.woff2" class="file-input"><span class="hint" id="font-note">Font perangkat dapat sedikit berbeda. Unggah font untuk kecocokan lebih dekat.</span>
@@ -123,7 +132,7 @@
  </section>
  </div>
 </main>
-<footer><span>timestamp studio v1.7.0 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
+<footer><span>timestamp studio v1.7.1 <span class="footer-dot">·</span> Dibuat untuk detail yang berarti.</span><span>Foto diproses di perangkat. Google Maps / OpenStreetMap.</span></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="app.js?v=1.7.0"></script>
+<script type="module" src="app.js?v=1.7.1"></script>
 </body></html>
